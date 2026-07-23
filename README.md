@@ -43,6 +43,7 @@ personal information is included.
 
 ```bash
 uv sync
+```
 
 ## Retrieval Evaluation
 
