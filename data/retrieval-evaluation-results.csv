@@ -1,0 +1,4 @@
+approach,hit_rate,mrr
+No boost,1.0,0.8888888888888888
+Manual boost,1.0,0.8888888888888888
+Optimized boost,1.0,0.8333333333333334
