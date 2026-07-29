@@ -95,5 +95,9 @@ def load_index(
     )
 
     index.fit(documents)
-
+    print(
+        f"Knowledge base loaded: "
+        f"{len(documents)} documents"
+    )
     return index
+

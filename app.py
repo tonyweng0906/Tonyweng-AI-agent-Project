@@ -10,11 +10,35 @@ app = Flask(__name__)
 
 @app.route("/health", methods=["GET"])
 def health():
-    return jsonify(
-        {
-            "status": "ok",
-            "service": "courtmate-ai",
-        }
+    try:
+        database_ready = (
+            db.check_database_connection()
+        )
+
+    except Exception:
+        database_ready = False
+
+    status_code = (
+        200 if database_ready else 503
+    )
+
+    return (
+        jsonify(
+            {
+                "status": (
+                    "ok"
+                    if database_ready
+                    else "degraded"
+                ),
+                "service": "courtmate-ai",
+                "database": (
+                    "connected"
+                    if database_ready
+                    else "unavailable"
+                ),
+            }
+        ),
+        status_code,
     )
 
 @app.route("/question", methods=["POST"])

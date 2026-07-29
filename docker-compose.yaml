@@ -2,6 +2,7 @@ services:
   postgres:
     image: postgres:16
     environment:
+      TZ: ${TZ:-America/Toronto}
       POSTGRES_DB: ${POSTGRES_DB:-courtmate}
       POSTGRES_USER: ${POSTGRES_USER:-courtmate}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-courtmate}
@@ -24,6 +25,7 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
+      TZ: ${TZ:-America/Toronto}
       OPENAI_API_KEY: ${OPENAI_API_KEY}
       OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
       OPENAI_JUDGE_MODEL: ${OPENAI_JUDGE_MODEL:-gpt-4o-mini}
@@ -34,24 +36,30 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-courtmate}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-courtmate}
 
-      TZ: ${TZ:-America/Toronto}
     ports:
       - "5000:5000"
     depends_on:
       postgres:
         condition: service_healthy
+        
+    command:
+    - sh
+    - -c
+    - |
+      python db_prep.py &&
+      python app.py
 
   grafana:
     image: grafana/grafana:latest
     environment:
+      TZ: ${TZ:-America/Toronto}
+      GF_DATE_FORMATS_DEFAULT_TIMEZONE: browser
       GF_SECURITY_ADMIN_USER: admin
       GF_SECURITY_ADMIN_PASSWORD: admin
     ports:
       - "3000:3000"
     volumes:
       - courtmate_grafana_data:/var/lib/grafana
-      - ./grafana/provisioning:/etc/grafana/provisioning
-      - ./grafana/dashboards:/var/lib/grafana/dashboards
     depends_on:
       postgres:
         condition: service_healthy

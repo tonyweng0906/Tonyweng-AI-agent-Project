@@ -14,6 +14,11 @@ from courtmate.config import (
     TIMEZONE,
 )
 
+APP_TIMEZONE = ZoneInfo("America/Toronto")
+
+
+def current_timestamp() -> datetime:
+    return datetime.now(APP_TIMEZONE)
 
 timezone = ZoneInfo(TIMEZONE)
 
@@ -257,6 +262,19 @@ def save_feedback(
             )
 
         connection.commit()
+
+    finally:
+        connection.close()
+
+def check_database_connection() -> bool:
+    connection = get_db_connection()
+
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+            result = cursor.fetchone()
+
+        return result == (1,)
 
     finally:
         connection.close()
