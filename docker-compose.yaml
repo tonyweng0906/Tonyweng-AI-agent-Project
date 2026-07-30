@@ -63,7 +63,27 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      TZ: ${TZ:-America/Toronto}
+      BADMINTON_MATE_API_URL: http://app:5000
+    ports:
+      - "8501:8501"
+    depends_on:
+      - app
+    command:
+      - streamlit
+      - run
+      - frontend.py
+      - --server.address=0.0.0.0
+      - --server.port=8501
 
 volumes:
   courtmate_postgres_data:
   courtmate_grafana_data:
+
+  
