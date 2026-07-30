@@ -23,22 +23,33 @@ index = load_index()
 boost = load_boost()
 
 PROMPT_TEMPLATE = """
-You are Badminton Mate, a helpful assistant for a badminton club.
+You are Badminton Mate, a friendly assistant for a badminton club.
 
-Answer the USER QUESTION using only the provided CONTEXT.
+First determine whether the user is having a general conversation
+or asking for factual badminton club information.
 
-Instructions:
-1. Give the direct answer in the first sentence.
-2. Include the necessary details found in the context.
-3. Do not invent prices, schedules, availability, policies,
-   coach qualifications, membership terms, or booking status.
-4. Static knowledge-base information must not be presented as
-   live availability.
-5. If the context does not contain enough information, say:
-   "I don't have enough information in the club knowledge base
-   to answer that."
-6. Keep the answer concise and customer-friendly.
-7. Finish with a short source list using document titles.
+GENERAL CONVERSATION:
+- Respond naturally to greetings, thanks, farewells, and questions
+  about who you are.
+- General conversation does not require knowledge-base support.
+- Do not include sources for general conversation.
+
+BADMINTON CLUB QUESTIONS:
+- Answer factual club questions using only the provided CONTEXT.
+- Give the direct answer in the first sentence.
+- Include the necessary details found in the context.
+- Do not invent prices, schedules, availability, policies,
+  coach qualifications, membership terms, or booking status.
+- Static knowledge-base information must not be presented as
+  live availability.
+- If the context does not contain enough information, say:
+  "I don't have enough information in the club knowledge base
+  to answer that."
+- When useful, ask one short follow-up question.
+- Finish with a short source list using document titles.
+
+CONVERSATION HISTORY:
+{conversation_history}
 
 USER QUESTION:
 {question}
@@ -91,6 +102,67 @@ Skill level: {skill_level}
 Location: {location}
 """.strip()
 
+def format_conversation_history(
+    history: list[dict[str, str]] | None,
+) -> str:
+    """Format recent messages for the LLM prompt."""
+    if not history:
+        return "No previous conversation."
+
+    formatted_messages = []
+
+    for message in history[-8:]:
+        role = message.get("role", "")
+        content = message.get("content", "").strip()
+
+        if role not in {"user", "assistant"}:
+            continue
+
+        if not content:
+            continue
+
+        speaker = (
+            "User"
+            if role == "user"
+            else "Badminton Mate"
+        )
+
+        formatted_messages.append(
+            f"{speaker}: {content}"
+        )
+
+    if not formatted_messages:
+        return "No previous conversation."
+
+    return "\n".join(formatted_messages)
+
+
+def build_retrieval_query(
+    question: str,
+    history: list[dict[str, str]] | None,
+) -> str:
+    """
+    Add recent user messages to the retrieval query.
+
+    This helps resolve follow-ups such as:
+    "Does she teach juniors?"
+    """
+    previous_user_messages = []
+
+    for message in history or []:
+        if message.get("role") != "user":
+            continue
+
+        content = message.get("content", "").strip()
+
+        if content:
+            previous_user_messages.append(content)
+
+    query_parts = previous_user_messages[-2:]
+    query_parts.append(question)
+
+    return " ".join(query_parts)
+
 def search(
     query: str,
     num_results: int = 5,
@@ -108,6 +180,7 @@ def search(
 def build_prompt(
     question: str,
     search_results: list[dict[str, Any]],
+    history: list[dict[str, str]] | None = None,
 ) -> str:
     context_entries = [
         DOCUMENT_TEMPLATE.format(**document)
@@ -116,9 +189,17 @@ def build_prompt(
 
     context = "\n\n".join(context_entries)
 
+    if not context:
+        context = "No relevant knowledge-base documents were found."
+
+    conversation_history = (
+        format_conversation_history(history)
+    )
+
     return PROMPT_TEMPLATE.format(
         question=question,
         context=context,
+        conversation_history=conversation_history,
     )
 
 def llm(
@@ -236,17 +317,24 @@ def rag(
     question: str,
     model: str = OPENAI_MODEL,
     num_results: int = 5,
+    history: list[dict[str, str]] | None = None,
 ) -> dict[str, Any]:
     started_at = perf_counter()
 
+    retrieval_query = build_retrieval_query(
+    question=question,
+    history=history,
+    )
+
     search_results = search(
-        query=question,
+        query=retrieval_query,
         num_results=num_results,
     )
 
     prompt = build_prompt(
         question=question,
         search_results=search_results,
+        history=history,
     )
 
     answer, generation_tokens = llm(

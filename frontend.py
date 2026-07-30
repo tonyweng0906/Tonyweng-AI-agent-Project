@@ -1,4 +1,3 @@
-```python
 import os
 from typing import Any
 
@@ -65,11 +64,17 @@ def extract_conversation_id(data: dict[str, Any]) -> Any:
     return None
 
 
-def ask_question(question: str) -> tuple[str, Any]:
-    """Send one question to the Badminton Mate API."""
+def ask_question(
+    question: str,
+    history: list[dict[str, str]],
+) -> tuple[str, Any]:
+    """Send a question and recent conversation history to the API."""
     response = requests.post(
         f"{API_URL}/question",
-        json={"question": question},
+        json={
+            "question": question,
+            "history": history[-8:],
+        },
         timeout=120,
     )
 
@@ -85,7 +90,7 @@ def send_feedback(conversation_id: Any, score: int) -> None:
         f"{API_URL}/feedback",
         json={
             "conversation_id": conversation_id,
-            "score": score,
+            "feedback": score,
         },
         timeout=10,
     )
@@ -154,6 +159,10 @@ question = st.chat_input(
 
 
 if question:
+    conversation_history = (
+        st.session_state.messages.copy()
+    )
+
     st.session_state.messages.append(
         {
             "role": "user",
@@ -169,7 +178,10 @@ if question:
             "Badminton Mate is checking the club knowledge base..."
         ):
             try:
-                answer, conversation_id = ask_question(question)
+                answer, conversation_id = ask_question(
+                    question=question,
+                    history=conversation_history,
+                )
 
                 st.markdown(answer)
 
@@ -255,4 +267,3 @@ if (
 
 elif st.session_state.feedback_sent:
     st.caption("✓ Feedback submitted")
-```

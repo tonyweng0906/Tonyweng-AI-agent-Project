@@ -51,6 +51,35 @@ def handle_question():
         data.get("question", "")
     ).strip()
 
+    raw_history = data.get("history", [])
+    history: list[dict[str, str]] = []
+
+    if isinstance(raw_history, list):
+        for message in raw_history[-8:]:
+            if not isinstance(message, dict):
+                continue
+
+            role = str(
+                message.get("role", "")
+            ).strip()
+
+            content = str(
+                message.get("content", "")
+            ).strip()
+
+            if role not in {"user", "assistant"}:
+                continue
+
+            if not content:
+                continue
+
+            history.append(
+                {
+                    "role": role,
+                    "content": content,
+                }
+            )
+
     if not question:
         return (
             jsonify(
@@ -66,7 +95,10 @@ def handle_question():
     conversation_id = str(uuid.uuid4())
 
     try:
-        answer_data = rag(question)
+        answer_data = rag(
+            question=question,
+            history=history,
+        )
 
         db.save_conversation(
             conversation_id=conversation_id,
