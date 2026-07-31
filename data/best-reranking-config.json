@@ -1,0 +1,9 @@
+{
+  "enabled": false,
+  "configuration": "hybrid_without_reranking",
+  "method": "llm",
+  "model": "gpt-4o-mini",
+  "candidate_count": 5,
+  "top_k": 5,
+  "selected_using": "validation_mrr_at_5"
+}
