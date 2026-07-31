@@ -34,6 +34,11 @@ OPENAI_EMBEDDING_MODEL = os.getenv(
     "text-embedding-3-small",
 )
 
+OPENAI_ROUTER_MODEL = os.getenv(
+    "OPENAI_ROUTER_MODEL",
+    OPENAI_MODEL,
+)
+
 RETRIEVAL_CONFIG_PATH = Path(
     os.getenv(
         "RETRIEVAL_CONFIG_PATH",

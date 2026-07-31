@@ -125,25 +125,29 @@ def build_prompt(
     prompt_template: str,
 ) -> str:
     context = "\n\n".join(
-        DOCUMENT_TEMPLATE.format(**document)
+        DOCUMENT_TEMPLATE.format(
+            **document
+        )
         for document in search_results
     )
 
     if not context:
         context = (
-            "No relevant knowledge-base documents "
-            "were found."
+            "No relevant knowledge-base "
+            "documents were found."
         )
 
-    values = {
-        "question": question,
-        "context": context,
-        "conversation_history": (
+    return prompt_template.format(
+        question=question,
+        context=context,
+        conversation_history=(
             "No previous conversation."
         ),
-    }
-
-    return prompt_template.format(**values)
+        operational_context=(
+            "No live operational data "
+            "was requested."
+        ),
+    )
 
 
 def generate_answer(

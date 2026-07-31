@@ -21,6 +21,13 @@ from courtmate.rerank import (
     rerank_documents,
 )
 
+from courtmate.live_context import (
+    build_live_context,
+)
+from courtmate.query_router import (
+    route_query,
+)
+
 openai_client = OpenAI(
     api_key=OPENAI_API_KEY,
 )
@@ -67,6 +74,13 @@ PARTIAL ANSWER RULE:
   mention the 60-minute duration even when exact start times or live
   availability are unavailable.
 
+BOOKING CAPABILITY:
+- You can check court availability but cannot create, reserve,
+  hold, modify, or cancel a booking.
+- Never imply that a booking has been or can be completed.
+- After presenting availability, ask which options the user wants
+  to review or advise them to contact the club to complete booking.
+
 Example:
 User question:
 Are there any specific time slots available for court bookings?
@@ -82,52 +96,80 @@ please confirm those details with the club.
 - When useful, ask one short follow-up question.
 - Finish with a short source list using document titles.
 
+LIVE OPERATIONAL DATA:
+- For current prices, court availability, and schedules, treat the
+  LIVE OPERATIONAL DATA as the authoritative source.
+- Never replace live operational data with static knowledge-base data.
+- Do not invent missing prices, courts, dates, time slots, coaches,
+  bookings, or availability.
+- If a date is required but missing, ask the user for a date.
+- Clearly include the resolved calendar date in schedule and
+  availability answers.
+- When several courts are available at the same time, group them by
+  time slot.
+- Use "Current price catalog" or "Live court schedule" as the source
+  when live operational data is used.
+
 CONVERSATION HISTORY:
 {conversation_history}
 
 USER QUESTION:
 {question}
 
-CONTEXT:
+LIVE OPERATIONAL DATA:
+{operational_context}
+
+STATIC KNOWLEDGE-BASE CONTEXT:
 {context}
+
 """.strip()
 
 EVALUATION_PROMPT_TEMPLATE = """
-You are evaluating an answer produced by Badminton Mate,
-a badminton club retrieval-augmented generation system.
+You are evaluating an answer produced by Badminton Mate.
 
-Evaluate whether the GENERATED ANSWER appropriately responds
-to the USER QUESTION.
+The application can use two kinds of data:
 
-Important:
-- The assistant only has access to a static club knowledge base.
-- The knowledge base may not contain live availability,
-  exact start times, or current booking status.
-- If the requested information is unavailable, an answer that
-  clearly explains this limitation without inventing facts is
-  a correct and relevant answer.
-- Do not penalize the answer merely because live or unavailable
-  information cannot be provided.
-- If partial information is available, the answer should provide
-  that supported information before explaining what is missing.
+1. Static knowledge-base documents for policies and club information.
+2. Live PostgreSQL operational data for prices, schedules,
+   court availability, coaches, and current activities.
 
-Use exactly one of these labels:
+QUERY INTENT:
+{query_intent}
+
+LIVE OPERATIONAL DATA USED:
+{uses_live_data}
+
+Evaluation rules:
+
+- If LIVE OPERATIONAL DATA USED is true, treat the answer as being
+  based on a current PostgreSQL query.
+- Do not reject an availability, schedule, or price answer merely
+  because it contains current operational information.
+- For an availability question, a list of dates, time slots, and
+  available courts is a valid direct answer.
+- For a price question, current catalog prices from PostgreSQL are
+  authoritative.
+- For a schedule question, scheduled activities from PostgreSQL are
+  authoritative.
+- The answer must directly address the user's question.
+- The answer must not invent information that was not returned by
+  the selected data source.
+- If requested information is unavailable, clearly explaining that
+  limitation is an appropriate answer.
+
+Use exactly one label:
 
 RELEVANT:
-The answer directly and appropriately responds to the question.
-It provides all supported information available and does not invent
-unsupported facts. A clear explanation that requested live or exact
-information is unavailable should be classified as RELEVANT when that
-is the most accurate answer possible.
+The answer directly and appropriately responds using the selected
+data source.
 
 PARTLY_RELEVANT:
-The answer contains useful supported information but misses another
-important fact that was available, is unnecessarily vague, or does
-not clearly explain the limitation.
+The answer contains useful information but omits an important
+available detail or is unnecessarily vague.
 
 NON_RELEVANT:
-The answer does not address the question, contradicts available
-information, or makes major unsupported claims.
+The answer does not address the question, contradicts the selected
+data source, or makes major unsupported claims.
 
 Return valid JSON only:
 
@@ -141,16 +183,6 @@ USER QUESTION:
 
 GENERATED ANSWER:
 {answer}
-""".strip()
-
-DOCUMENT_TEMPLATE = """
-Document ID: {id}
-Category: {category}
-Title: {title}
-Content: {content}
-Coach: {coach_name}
-Skill level: {skill_level}
-Location: {location}
 """.strip()
 
 def format_conversation_history(
@@ -232,6 +264,9 @@ def build_prompt(
     question: str,
     search_results: list[dict[str, Any]],
     history: list[dict[str, str]] | None = None,
+    operational_context: str = (
+        "No live operational data was requested."
+    ),
 ) -> str:
     context_entries = [
         DOCUMENT_TEMPLATE.format(**document)
@@ -250,7 +285,12 @@ def build_prompt(
     return PROMPT_TEMPLATE.format(
         question=question,
         context=context,
-        conversation_history=conversation_history,
+        conversation_history=(
+            conversation_history
+        ),
+        operational_context=(
+            operational_context
+        ),
     )
 
 def llm(
@@ -317,10 +357,18 @@ def clean_json_text(text: str) -> str:
 def evaluate_relevance(
     question: str,
     answer: str,
+    query_intent: str = "knowledge",
+    uses_live_data: bool = False,
 ) -> tuple[dict[str, str], dict[str, int]]:
-    prompt = EVALUATION_PROMPT_TEMPLATE.format(
-        question=question,
-        answer=answer,
+    prompt = (
+        EVALUATION_PROMPT_TEMPLATE.format(
+            question=question,
+            answer=answer,
+            query_intent=query_intent,
+            uses_live_data=str(
+                uses_live_data
+            ).lower(),
+        )
     )
 
     raw_evaluation, token_stats = llm(
@@ -371,41 +419,68 @@ def rag(
     history: list[dict[str, str]] | None = None,
 ) -> dict[str, Any]:
     started_at = perf_counter()
-
-    retrieval_query = build_retrieval_query(
-    question=question,
-    history=history,
+    route = route_query(
+        question=question,
+        history=history,
     )
 
-    retrieval_count = (
-    max(
-        num_results,
-        RERANK_CANDIDATE_COUNT,
-    )
-    if RERANK_ENABLED
-    else num_results
-)
-
-    search_results = search(
-        query=retrieval_query,
-        num_results=retrieval_count,
+    (
+        operational_context,
+        operational_sources,
+    ) = build_live_context(
+        route
     )
 
-    if RERANK_ENABLED:
-        search_results = rerank_documents(
-            question=retrieval_query,
-            documents=search_results,
-            model=RERANK_MODEL,
+    search_results = []
+
+    if route.intent == "knowledge":
+        retrieval_query = (
+            build_retrieval_query(
+                question=question,
+                history=history,
+            )
         )
 
-    search_results = search_results[
-        :num_results
-    ]
+        retrieval_count = (
+            max(
+                num_results,
+                RERANK_CANDIDATE_COUNT,
+            )
+            if RERANK_ENABLED
+            else num_results
+        )
+
+        search_results = search(
+            query=retrieval_query,
+            num_results=retrieval_count,
+        )
+
+        if RERANK_ENABLED:
+            search_results = (
+                rerank_documents(
+                    question=(
+                        retrieval_query
+                    ),
+                    documents=(
+                        search_results
+                    ),
+                    model=RERANK_MODEL,
+                )
+            )
+
+        search_results = (
+            search_results[
+                :num_results
+            ]
+        )
 
     prompt = build_prompt(
         question=question,
         search_results=search_results,
         history=history,
+        operational_context=(
+            operational_context
+        ),
     )
 
     answer, generation_tokens = llm(
@@ -417,6 +492,10 @@ def rag(
         evaluate_relevance(
             question=question,
             answer=answer,
+            query_intent=route.intent,
+            uses_live_data=bool(
+                operational_sources
+            ),
         )
     )
 
@@ -426,14 +505,19 @@ def rag(
 
     return {
         "answer": answer,
-        "sources": [
-            {
-                "id": document["id"],
-                "title": document["title"],
-                "category": document["category"],
-            }
-            for document in search_results
-        ],
+        "sources": (
+            operational_sources
+            + [
+                {
+                    "id": document["id"],
+                    "title": document["title"],
+                    "category": document[
+                        "category"
+                    ],
+                }
+                for document in search_results
+            ]
+        ),
         "model_used": model,
         "judge_model": OPENAI_JUDGE_MODEL,
         "response_time": response_time,
@@ -463,5 +547,9 @@ def rag(
         "eval_total_tokens": evaluation_tokens[
             "total_tokens"
         ],
+        "query_intent": route.intent,
+        "resolved_date": (
+            route.target_date
+        ),
     }
 

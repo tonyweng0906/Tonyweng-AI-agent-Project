@@ -29,7 +29,8 @@ services:
       OPENAI_API_KEY: ${OPENAI_API_KEY}
       OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
       OPENAI_JUDGE_MODEL: ${OPENAI_JUDGE_MODEL:-gpt-4o-mini}
-
+      OPENAI_ROUTER_MODEL: ${OPENAI_ROUTER_MODEL:-gpt-4o-mini}
+      
       POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
       POSTGRES_DB: ${POSTGRES_DB:-courtmate}
