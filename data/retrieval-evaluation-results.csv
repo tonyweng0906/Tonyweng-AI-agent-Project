@@ -1,4 +1,4 @@
-approach,hit_rate,mrr
-No boost,1.0,0.8888888888888888
-Manual boost,1.0,0.8888888888888888
-Optimized boost,1.0,0.8333333333333334
+approach,top_k,validation_hit_rate,validation_mrr,test_hit_rate,test_mrr,selected
+no_boost,5,1.0,0.9761904761904762,1.0,0.8055555555555556,True
+manual_boost,5,1.0,0.9523809523809523,1.0,0.8055555555555556,False
+previous_optimized_boost,5,1.0,0.9285714285714286,1.0,0.9166666666666666,False
