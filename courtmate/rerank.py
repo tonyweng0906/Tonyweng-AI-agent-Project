@@ -1,5 +1,4 @@
 import json
-import os
 from typing import Any
 
 from openai import OpenAI
@@ -7,13 +6,56 @@ from pydantic import BaseModel, Field
 
 from courtmate.config import (
     OPENAI_API_KEY,
-    OPENAI_JUDGE_MODEL,
+    OPENAI_RERANK_MODEL,
+    RERANK_CONFIG_PATH,
 )
 
 
-RERANK_MODEL = os.getenv(
-    "OPENAI_RERANK_MODEL",
-    OPENAI_JUDGE_MODEL,
+def load_rerank_config() -> dict[str, Any]:
+    if not RERANK_CONFIG_PATH.exists():
+        return {
+            "enabled": False,
+            "model": OPENAI_RERANK_MODEL,
+            "candidate_count": 5,
+            "top_k": 5,
+        }
+
+    with RERANK_CONFIG_PATH.open(
+        "r",
+        encoding="utf-8",
+    ) as file:
+        return json.load(file)
+
+
+RERANK_CONFIG = load_rerank_config()
+
+RERANK_ENABLED = bool(
+    RERANK_CONFIG.get(
+        "enabled",
+        False,
+    )
+)
+
+RERANK_MODEL = str(
+    RERANK_CONFIG.get(
+        "model",
+        OPENAI_RERANK_MODEL,
+    )
+)
+
+RERANK_CANDIDATE_COUNT = int(
+    RERANK_CONFIG.get(
+        "candidate_count",
+        5,
+    )
+)
+
+print(
+    "Document re-ranking loaded: "
+    f"enabled={RERANK_ENABLED}, "
+    f"model={RERANK_MODEL}, "
+    f"candidate_count="
+    f"{RERANK_CANDIDATE_COUNT}"
 )
 
 rerank_client = OpenAI(

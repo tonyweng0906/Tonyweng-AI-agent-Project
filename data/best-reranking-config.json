@@ -1,6 +1,6 @@
 {
-  "enabled": false,
-  "configuration": "hybrid_without_reranking",
+  "enabled": true,
+  "configuration": "hybrid_with_llm_reranking",
   "method": "llm",
   "model": "gpt-4o-mini",
   "candidate_count": 5,

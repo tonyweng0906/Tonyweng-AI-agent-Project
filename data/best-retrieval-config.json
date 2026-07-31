@@ -1,9 +1,9 @@
 {
-  "approach": "hybrid_text_50_vector_50",
+  "approach": "vector_only",
   "top_k": 5,
   "rrf_k": 60,
-  "text_weight": 0.5,
-  "vector_weight": 0.5,
+  "text_weight": 0.0,
+  "vector_weight": 1.0,
   "embedding_model": "text-embedding-3-small",
   "selected_using": "validation_mrr"
 }

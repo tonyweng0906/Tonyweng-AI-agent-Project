@@ -48,6 +48,20 @@ OPENAI_JUDGE_MODEL = os.getenv(
     OPENAI_MODEL,
 )
 
+OPENAI_RERANK_MODEL = os.getenv(
+    "OPENAI_RERANK_MODEL",
+    OPENAI_JUDGE_MODEL,
+)
+
+RERANK_CONFIG_PATH = Path(
+    os.getenv(
+        "RERANK_CONFIG_PATH",
+        PROJECT_ROOT
+        / "data"
+        / "best-reranking-config.json",
+    )
+)
+
 POSTGRES_HOST = os.getenv(
     "POSTGRES_HOST",
     "localhost",

@@ -37,6 +37,8 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-courtmate}
       OPENAI_EMBEDDING_MODEL: ${OPENAI_EMBEDDING_MODEL:-text-embedding-3-small}
       RETRIEVAL_CONFIG_PATH: /app/data/best-retrieval-config.json 
+      OPENAI_RERANK_MODEL: ${OPENAI_RERANK_MODEL:-gpt-4o-mini}
+      RERANK_CONFIG_PATH: /app/data/best-reranking-config.json
 
     ports:
       - "5000:5000"

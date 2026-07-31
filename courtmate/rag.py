@@ -14,6 +14,12 @@ from courtmate.hybrid_search import (
     HybridSearch,
 )
 
+from courtmate.rerank import (
+    RERANK_CANDIDATE_COUNT,
+    RERANK_ENABLED,
+    RERANK_MODEL,
+    rerank_documents,
+)
 
 openai_client = OpenAI(
     api_key=OPENAI_API_KEY,
@@ -371,10 +377,30 @@ def rag(
     history=history,
     )
 
+    retrieval_count = (
+    max(
+        num_results,
+        RERANK_CANDIDATE_COUNT,
+    )
+    if RERANK_ENABLED
+    else num_results
+)
+
     search_results = search(
         query=retrieval_query,
-        num_results=num_results,
+        num_results=retrieval_count,
     )
+
+    if RERANK_ENABLED:
+        search_results = rerank_documents(
+            question=retrieval_query,
+            documents=search_results,
+            model=RERANK_MODEL,
+        )
+
+    search_results = search_results[
+        :num_results
+    ]
 
     prompt = build_prompt(
         question=question,
