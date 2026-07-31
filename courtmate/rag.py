@@ -185,6 +185,16 @@ GENERATED ANSWER:
 {answer}
 """.strip()
 
+DOCUMENT_TEMPLATE = """
+Document ID: {id}
+Category: {category}
+Title: {title}
+Content: {content}
+Coach: {coach_name}
+Skill level: {skill_level}
+Location: {location}
+""".strip()
+
 def format_conversation_history(
     history: list[dict[str, str]] | None,
 ) -> str:

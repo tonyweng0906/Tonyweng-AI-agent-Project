@@ -48,11 +48,12 @@ services:
         condition: service_healthy
         
     command:
-    - sh
-    - -c
-    - |
-      python db_prep.py &&
-      python app.py
+      - sh
+      - -c
+      - |
+        python db_prep.py &&
+        python seed_operational_data.py &&
+        python app.py
 
   grafana:
     image: grafana/grafana:latest
