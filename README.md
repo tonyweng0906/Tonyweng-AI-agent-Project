@@ -95,22 +95,22 @@ The current version of the project focuses on building a reliable question-answe
 
 ## 4. Current Project Status
 
-The project has currently been completed through the main observability and containerization stage.
+The current version implements a complete RAG application with a web UI, API, persistence, evaluation artifacts, monitoring, and containerized services.
 
 Implemented components include:
 
 * [x] Project problem definition
 * [x] Badminton facility knowledge base
-* [x] Document loading and preprocessing
-* [x] Text indexing
-* [x] Semantic retrieval
+* [x] Automated CSV loading and text indexing
+* [x] MinSearch text retrieval
 * [x] Retrieval-Augmented Generation
-* [x] Retrieval evaluation
-* [x] RAG evaluation
+* [x] Ground-truth retrieval evaluation with Hit Rate and MRR
+* [x] LLM-as-a-Judge evaluation
 * [x] Flask API
-* [x] PostgreSQL conversation storage
-* [x] User feedback storage
-* [x] Grafana monitoring
+* [x] Streamlit chat interface
+* [x] Conversation-history-aware retrieval queries
+* [x] PostgreSQL conversation and feedback storage
+* [x] Grafana dashboard with eight monitoring panels
 * [x] Docker Compose setup
 * [ ] Real booking tools
 * [ ] Coach scheduling automation
@@ -121,113 +121,108 @@ Implemented components include:
 
 ## 5. System Architecture
 
-The current application follows a Retrieval-Augmented Generation architecture.
+The application uses a Retrieval-Augmented Generation architecture.
 
 ```text
 User
   |
   v
+Streamlit UI
+  |
+  v
 Flask API
   |
   v
-RAG Application
+Conversation-aware RAG pipeline
   |
-  +--------------------+
-  |                    |
-  v                    v
-Search / Retrieval     LLM
-  |                    |
-  v                    |
-Knowledge Base --------+
+  +------------------------+
+  |                        |
+  v                        v
+MinSearch text retrieval   OpenAI-compatible LLM
   |
   v
-Generated Answer
-  |
-  +--------------------+
-  |                    |
-  v                    v
-PostgreSQL           API Response
+CSV knowledge base
   |
   v
-Grafana Dashboard
+Retrieved context
+  |
+  v
+Generated answer
+  |
+  +------------------------+
+  |                        |
+  v                        v
+PostgreSQL             API / Streamlit response
+  |
+  v
+Grafana dashboard
 ```
 
 ### Request flow
 
-1. The user submits a question to the Flask API.
-2. The retrieval component searches the indexed knowledge base.
-3. The most relevant documents are added to the LLM prompt.
-4. The LLM generates an answer based on the retrieved context.
-5. The question, answer, and metadata are stored in PostgreSQL.
-6. The answer is returned to the user.
-7. Grafana reads application data from PostgreSQL for monitoring.
+1. The user submits a question through Streamlit or directly to the Flask API.
+2. The frontend sends the current question and up to eight recent messages.
+3. The RAG pipeline uses recent user messages to contextualize follow-up retrieval queries.
+4. MinSearch retrieves the most relevant records from the badminton knowledge base.
+5. The retrieved documents and conversation history are added to the LLM prompt.
+6. The LLM generates a grounded answer.
+7. The question, answer, relevance judgment, token usage, and response time are stored in PostgreSQL.
+8. The user can submit positive or negative feedback.
+9. Grafana reads the stored application data for monitoring.
 
 ---
 
 ## 6. Technology Stack
 
-| Component             | Technology                                           |
-| --------------------- | ---------------------------------------------------- |
-| Programming language  | Python                                               |
-| Web API               | Flask                                                |
-| LLM orchestration     | Custom RAG pipeline                                  |
-| Language model        | OpenAI-compatible LLM                                |
-| Embeddings            | Sentence-transformer or OpenAI-compatible embeddings |
-| Search                | Semantic/vector retrieval                            |
-| Data processing       | Pandas                                               |
-| Database              | PostgreSQL                                           |
-| Monitoring            | Grafana                                              |
-| Containerization      | Docker                                               |
-| Service orchestration | Docker Compose                                       |
-| Evaluation            | Retrieval and RAG evaluation scripts                 |
+| Component | Technology |
+| --- | --- |
+| Programming language | Python 3.13 in Docker |
+| Web interface | Streamlit |
+| Web API | Flask |
+| LLM orchestration | Custom conversation-aware RAG pipeline |
+| Language model | OpenAI-compatible LLM |
+| Search | MinSearch text retrieval with evaluated field boosts |
+| Data processing | Pandas |
+| Database | PostgreSQL 16 |
+| Monitoring | Grafana |
+| Dependency management | uv, `pyproject.toml`, and `uv.lock` |
+| Containerization | Docker and Docker Compose |
+| Evaluation | Ground truth, Hit Rate, MRR, and LLM-as-a-Judge |
 
 ---
 
 ## 7. Project Structure
 
-The exact structure may vary slightly as the project develops, but the repository follows a structure similar to the following:
-
 ```text
-badminton-ai-agent/
-│
+Tonyweng-AI-agent-Project/
 ├── app.py
-├── rag.py
-├── db.py
-├── ingest.py
-├── search.py
-│
+├── frontend.py
+├── db_prep.py
+├── courtmate/
+│   ├── config.py
+│   ├── db.py
+│   ├── ingest.py
+│   └── rag.py
 ├── data/
-│   ├── documents.json
-│   ├── badminton_data.csv
-│   └── ground-truth-retrieval.csv
-│
+│   ├── knowledge_base.csv
+│   ├── ground-truth-retrieval.csv
+│   ├── retrieval-evaluation-results.csv
+│   ├── rag-evaluation-baseline.csv
+│   └── best-minsearch-boost.json
 ├── notebooks/
-│   ├── data-preparation.ipynb
-│   ├── retrieval-evaluation.ipynb
-│   └── rag-evaluation.ipynb
-│
-├── scripts/
-│   ├── evaluate_retrieval.py
-│   ├── evaluate_rag.py
-│   └── init_db.py
-│
+│   ├── 02-retrieval-evaluation.ipynb
+│   └── 03-rag-evaluation.ipynb
 ├── grafana/
-│   └── provisioning/
-│       ├── datasources/
-│       │   └── postgres.yaml
-│       └── dashboards/
-│
-├── tests/
-│
-├── requirements.txt
+│   ├── init.py
+│   └── dashboard.json
 ├── Dockerfile
 ├── docker-compose.yaml
+├── pyproject.toml
+├── uv.lock
+├── .python-version
 ├── .env.example
-├── .gitignore
 └── README.md
 ```
-
-Depending on the final implementation, some filenames may be different.
 
 ---
 
@@ -676,49 +671,28 @@ FLASK_PORT=5000
 
 ## 16. Local Installation
 
+Docker Compose is the recommended way to run the complete project. For local Python development, this repository uses [uv](https://docs.astral.sh/uv/) rather than `requirements.txt`.
+
 ### 16.1 Clone the repository
 
 ```bash
-git clone <your-repository-url>
-cd badminton-ai-agent
+git clone https://github.com/tonyweng0906/Tonyweng-AI-agent-Project.git
+cd Tonyweng-AI-agent-Project
 ```
 
-### 16.2 Create a virtual environment
+### 16.2 Install the locked dependencies
 
-Using Conda:
+Install uv if it is not already available, then run:
 
 ```bash
-conda create -n badminton-agent python=3.11
-conda activate badminton-agent
+uv sync --locked
 ```
 
-Alternatively, using `venv`:
+The dependency declarations are in `pyproject.toml`, and exact resolved versions are stored in `uv.lock`.
 
-```bash
-python -m venv venv
-```
-
-On Windows:
-
-```bash
-venv\Scripts\activate
-```
+### 16.3 Configure environment variables
 
 On macOS or Linux:
-
-```bash
-source venv/bin/activate
-```
-
-### 16.3 Install dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### 16.4 Configure environment variables
-
-Create `.env` from the example file:
 
 ```bash
 cp .env.example .env
@@ -730,184 +704,112 @@ On Windows PowerShell:
 Copy-Item .env.example .env
 ```
 
-Add the required API keys and database configuration.
+Add a valid `OPENAI_API_KEY` to `.env`. Do not commit the real `.env` file.
 
-### 16.5 Run the application
+### 16.4 Optional local development
+
+When PostgreSQL and the Flask backend are already available, start the API with:
 
 ```bash
-python app.py
+uv run python db_prep.py
+uv run python app.py
 ```
 
-The Flask service runs internally on:
+In another terminal, start the Streamlit frontend:
 
-```text
-http://localhost:5000
+```bash
+uv run streamlit run frontend.py --server.port 8501
 ```
 
-When the Docker host mapping uses port `5001`, access it through:
-
-```text
-http://localhost:5001
-```
+For the simplest full setup, use Docker Compose as described below.
 
 ---
 
 ## 17. Running with Docker Compose
 
-The complete application can be started using Docker Compose.
+The Compose configuration starts all application services:
 
-The services include:
+* `postgres` — PostgreSQL database
+* `app` — Flask API and RAG backend
+* `frontend` — Streamlit chat interface
+* `grafana` — monitoring dashboard service
 
-* `app`
-* `postgres`
-* `grafana`
+### 17.1 Configure and start
 
-Run:
+Create `.env` from `.env.example`, add `OPENAI_API_KEY`, then run:
 
 ```bash
 docker compose up -d --build
 ```
 
-Check the services:
+Check service status:
 
 ```bash
 docker compose ps
 ```
 
-View all logs:
+### 17.2 Access the services
 
-```bash
-docker compose logs
-```
+| Service | URL |
+| --- | --- |
+| Streamlit frontend | `http://localhost:8501` |
+| Flask API | `http://localhost:5000` |
+| Flask health check | `http://localhost:5000/health` |
+| Grafana | `http://localhost:3000` |
+| PostgreSQL from the host | `localhost:5432` |
 
-View application logs:
-
-```bash
-docker compose logs app
-```
-
-Follow the application logs:
+### 17.3 View logs
 
 ```bash
 docker compose logs -f app
 ```
 
-Stop the services:
+```bash
+docker compose logs -f frontend
+```
+
+```bash
+docker compose logs -f grafana
+```
+
+### 17.4 Stop the project
 
 ```bash
 docker compose down
 ```
 
-Stop the services and remove orphan containers:
+This preserves the PostgreSQL and Grafana named volumes.
 
-```bash
-docker compose down --remove-orphans
-```
-
-Remove containers and volumes:
+To delete containers and all stored database and Grafana data:
 
 ```bash
 docker compose down -v
 ```
 
-Be careful when using `-v`, because it deletes the PostgreSQL data volume.
+Use `-v` only when you intentionally want to erase the stored data.
 
 ---
 
 ## 18. Docker Compose Configuration
 
-A simplified Docker Compose configuration looks like this:
+The repository's `docker-compose.yaml` is the source of truth for service configuration.
 
-```yaml
-services:
-  app:
-    build:
-      context: .
-    ports:
-      - "5001:5000"
-    environment:
-      OPENAI_API_KEY: ${OPENAI_API_KEY}
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_HOST: postgres
-      POSTGRES_PORT: 5432
-    depends_on:
-      - postgres
-    restart: unless-stopped
+| Service | Container port | Host port | Purpose |
+| --- | ---: | ---: | --- |
+| `app` | 5000 | 5000 | Flask API and RAG backend |
+| `frontend` | 8501 | 8501 | Streamlit web interface |
+| `grafana` | 3000 | 3000 | Monitoring dashboard |
+| `postgres` | 5432 | 5432 | Conversation and feedback storage |
 
-  postgres:
-    image: postgres:15
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    restart: unless-stopped
-
-  grafana:
-    image: grafana/grafana:latest
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./grafana/provisioning:/etc/grafana/provisioning
-    depends_on:
-      - postgres
-    restart: unless-stopped
-
-volumes:
-  postgres_data:
-```
-
-### Port configuration
-
-The application originally used:
-
-```yaml
-ports:
-  - "5000:5000"
-```
-
-Because host port `5000` was already occupied, the host mapping was changed to:
-
-```yaml
-ports:
-  - "5001:5000"
-```
-
-This means:
-
-* Flask runs on port `5000` inside the container.
-* The application is accessed through port `5001` on the host.
-
-Application URL:
+Inside Docker Compose, services communicate using service names:
 
 ```text
-http://localhost:5001
+frontend -> http://app:5000
+app      -> postgres:5432
+grafana  -> postgres:5432
 ```
 
-PostgreSQL URL from the host:
-
-```text
-localhost:5432
-```
-
-Grafana URL:
-
-```text
-http://localhost:3000
-```
-
-Inside Docker, services communicate using their service names:
-
-```text
-postgres:5432
-```
-
-The application should not use `localhost` as the PostgreSQL host when it is running inside Docker.
+The named volumes `courtmate_postgres_data` and `courtmate_grafana_data` preserve data across normal container restarts.
 
 ---
 
@@ -916,7 +818,7 @@ The application should not use `localhost` as the PostgreSQL host when it is run
 ### Using curl
 
 ```bash
-curl -X POST http://localhost:5001/question \
+curl -X POST http://localhost:5000/question \
   -H "Content-Type: application/json" \
   -d "{\"question\":\"What are the drop-in times?\"}"
 ```
@@ -926,7 +828,7 @@ On PowerShell:
 ```powershell
 Invoke-RestMethod `
   -Method Post `
-  -Uri "http://localhost:5001/question" `
+  -Uri "http://localhost:5000/question" `
   -ContentType "application/json" `
   -Body '{"question":"What are the drop-in times?"}'
 ```
@@ -934,7 +836,7 @@ Invoke-RestMethod `
 ### Submit feedback
 
 ```bash
-curl -X POST http://localhost:5001/feedback \
+curl -X POST http://localhost:5000/feedback \
   -H "Content-Type: application/json" \
   -d '{
     "conversation_id": "replace-with-conversation-id",
@@ -945,7 +847,7 @@ curl -X POST http://localhost:5001/feedback \
 ### Health check
 
 ```bash
-curl http://localhost:5001/health
+curl http://localhost:5000/health
 ```
 
 ---
@@ -1017,162 +919,104 @@ Because port `5000` is occupied on the current development machine, the Docker a
 
 ## 21. Grafana Setup
 
-After Docker Compose starts successfully, open:
+After Docker Compose starts successfully, initialize the PostgreSQL datasource and import the version-controlled dashboard.
+
+Run the initializer inside the application container:
+
+```bash
+docker compose exec -e GRAFANA_URL=http://grafana:3000 app python grafana/init.py
+```
+
+Alternatively, run it from the host after `uv sync --locked`:
+
+```bash
+uv run python grafana/init.py
+```
+
+Open Grafana:
 
 ```text
 http://localhost:3000
 ```
 
-The default Grafana credentials are commonly:
+Default credentials:
 
 ```text
 Username: admin
 Password: admin
 ```
 
-Grafana may ask for a new password during the first login.
+The initializer is safe to run again: it creates or updates the PostgreSQL datasource and imports `grafana/dashboard.json`.
 
-The provisioned PostgreSQL datasource should appear automatically when the following file exists:
-
-```text
-grafana/provisioning/datasources/postgres.yaml
-```
-
-Create the directory from the project root:
-
-```bash
-mkdir -p grafana/provisioning/datasources
-```
-
-In Windows PowerShell:
-
-```powershell
-New-Item -ItemType Directory `
-  -Force `
-  -Path grafana/provisioning/datasources
-```
-
-Then create the datasource file:
-
-```powershell
-New-Item -ItemType File `
-  -Force `
-  -Path grafana/provisioning/datasources/postgres.yaml
-```
-
-After changing the provisioning configuration, restart Grafana:
-
-```bash
-docker compose restart grafana
-```
-
-Or rebuild the complete environment:
-
-```bash
-docker compose down --remove-orphans
-docker compose up -d --build
-```
+The dashboard contains eight panels covering question volume, response relevance, latency, token usage, feedback, satisfaction, and recent conversations.
 
 ---
 
 ## 22. Common Issues
 
-### Port 5000 is already in use
+### Frontend cannot reach the API
 
-Error:
+Check both services:
 
-```text
-Bind for 0.0.0.0:5000 failed: port is already allocated
+```bash
+docker compose ps
+docker compose logs frontend --tail=100
+docker compose logs app --tail=100
 ```
 
-Solution:
+The frontend container must use:
+
+```text
+BADMINTON_MATE_API_URL=http://app:5000
+```
+
+### Application cannot connect to PostgreSQL
+
+Inside Docker, the database host must be the Compose service name:
+
+```text
+POSTGRES_HOST=postgres
+```
+
+Check the database and application logs:
+
+```bash
+docker compose logs postgres --tail=100
+docker compose logs app --tail=100
+```
+
+### Port 5000 is already in use
+
+Change the app mapping in `docker-compose.yaml`:
 
 ```yaml
 ports:
   - "5001:5000"
 ```
 
-Then run:
+Then access the API from the host at `http://localhost:5001`. The frontend container still uses `http://app:5000`.
+
+### Grafana has no datasource or dashboard
+
+Run:
 
 ```bash
-docker compose down --remove-orphans
-docker compose up -d --build
+docker compose exec -e GRAFANA_URL=http://grafana:3000 app python grafana/init.py
 ```
 
-Open:
-
-```text
-http://localhost:5001
-```
-
-### Application cannot connect to PostgreSQL
-
-When the application is running inside Docker, use:
-
-```env
-POSTGRES_HOST=postgres
-```
-
-Do not use:
-
-```env
-POSTGRES_HOST=localhost
-```
-
-`localhost` inside the application container refers to the application container itself, not the PostgreSQL container.
-
-### Grafana cannot connect to PostgreSQL
-
-Check that the datasource uses:
-
-```yaml
-url: postgres:5432
-```
-
-Also verify that these values match Docker Compose:
-
-* Database name
-* PostgreSQL username
-* PostgreSQL password
-* PostgreSQL port
-
-Check Grafana logs:
+Then inspect the Grafana logs if initialization fails:
 
 ```bash
-docker compose logs grafana
+docker compose logs grafana --tail=100
 ```
 
 ### Docker is using an old configuration
 
-Check the resolved configuration:
-
 ```bash
 docker compose config
-```
-
-Then recreate the containers:
-
-```bash
 docker compose down --remove-orphans
 docker compose up -d --build
 ```
-
-### Application container exits
-
-Inspect the logs:
-
-```bash
-docker compose logs app
-```
-
-Common causes include:
-
-* Missing Python package
-* Missing environment variable
-* Incorrect module import
-* Database connection failure
-* Incorrect startup command
-* Port configuration mismatch
 
 ---
 
@@ -1371,7 +1215,6 @@ Planned improvements include:
 * Add automated testing.
 * Add CI/CD.
 * Deploy the application to a cloud platform.
-* Add conversation history.
 * Add multilingual support.
 * Add fallback handling for unsupported questions.
 * Add automatic evaluation reports.
@@ -1425,15 +1268,17 @@ Planned improvements include:
 
 After running Docker Compose:
 
-| Service           | URL                     |
-| ----------------- | ----------------------- |
-| Flask application | `http://localhost:5001` |
-| Grafana           | `http://localhost:3000` |
-| PostgreSQL        | `localhost:5432`        |
+| Service | URL |
+| --- | --- |
+| Streamlit frontend | `http://localhost:8501` |
+| Flask API | `http://localhost:5000` |
+| Grafana | `http://localhost:3000` |
+| PostgreSQL | `localhost:5432` |
 
 Docker containers communicate internally using:
 
 ```text
+frontend -> app:5000
 app -> postgres:5432
 grafana -> postgres:5432
 ```
