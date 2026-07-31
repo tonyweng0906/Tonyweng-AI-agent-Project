@@ -9,9 +9,9 @@ from courtmate.config import (
     OPENAI_JUDGE_MODEL,
     OPENAI_MODEL,
 )
-from courtmate.ingest import (
-    load_boost,
-    load_index,
+
+from courtmate.hybrid_search import (
+    HybridSearch,
 )
 
 
@@ -19,8 +19,7 @@ openai_client = OpenAI(
     api_key=OPENAI_API_KEY,
 )
 
-index = load_index()
-boost = load_boost()
+retriever = HybridSearch()
 
 PROMPT_TEMPLATE = """
 You are Badminton Mate, a friendly assistant for a badminton club.
@@ -88,24 +87,41 @@ CONTEXT:
 """.strip()
 
 EVALUATION_PROMPT_TEMPLATE = """
-You are evaluating an answer produced by a badminton club
-retrieval-augmented generation system.
+You are evaluating an answer produced by Badminton Mate,
+a badminton club retrieval-augmented generation system.
 
-Evaluate how well the GENERATED ANSWER responds to the USER QUESTION.
+Evaluate whether the GENERATED ANSWER appropriately responds
+to the USER QUESTION.
+
+Important:
+- The assistant only has access to a static club knowledge base.
+- The knowledge base may not contain live availability,
+  exact start times, or current booking status.
+- If the requested information is unavailable, an answer that
+  clearly explains this limitation without inventing facts is
+  a correct and relevant answer.
+- Do not penalize the answer merely because live or unavailable
+  information cannot be provided.
+- If partial information is available, the answer should provide
+  that supported information before explaining what is missing.
 
 Use exactly one of these labels:
 
 RELEVANT:
-The answer directly answers the question, is sufficiently complete,
-and does not make unsupported claims.
+The answer directly and appropriately responds to the question.
+It provides all supported information available and does not invent
+unsupported facts. A clear explanation that requested live or exact
+information is unavailable should be classified as RELEVANT when that
+is the most accurate answer possible.
 
 PARTLY_RELEVANT:
-The answer contains useful information but is incomplete, vague,
-indirect, or contains a minor unsupported detail.
+The answer contains useful supported information but misses another
+important fact that was available, is unnecessarily vague, or does
+not clearly explain the limitation.
 
 NON_RELEVANT:
-The answer fails to answer the question, contains major unsupported
-claims, or is substantially incorrect.
+The answer does not address the question, contradicts available
+information, or makes major unsupported claims.
 
 Return valid JSON only:
 
@@ -197,12 +213,12 @@ def search(
     num_results: int = 5,
 ) -> list[dict[str, Any]]:
     if not query or not query.strip():
-        raise ValueError("Query cannot be empty.")
+        raise ValueError(
+            "Query cannot be empty."
+        )
 
-    return index.search(
+    return retriever.search(
         query=query.strip(),
-        filter_dict={},
-        boost_dict=boost,
         num_results=num_results,
     )
 

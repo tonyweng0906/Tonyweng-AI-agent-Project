@@ -29,6 +29,20 @@ OPENAI_MODEL = os.getenv(
     "gpt-4o-mini",
 )
 
+OPENAI_EMBEDDING_MODEL = os.getenv(
+    "OPENAI_EMBEDDING_MODEL",
+    "text-embedding-3-small",
+)
+
+RETRIEVAL_CONFIG_PATH = Path(
+    os.getenv(
+        "RETRIEVAL_CONFIG_PATH",
+        PROJECT_ROOT
+        / "data"
+        / "best-retrieval-config.json",
+    )
+)
+
 OPENAI_JUDGE_MODEL = os.getenv(
     "OPENAI_JUDGE_MODEL",
     OPENAI_MODEL,

@@ -35,6 +35,8 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-courtmate}
       POSTGRES_USER: ${POSTGRES_USER:-courtmate}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-courtmate}
+      OPENAI_EMBEDDING_MODEL: ${OPENAI_EMBEDDING_MODEL:-text-embedding-3-small}
+      RETRIEVAL_CONFIG_PATH: /app/data/best-retrieval-config.json 
 
     ports:
       - "5000:5000"
