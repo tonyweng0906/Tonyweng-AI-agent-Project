@@ -1,6 +1,6 @@
 id,category,title,content,coach_name,skill_level,location
 policy-001,cancellation,Private lesson cancellation,"Private lessons must be cancelled at least 24 hours before the scheduled start time. Late cancellations may not be eligible for a refund.",,,Main Club
-policy-002,booking,Court booking duration,"Court bookings are available in 60-minute time slots. Customers should arrive at least 10 minutes before the booking.",,,Main Club
+policy-002,booking,Court booking duration,"Court bookings use 60-minute time slots. This describes the booking duration only. Exact start times and live court availability are not stored in the knowledge base. Customers should arrive at least 10 minutes before the booking.",,,Main Club
 dropin-001,dropin,Beginner drop-in,"The beginner drop-in is suitable for new and recreational players. Registration is required and spaces are limited.",,beginner,Main Club
 coach-001,coach,Coach Amy profile,"Coach Amy specializes in beginner fundamentals, footwork and junior training. She teaches private and semi-private lessons.",Coach Amy,beginner,Main Club
 coach-002,coach,Coach David profile,"Coach David specializes in intermediate and advanced singles strategy, movement and match preparation.",Coach David,advanced,Main Club
