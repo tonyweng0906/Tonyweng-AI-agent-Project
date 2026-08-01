@@ -12,7 +12,7 @@ from courtmate.rerank import (
     RERANK_MODEL,
     rerank_documents,
 )
-from evaluate_retrieval import (
+from evaluation.evaluate_retrieval import (
     GROUND_TRUTH_PATH,
     hit_rate,
     mean_reciprocal_rank,
@@ -24,7 +24,7 @@ TOP_K = 5
 CANDIDATE_COUNT = 5
 
 RESULTS_PATH = Path(
-    "data/reranking-evaluation-results.csv"
+    "data/evaluation/reranking-evaluation-results.csv"
 )
 BEST_CONFIG_PATH = Path(
     "data/best-reranking-config.json"

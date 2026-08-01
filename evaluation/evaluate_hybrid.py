@@ -14,12 +14,12 @@ from courtmate.ingest import (
     TEXT_FIELDS,
     load_documents,
 )
-from evaluate_retrieval import (
+
+from evaluation.evaluate_retrieval import (
     hit_rate,
     mean_reciprocal_rank,
     split_by_document,
 )
-
 
 TOP_K = 5
 RRF_K = 60
@@ -28,7 +28,7 @@ GROUND_TRUTH_PATH = Path(
     "data/ground-truth-retrieval.csv"
 )
 RESULTS_PATH = Path(
-    "data/hybrid-retrieval-evaluation-results.csv"
+    "data/evaluation/hybrid-retrieval-evaluation-results.csv"
 )
 BEST_CONFIG_PATH = Path(
     "data/best-retrieval-config.json"

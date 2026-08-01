@@ -3,10 +3,23 @@ import uuid
 from flask import Flask, jsonify, request
 
 from courtmate import db
-from courtmate.rag import rag
+
 
 
 app = Flask(__name__)
+
+def run_rag(
+    question: str,
+    history: list[dict[str, str]],
+):
+    """Load the expensive RAG pipeline only when it is needed."""
+    from courtmate.rag import rag
+
+    return rag(
+        question=question,
+        history=history,
+    )
+
 
 @app.route("/health", methods=["GET"])
 def health():
@@ -95,7 +108,7 @@ def handle_question():
     conversation_id = str(uuid.uuid4())
 
     try:
-        answer_data = rag(
+        answer_data = run_rag(
             question=question,
             history=history,
         )

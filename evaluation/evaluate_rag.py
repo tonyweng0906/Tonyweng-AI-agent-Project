@@ -24,10 +24,11 @@ GROUND_TRUTH_PATH = Path(
     "data/ground-truth-retrieval.csv"
 )
 DETAIL_RESULTS_PATH = Path(
-    "data/rag-evaluation-comparison.csv"
+    "data/evaluation/rag-evaluation-comparison.csv"
 )
+
 SUMMARY_RESULTS_PATH = Path(
-    "data/rag-prompt-comparison.csv"
+    "data/evaluation/rag-prompt-comparison.csv"
 )
 
 TOP_K = 5
@@ -118,6 +119,14 @@ judge_client = OpenAI(
     api_key=OPENAI_API_KEY
 )
 
+def clean_multiline_text(
+    value: object,
+) -> str:
+    """Remove trailing whitespace from generated multiline text."""
+    return "\n".join(
+        line.rstrip()
+        for line in str(value).splitlines()
+    ).strip()
 
 def build_prompt(
     question: str,
@@ -313,6 +322,21 @@ def main() -> None:
                 reasoning = ""
                 error = str(exception)
 
+            question = clean_multiline_text(
+                question
+            )
+            answer_orig = clean_multiline_text(
+                answer_orig
+            )
+            answer_llm = clean_multiline_text(
+                answer_llm
+            )
+            reasoning = clean_multiline_text(
+                reasoning
+            )
+            error = clean_multiline_text(
+                error
+            )
             detailed_rows.append(
                 {
                     "configuration": (

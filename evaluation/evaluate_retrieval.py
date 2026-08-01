@@ -20,7 +20,7 @@ GROUND_TRUTH_PATH = Path(
     "data/ground-truth-retrieval.csv"
 )
 RESULTS_PATH = Path(
-    "data/retrieval-evaluation-results.csv"
+    "data/evaluation/retrieval-evaluation-results.csv"
 )
 BEST_BOOST_PATH = Path(
     "data/best-minsearch-boost.json"

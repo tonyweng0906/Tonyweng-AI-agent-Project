@@ -51,8 +51,8 @@ services:
       - sh
       - -c
       - |
-        python db_prep.py &&
-        python seed_operational_data.py &&
+        python -m scripts.db_prep &&
+        python -m scripts.seed_operational_data &&
         python app.py
 
   grafana:

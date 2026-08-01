@@ -197,21 +197,42 @@ Grafana dashboard
 Tonyweng-AI-agent-Project/
 ├── app.py
 ├── frontend.py
-├── db_prep.py
 ├── courtmate/
 │   ├── config.py
 │   ├── db.py
+│   ├── hybrid_search.py
 │   ├── ingest.py
-│   └── rag.py
+│   ├── live_context.py
+│   ├── operations.py
+│   ├── query_router.py
+│   ├── rag.py
+│   └── rerank.py
+├── evaluation/
+│   ├── evaluate_retrieval.py
+│   ├── evaluate_hybrid.py
+│   ├── evaluate_reranking.py
+│   └── evaluate_rag.py
+├── scripts/
+│   ├── db_prep.py
+│   ├── seed_operational_data.py
+│   └── check_operational_search.py
+├── tests/
+│   ├── conftest.py
+│   ├── test_api.py
+│   └── test_ingest.py
 ├── data/
 │   ├── knowledge_base.csv
 │   ├── ground-truth-retrieval.csv
-│   ├── retrieval-evaluation-results.csv
-│   ├── rag-evaluation-baseline.csv
-│   └── best-minsearch-boost.json
+│   ├── best-minsearch-boost.json
+│   ├── best-retrieval-config.json
+│   ├── best-reranking-config.json
+│   └── evaluation/
+│       ├── retrieval-evaluation-results.csv
+│       ├── hybrid-retrieval-evaluation-results.csv
+│       ├── reranking-evaluation-results.csv
+│       ├── rag-evaluation-comparison.csv
+│       └── rag-prompt-comparison.csv
 ├── notebooks/
-│   ├── 02-retrieval-evaluation.ipynb
-│   └── 03-rag-evaluation.ipynb
 ├── grafana/
 │   ├── init.py
 │   └── dashboard.json
@@ -711,7 +732,8 @@ Add a valid `OPENAI_API_KEY` to `.env`. Do not commit the real `.env` file.
 When PostgreSQL and the Flask backend are already available, start the API with:
 
 ```bash
-uv run python db_prep.py
+uv run python -m scripts.db_prep
+uv run python -m scripts.seed_operational_data
 uv run python app.py
 ```
 
