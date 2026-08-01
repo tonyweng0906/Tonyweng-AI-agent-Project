@@ -7,9 +7,10 @@ from typing import Any
 
 from courtmate.operations import (
     find_available_courts,
-    get_daily_schedule,
+    get_schedule_range,
     search_prices,
 )
+
 from courtmate.query_router import (
     QueryRoute,
 )
@@ -194,11 +195,15 @@ def build_live_context(
         )
 
     if route.intent == "schedule":
-        target_date = parse_date(
+        start_date = parse_date(
             route.target_date
         )
 
-        if target_date is None:
+        end_date = parse_date(
+            route.target_end_date
+        )
+
+        if start_date is None:
             return (
                 json.dumps(
                     {
@@ -206,7 +211,7 @@ def build_live_context(
                             "live_court_schedule"
                         ),
                         "error": (
-                            "A specific date is "
+                            "A date or date range is "
                             "required before the "
                             "schedule can be checked."
                         ),
@@ -216,30 +221,47 @@ def build_live_context(
                 [],
             )
 
-        schedule = get_daily_schedule(
-            target_date=target_date
+        if end_date is None:
+            end_date = start_date
+
+        if end_date < start_date:
+            return (
+                json.dumps(
+                    {
+                        "source": (
+                            "live_court_schedule"
+                        ),
+                        "error": (
+                            "The schedule end date "
+                            "cannot be earlier than "
+                            "the start date."
+                        ),
+                    },
+                    ensure_ascii=False,
+                ),
+                [],
+            )
+
+        schedule = get_schedule_range(
+            start_date=start_date,
+            end_date=end_date,
+            coach_name=route.coach_name,
         )
 
         context = {
-            "source": (
-                "live_court_schedule"
-            ),
-            "target_date": (
-                target_date.isoformat()
-            ),
+            "source": "live_court_schedule",
+            "start_date": start_date.isoformat(),
+            "end_date": end_date.isoformat(),
+            "coach_filter": route.coach_name,
             "scheduled_activities": (
-                compact_schedule(
-                    schedule
-                )
+                compact_schedule(schedule)
             ),
         }
 
         sources = [
             {
                 "id": "live-court-schedule",
-                "title": (
-                    "Live court schedule"
-                ),
+                "title": "Live court schedule",
                 "category": "live_schedule",
             }
         ]

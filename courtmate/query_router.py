@@ -69,6 +69,14 @@ class QueryRoute(BaseModel):
         ),
     )
 
+    coach_name: str | None = Field(
+        default=None,
+        description=(
+            "The coach name mentioned in a schedule "
+            "question, or null when no coach is specified."
+        ),
+    )
+
     target_date: str | None = Field(
         default=None,
         description=(
@@ -78,6 +86,15 @@ class QueryRoute(BaseModel):
         ),
     )
 
+    target_end_date: str | None = Field(
+        default=None,
+        description=(
+            "End date in YYYY-MM-DD format when "
+            "the question requests a date range, "
+            "such as this week or next week."
+        ),
+    )
+    
     start_time: str | None = Field(
         default=None,
         description=(
@@ -231,6 +248,46 @@ def resolve_relative_date(
 
     return None
 
+def resolve_relative_date_range(
+    question: str,
+    current_date: date,
+) -> tuple[date, date] | None:
+    """Resolve common English date ranges."""
+    normalized = question.strip().lower()
+
+    if re.search(
+        r"\bnext\s+(calendar\s+)?week\b",
+        normalized,
+    ):
+        range_start = (
+            start_of_week(current_date)
+            + timedelta(weeks=1)
+        )
+
+        range_end = (
+            range_start
+            + timedelta(days=6)
+        )
+
+        return range_start, range_end
+
+    if re.search(
+        r"\bthis\s+(calendar\s+)?week\b",
+        normalized,
+    ):
+        range_start = start_of_week(
+            current_date
+        )
+
+        range_end = (
+            range_start
+            + timedelta(days=6)
+        )
+
+        return range_start, range_end
+
+    return None
+
 def route_query(
     question: str,
     history: list[dict[str, str]] | None = None,
@@ -278,13 +335,23 @@ schedule:
 Questions asking what lessons, bookings, activities, or
 coaches are scheduled on a particular date.
 
+Schedule filtering rules:
+- Extract the coach name when a specific coach is mentioned.
+- For "Coach Amy", return coach_name as "Coach Amy".
+- For schedule questions without a coach, return coach_name as null.
+
 Date rules:
 - Resolve relative dates using the current local date.
 - "Next Thursday" means Thursday in the next calendar week.
 - "This Thursday" means Thursday in the current calendar week.
-- Return target_date as YYYY-MM-DD.
+- For one specific date, return target_date as YYYY-MM-DD
+  and target_end_date as null.
+- For "next week", return next Monday as target_date and
+  next Sunday as target_end_date.
+- For "this week", return this Monday as target_date and
+  this Sunday as target_end_date.
 - If no date is supplied for availability or schedule,
-  return null instead of guessing.
+  return both date fields as null instead of guessing.
 
 
 Use the conversation history only when needed to resolve
@@ -320,6 +387,13 @@ a follow-up question.
             "return structured output."
         )
 
+    deterministic_range = (
+        resolve_relative_date_range(
+            question=question,
+            current_date=now.date(),
+        )
+    )
+
     deterministic_date = (
         resolve_relative_date(
             question=question,
@@ -327,9 +401,23 @@ a follow-up question.
         )
     )
 
-    if deterministic_date is not None:
+    if deterministic_range is not None:
+        range_start, range_end = (
+            deterministic_range
+        )
+
+        route.target_date = (
+            range_start.isoformat()
+        )
+
+        route.target_end_date = (
+            range_end.isoformat()
+        )
+
+    elif deterministic_date is not None:
         route.target_date = (
             deterministic_date.isoformat()
         )
+        route.target_end_date = None
 
     return route

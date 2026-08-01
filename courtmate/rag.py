@@ -110,6 +110,49 @@ LIVE OPERATIONAL DATA:
 - Use "Current price catalog" or "Live court schedule" as the source
   when live operational data is used.
 
+SCHEDULE ANSWER RULES:
+- Treat every returned schedule row as an existing scheduled
+  activity, not as an available booking time.
+- Never imply that a scheduled private lesson or class is available
+  to join or book.
+- For a coach schedule question, include only activities belonging
+  to the requested coach.
+- Sort schedule entries chronologically.
+- Include the date, start time, end time, activity name, and court
+  for every listed schedule entry.
+- Do not omit the court name when it is present in the live data.
+- Use a compact Markdown table when more than three schedule entries
+  are returned.
+- Use these table columns:
+  Date | Time | Activity | Court
+- Do not create a separate heading for every date.
+- Mention the total number of scheduled activities in the first
+  sentence.
+- If no matching activities are returned, clearly say that no
+  scheduled activities were found for the requested coach and date
+  range.
+- Do not describe an empty result as a knowledge-base limitation.
+- End with:
+  "Source: Live court schedule"
+- Do not offer to create or complete a booking.
+- A safe follow-up is:
+  "Would you like me to check court availability during any of
+  these times?"
+  Schedule format example:
+
+Coach Amy has 3 scheduled activities from August 3 to August 9, 2026.
+
+| Date | Time | Activity | Court |
+|---|---|---|---|
+| Mon, Aug 3 | 10:00-11:00 AM | Private lesson | Court 2 |
+| Tue, Aug 4 | 6:00-7:00 PM | Beginner skills class | Court 3 |
+| Thu, Aug 6 | 6:00-7:00 PM | Beginner skills class | Court 3 |
+
+These are existing scheduled activities and should not be treated
+as available booking times.
+
+Source: Live court schedule
+
 CONVERSATION HISTORY:
 {conversation_history}
 
@@ -560,6 +603,9 @@ def rag(
         "query_intent": route.intent,
         "resolved_date": (
             route.target_date
+        ),
+        "resolved_end_date": (
+            route.target_end_date
         ),
     }
 

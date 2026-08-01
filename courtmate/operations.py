@@ -240,7 +240,104 @@ def find_available_courts(
     finally:
         connection.close()
 
+def get_schedule_range(
+    start_date: date,
+    end_date: date,
+    coach_name: str | None = None,
+) -> list[dict[str, Any]]:
+    """Return scheduled activities within a local date range."""
+    if end_date < start_date:
+        raise ValueError(
+            "end_date cannot be earlier than start_date."
+        )
 
+    local_start = datetime.combine(
+        start_date,
+        time.min,
+        tzinfo=APP_TIMEZONE,
+    )
+
+    local_end = datetime.combine(
+        end_date + timedelta(days=1),
+        time.min,
+        tzinfo=APP_TIMEZONE,
+    )
+
+    conditions = [
+        "cs.start_at >= %s",
+        "cs.start_at < %s",
+        "cs.slot_status != 'available'",
+    ]
+
+    parameters: list[Any] = [
+        local_start,
+        local_end,
+    ]
+
+    cleaned_coach_name = (
+        coach_name.strip()
+        if coach_name
+        else ""
+    )
+
+    if cleaned_coach_name:
+        conditions.append(
+            "coach.name ILIKE %s"
+        )
+        parameters.append(
+            f"%{cleaned_coach_name}%"
+        )
+
+    where_clause = " AND ".join(
+        conditions
+    )
+
+    connection = get_db_connection()
+
+    try:
+        with connection.cursor(
+            cursor_factory=RealDictCursor
+        ) as cursor:
+            cursor.execute(
+                f"""
+                SELECT
+                    c.id AS court_id,
+                    c.name AS court_name,
+                    cs.start_at,
+                    cs.end_at,
+                    cs.activity_name,
+                    cs.slot_status,
+                    o.offering_type,
+                    o.name AS offering_name,
+                    coach.name AS coach_name,
+                    cs.capacity,
+                    cs.booked_count,
+                    cs.notes,
+                    cs.source
+                FROM court_schedule cs
+                JOIN courts c
+                    ON c.id = cs.court_id
+                LEFT JOIN offerings o
+                    ON o.id = cs.offering_id
+                LEFT JOIN coaches coach
+                    ON coach.id = cs.coach_id
+                WHERE {where_clause}
+                ORDER BY
+                    cs.start_at,
+                    c.name
+                """,
+                parameters,
+            )
+
+            rows = cursor.fetchall()
+
+        return serialize_rows(
+            list(rows)
+        )
+
+    finally:
+        connection.close()
+        
 def get_daily_schedule(
     target_date: date,
 ) -> list[dict[str, Any]]:

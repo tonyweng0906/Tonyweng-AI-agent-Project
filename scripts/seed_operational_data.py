@@ -40,8 +40,28 @@ COACHES = [
         "Singles strategy, movement, match preparation",
         "intermediate and advanced",
     ),
+    (
+        "coach-amy",
+        "Coach Amy",
+        (
+            "Beginner-friendly coach focused on "
+            "fundamentals, footwork and junior training."
+        ),
+        "Fundamentals, footwork, junior training",
+        "beginner and intermediate",
+    ),
 ]
 
+COACH_NAMES = {
+    coach_id: coach_name
+    for (
+        coach_id,
+        coach_name,
+        _,
+        _,
+        _,
+    ) in COACHES
+}
 
 OFFERINGS = [
     (
@@ -274,6 +294,11 @@ def local_datetime(
 
 def create_schedule_rows() -> list[tuple]:
     rows = []
+
+    coach_busy_slots: set[
+        tuple[str, datetime]
+    ] = set()
+
     today = datetime.now(
         timezone
     ).date()
@@ -326,6 +351,7 @@ def create_schedule_rows() -> list[tuple]:
             for hour in range(
                 10,
                 22,
+                
             ):
                 start_at = local_datetime(
                     schedule_date,
@@ -335,7 +361,37 @@ def create_schedule_rows() -> list[tuple]:
                     start_at
                     + timedelta(hours=1)
                 )
+                # Coach Amy teaches a regular beginner class
+                # every Tuesday and Thursday from 6 PM to 7 PM.
+                if (
+                    weekday in {1, 3}
+                    and court_number == 3
+                    and hour == 18
+                ):
+                    rows.append(
+                        (
+                            court_id,
+                            "group-basic",
+                            "coach-amy",
+                            "Beginner skills class with Coach Amy",
+                            start_at,
+                            end_at,
+                            "scheduled",
+                            16,
+                            10,
+                            "Simulated recurring class",
+                            "simulation",
+                        )
+                    )
 
+                    coach_busy_slots.add(
+                        (
+                            "coach-amy",
+                            start_at,
+                        )
+                    )
+
+                    continue
                 # Court 1: weekday basic class,
                 # 9 AM to 12 PM.
                 if (
@@ -358,6 +414,14 @@ def create_schedule_rows() -> list[tuple]:
                             "simulation",
                         )
                     )
+
+                    coach_busy_slots.add(
+                        (
+                            "coach-lily",
+                            start_at,
+                        )
+                    )
+                    
                     continue
 
                 # Court 2: weekday advanced class,
@@ -382,6 +446,13 @@ def create_schedule_rows() -> list[tuple]:
                             "simulation",
                         )
                     )
+
+                    coach_busy_slots.add(
+                        (
+                            "coach-daniel",
+                            start_at,
+                        )
+                    )
                     continue
 
                 random_generator = Random(
@@ -397,50 +468,59 @@ def create_schedule_rows() -> list[tuple]:
 
                 # Simulate private lessons.
                 if random_value < 0.10:
-                    (
-                        offering_id,
-                        lesson_name,
-                        capacity,
-                    ) = random_generator.choice(
-                        PRIVATE_OPTIONS
-                    )
-
-                    coach_id = (
-                        random_generator.choice(
-                            [
-                                "coach-lily",
-                                "coach-daniel",
-                            ]
-                        )
-                    )
-
-                    coach_name = (
-                        "Coach Lily Chen"
-                        if coach_id
-                        == "coach-lily"
-                        else "Coach Daniel Wong"
-                    )
-
-                    rows.append(
-                        (
-                            court_id,
-                            offering_id,
+                    available_coaches = [
+                        coach_id
+                        for coach_id in COACH_NAMES
+                        if (
                             coach_id,
-                            (
-                                f"{lesson_name} "
-                                f"with {coach_name}"
-                            ),
                             start_at,
-                            end_at,
-                            "scheduled",
-                            capacity,
-                            capacity,
-                            "Simulated private lesson",
-                            "simulation",
-                        )
-                    )
-                    continue
+                        ) not in coach_busy_slots
+                    ]
 
+                    if available_coaches:
+                        (
+                            offering_id,
+                            lesson_name,
+                            capacity,
+                        ) = random_generator.choice(
+                            PRIVATE_OPTIONS
+                        )
+
+                        coach_id = random_generator.choice(
+                            available_coaches
+                        )
+
+                        coach_name = COACH_NAMES[
+                            coach_id
+                        ]
+
+                        rows.append(
+                            (
+                                court_id,
+                                offering_id,
+                                coach_id,
+                                (
+                                    f"{lesson_name} "
+                                    f"with {coach_name}"
+                                ),
+                                start_at,
+                                end_at,
+                                "scheduled",
+                                capacity,
+                                capacity,
+                                "Simulated private lesson",
+                                "simulation",
+                            )
+                        )
+
+                        coach_busy_slots.add(
+                            (
+                                coach_id,
+                                start_at,
+                            )
+                        )
+
+                        continue
                 # Simulate existing court bookings.
                 if random_value < 0.28:
                     rows.append(
@@ -638,7 +718,17 @@ def seed_data() -> None:
                     start_at,
                     end_at
                 )
-                DO NOTHING
+                DO UPDATE SET
+                    offering_id = EXCLUDED.offering_id,
+                    coach_id = EXCLUDED.coach_id,
+                    activity_name = EXCLUDED.activity_name,
+                    slot_status = EXCLUDED.slot_status,
+                    capacity = EXCLUDED.capacity,
+                    booked_count = EXCLUDED.booked_count,
+                    notes = EXCLUDED.notes,
+                    source = EXCLUDED.source,
+                    updated_at = CURRENT_TIMESTAMP
+                WHERE court_schedule.source = 'simulation'
                 """,
                 schedule_rows,
                 page_size=500,
