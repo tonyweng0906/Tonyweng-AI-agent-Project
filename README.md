@@ -1,153 +1,73 @@
-# Badminton Court AI Agent
+# Badminton Mate
 
-An AI-powered assistant for badminton court operations, designed to reduce repetitive work related to court bookings, coach availability, lesson scheduling, cancellations, drop-in sessions, and customer inquiries.
+A RAG-powered assistant for badminton-club information, pricing, and court availability.
 
-This project is developed as part of the **LLM Zoomcamp final project**, following the structure and methodology demonstrated in the DataTalksClub project example.
+Badminton Mate combines an evaluated knowledge-retrieval pipeline with operational PostgreSQL data. Users can ask natural-language questions through a Streamlit interface or Flask API, submit feedback, and view application metrics in Grafana.
 
----
+This project was created as an **LLM Zoomcamp final project** and applies the retrieval, evaluation, monitoring, and deployment methods taught by DataTalksClub.
 
-## 1. Project Overview
+## Problem description
 
-Badminton facilities often manage information across multiple places, including:
+Badminton facilities often store information across schedules, price lists, policy documents, booking records, and staff knowledge.
 
-* Court schedules
-* Coach availability
-* Private lesson bookings
-* Group classes
-* Drop-in sessions
-* Cancellation policies
-* Membership information
-* Pricing and facility rules
+Club staff repeatedly need to:
 
-Staff frequently need to answer the same questions and manually coordinate schedules between customers, coaches, and available courts.
+- explain lesson and equipment prices;
+- check court schedules;
+- answer questions about coaches and skill levels;
+- explain cancellation and facility policies;
+- find suitable programs;
+- respond to repeated customer questions.
 
-The goal of this project is to build an AI agent that can understand natural-language questions, retrieve relevant facility information, and eventually support booking-related actions.
+This creates slow response times, inconsistent answers, and unnecessary administrative work.
 
-Example user questions include:
+Badminton Mate provides one conversational interface for both static club knowledge and operational schedule data.
 
-* Which coaches are available on Saturday?
-* Are there courts available tomorrow evening?
-* What are the drop-in times this week?
-* How much does a private lesson cost?
-* What is the cancellation policy?
-* Can I reschedule my lesson?
-* Which coach is suitable for a beginner?
-* Are there any group classes this weekend?
+Example questions include:
 
----
+- What should I bring to a badminton session?
+- Which coach is suitable for a beginner?
+- How much is a one-to-two private lesson?
+- What is the cancellation policy?
+- What court times are available next Thursday?
+- Can I rent a racket at the club?
+- Are there beginner group classes?
 
-## 2. Problem Statement
+## Current capabilities
 
-The current booking and customer-service process contains repetitive manual tasks.
+- Streamlit chat interface
+- Flask REST API
+- Static badminton-club knowledge base
+- MinSearch text retrieval
+- OpenAI embedding-based vector retrieval
+- Evaluated text, vector, and hybrid retrieval configurations
+- Weighted rank fusion
+- Optional LLM document re-ranking
+- Conversation-history-aware retrieval
+- Query routing for knowledge, pricing, and availability
+- Relative-date resolution such as `tomorrow` and `next Thursday`
+- PostgreSQL-backed pricing and court schedules
+- Eight courts with 60-minute availability slots
+- Online LLM relevance evaluation
+- Offline retrieval and RAG evaluation
+- Conversation and feedback persistence
+- Grafana monitoring dashboard
+- Docker Compose support
+- Railway deployment configuration
+- Automated API and ingestion tests
 
-Staff may need to:
+Badminton Mate can check operational availability, but it cannot yet create, modify, or cancel real bookings.
 
-1. Search through schedules.
-2. Check coach availability.
-3. Check court availability.
-4. Explain pricing and policies.
-5. coordinate cancellations and rescheduling.
-6. Respond repeatedly to common customer questions.
-7. Update operational records manually.
-
-This creates several problems:
-
-* Slow response times
-* Repetitive administrative work
-* Inconsistent answers
-* Scheduling conflicts
-* Difficulty finding information quickly
-* Increased workload during busy periods
-
-The AI agent provides a single conversational interface for accessing facility information.
-
----
-
-## 3. Project Goals
-
-The project provides a single conversational interface for static club
-knowledge and operational badminton-facility data.
-
-### Current capabilities
-
-* Search the badminton facility knowledge base.
-* Combine evaluated text and vector retrieval.
-* Re-rank retrieved documents when the evaluated configuration enables it.
-* Answer questions using grounded LLM generation.
-* Route pricing and availability questions to PostgreSQL operational data.
-* Resolve relative date expressions for court availability.
-* Return available courts for specific dates and 60-minute time slots.
-* Return lesson, court, and equipment pricing.
-* Expose the assistant through Flask and Streamlit.
-* Store conversations, evaluation results, and user feedback.
-* Monitor application activity through Grafana.
-* Run locally with Docker Compose and deploy through Railway.
-
-### Future goals
-
-* Create and confirm real court bookings.
-* Cancel or reschedule bookings.
-* Add customer authentication and user profiles.
-* Add coach-specific pricing and availability.
-* Provide a staff interface for editing schedules and prices.
-* Integrate with calendar, email, or SMS services.
-* Send booking confirmations and reminders.
-* Add automated CI, production backups, and alerting.
-* Add permission controls for booking-related actions.
-
----
-
----
-
-## 4. Current Project Status
-
-The current version implements a complete badminton-club assistant with
-a web UI, API, hybrid retrieval, operational database queries, evaluation,
-monitoring, and containerized deployment.
-
-Implemented components include:
-
-* [x] Project problem definition
-* [x] Badminton facility knowledge base
-* [x] Automated CSV loading and text indexing
-* [x] MinSearch text retrieval
-* [x] OpenAI embedding-based vector retrieval
-* [x] Evaluated hybrid retrieval configurations
-* [x] LLM document re-ranking
-* [x] Retrieval-Augmented Generation
-* [x] Ground-truth retrieval evaluation with Hit Rate and MRR
-* [x] Multiple-prompt evaluation with LLM-as-a-Judge
-* [x] Query routing for knowledge, pricing, and availability requests
-* [x] PostgreSQL pricing and operational schedule data
-* [x] Live court-availability queries
-* [x] Flask API
-* [x] Streamlit chat interface
-* [x] Conversation-history-aware retrieval queries
-* [x] PostgreSQL conversation and feedback storage
-* [x] Grafana monitoring dashboard
-* [x] Docker Compose setup
-* [x] Railway deployment configuration
-* [x] Automated API and ingestion tests
-* [ ] Real booking creation
-* [ ] Customer authentication
-* [ ] Cancellation and rescheduling actions
-* [ ] Automated CI workflow
-
----
-
-## 5. System Architecture
-
-The application combines a static badminton knowledge base with
-operational PostgreSQL data.
+## Architecture
 
 ```mermaid
 flowchart TD
-    U["User"] --> UI["Streamlit frontend"]
+    USER["User"] --> UI["Streamlit frontend"]
     UI --> API["Flask API"]
     API --> ROUTER["Query router"]
 
     ROUTER --> STATIC["Knowledge retrieval"]
-    ROUTER --> LIVE["Operational lookup"]
+    ROUTER --> OPERATIONS["Operational lookup"]
 
     STATIC --> TEXT["MinSearch text ranking"]
     STATIC --> VECTOR["OpenAI vector ranking"]
@@ -155,8 +75,8 @@ flowchart TD
     VECTOR --> FUSION
     FUSION --> RERANK["Optional LLM re-ranking"]
 
-    LIVE --> PRICES["PostgreSQL prices"]
-    LIVE --> SCHEDULE["PostgreSQL court schedule"]
+    OPERATIONS --> PRICES["PostgreSQL prices"]
+    OPERATIONS --> SCHEDULE["PostgreSQL court schedule"]
 
     RERANK --> CONTEXT["Combined prompt context"]
     PRICES --> CONTEXT
@@ -177,311 +97,287 @@ flowchart TD
 
 ### Request flow
 
-1. The user submits a question through Streamlit or directly to the
-   Flask API.
-2. The frontend sends the question together with up to eight recent
-   conversation messages.
-3. The query router identifies whether the request concerns general
-   knowledge, pricing, or court availability.
-4. Date expressions such as `tomorrow` or `next Thursday` are resolved
-   for operational schedule queries.
-5. Knowledge queries use evaluated text and vector retrieval.
-6. Text and vector rankings are combined using weighted rank fusion.
-7. Retrieved documents may be re-ranked by the configured LLM
-   re-ranker.
-8. Pricing and availability requests retrieve current operational
-   records from PostgreSQL.
-9. Static documents, operational results, and recent conversation
-   history are combined in the generation prompt.
-10. The LLM produces a grounded response, and an online judge evaluates
-    its relevance.
-11. The response, sources, token usage, timing, routing information, and
-    relevance result are stored in PostgreSQL.
-12. Users can submit positive or negative feedback through Streamlit.
-13. Grafana reads the stored conversations and feedback for monitoring.
+1. The user submits a question through Streamlit or the Flask API.
+2. The frontend includes up to eight recent conversation messages.
+3. The query router identifies knowledge, pricing, or availability intent.
+4. Relative dates are resolved when operational data is requested.
+5. Knowledge queries use the selected text, vector, or hybrid configuration.
+6. Retrieved documents may be re-ranked by an LLM.
+7. Pricing and schedule questions query PostgreSQL.
+8. Retrieved documents, operational results, and conversation history are combined in the prompt.
+9. The generation model produces a grounded answer.
+10. An online judge evaluates the response.
+11. The conversation, sources, routing details, token usage, timing, and evaluation are saved.
+12. Users may submit positive or negative feedback.
+13. Grafana reads the stored monitoring data.
 
-
----
-
-## 6. Technology Stack
+## Technology stack
 
 | Component | Technology |
 | --- | --- |
-| Programming language | Python 3.13 in Docker |
+| Language | Python 3.12+ |
 | Web interface | Streamlit |
-| Web API | Flask |
-| LLM orchestration | Query-routed, conversation-aware RAG pipeline with static and operational context |
-| Language model | OpenAI-compatible LLM |
-| Search | Evaluated MinSearch, OpenAI vector retrieval, weighted hybrid retrieval, and LLM re-ranking |
+| API | Flask |
+| Generation and evaluation | OpenAI API |
+| Text retrieval | MinSearch |
+| Vector retrieval | OpenAI embeddings and NumPy |
+| Rank fusion | Weighted reciprocal-rank fusion |
+| Re-ranking | Structured LLM re-ranking |
 | Data processing | Pandas |
-| Database | PostgreSQL 16 |
+| Operational database | PostgreSQL 16 |
 | Monitoring | Grafana |
-| Dependency management | uv, `pyproject.toml`, and `uv.lock` |
+| Testing | pytest |
+| Dependencies | uv, `pyproject.toml`, and `uv.lock` |
 | Containerization | Docker and Docker Compose |
-| Evaluation | Ground truth, Hit Rate, MRR, and LLM-as-a-Judge |
+| Cloud deployment | Railway |
 
----
-
-## 7. Project Structure
+## Project structure
 
 ```text
 Tonyweng-AI-agent-Project/
-├── app.py
-├── frontend.py
-├── courtmate/
-│   ├── config.py
-│   ├── db.py
-│   ├── hybrid_search.py
-│   ├── ingest.py
-│   ├── live_context.py
-│   ├── operations.py
-│   ├── query_router.py
-│   ├── rag.py
-│   └── rerank.py
-├── evaluation/
-│   ├── evaluate_retrieval.py
-│   ├── evaluate_hybrid.py
-│   ├── evaluate_reranking.py
-│   └── evaluate_rag.py
-├── scripts/
-│   ├── db_prep.py
-│   ├── seed_operational_data.py
-│   └── check_operational_search.py
-├── tests/
-│   ├── conftest.py
-│   ├── test_api.py
-│   └── test_ingest.py
-├── data/
-│   ├── knowledge_base.csv
-│   ├── ground-truth-retrieval.csv
-│   ├── best-minsearch-boost.json
-│   ├── best-retrieval-config.json
-│   ├── best-reranking-config.json
-│   └── evaluation/
-│       ├── retrieval-evaluation-results.csv
-│       ├── hybrid-retrieval-evaluation-results.csv
-│       ├── reranking-evaluation-results.csv
-│       ├── rag-evaluation-comparison.csv
-│       └── rag-prompt-comparison.csv
-├── notebooks/
-├── grafana/
-│   ├── init.py
-│   └── dashboard.json
-├── Dockerfile
-├── docker-compose.yaml
-├── pyproject.toml
-├── uv.lock
-├── .python-version
-├── .env.example
-└── README.md
+|-- app.py
+|-- frontend.py
+|-- courtmate/
+|   |-- config.py
+|   |-- db.py
+|   |-- hybrid_search.py
+|   |-- ingest.py
+|   |-- live_context.py
+|   |-- operations.py
+|   |-- query_router.py
+|   |-- rag.py
+|   `-- rerank.py
+|-- evaluation/
+|   |-- evaluate_retrieval.py
+|   |-- evaluate_hybrid.py
+|   |-- evaluate_reranking.py
+|   `-- evaluate_rag.py
+|-- scripts/
+|   |-- db_prep.py
+|   |-- seed_operational_data.py
+|   `-- check_operational_search.py
+|-- tests/
+|   |-- conftest.py
+|   |-- test_api.py
+|   `-- test_ingest.py
+|-- data/
+|   |-- knowledge_base.csv
+|   |-- ground-truth-retrieval.csv
+|   |-- best-minsearch-boost.json
+|   |-- best-retrieval-config.json
+|   |-- best-reranking-config.json
+|   `-- evaluation/
+|       |-- retrieval-evaluation-results.csv
+|       |-- hybrid-retrieval-evaluation-results.csv
+|       |-- reranking-evaluation-results.csv
+|       |-- rag-evaluation-baseline.csv
+|       |-- rag-evaluation-comparison.csv
+|       `-- rag-prompt-comparison.csv
+|-- grafana/
+|   |-- init.py
+|   `-- dashboard.json
+|-- notebooks/
+|-- Dockerfile
+|-- docker-compose.yaml
+|-- pyproject.toml
+|-- uv.lock
+|-- .python-version
+|-- .env.example
+`-- README.md
 ```
 
----
+## Data sources
 
-## 8. Knowledge Base
+### Knowledge base
 
-The knowledge base contains information related to badminton facility operations.
-
-Possible document categories include:
-
-* Facility information
-* Opening hours
-* Court availability rules
-* Court rental prices
-* Coach profiles
-* Coach specialties
-* Coach availability
-* Private lesson pricing
-* Group lesson schedules
-* Drop-in schedules
-* Membership plans
-* Cancellation policies
-* Rescheduling policies
-* Equipment rental
-* Facility rules
-* Frequently asked questions
-
-Each document should contain enough metadata to support accurate retrieval.
-
-Example document:
-
-```json
-{
-  "id": "coach-001",
-  "category": "coach",
-  "name": "Coach Alex",
-  "level": ["beginner", "intermediate"],
-  "availability": ["Monday evening", "Saturday morning"],
-  "content": "Coach Alex teaches beginner and intermediate badminton lessons..."
-}
-```
-
----
-
-## 9. RAG Pipeline
-
-The application uses Retrieval-Augmented Generation to answer user questions.
-
-### 9.1 Document preparation
-
-Raw facility data is converted into searchable text documents.
-
-Each document may contain:
-
-* A unique document ID
-* A category
-* A title
-* Structured metadata
-* Searchable text content
-
-### 9.2 Indexing
-
-Documents are transformed into embeddings and stored in a searchable index.
-
-The index allows the application to find documents that are semantically related to the user’s question.
-
-### 9.3 Retrieval
-
-For each user question, the system retrieves the top matching documents.
-
-Example:
-
-```python
-results = search_engine.search(
-    query=user_question,
-    num_results=5
-)
-```
-
-### 9.4 Prompt construction
-
-The retrieved documents are inserted into a prompt.
+The static knowledge base is stored in:
 
 ```text
-You are a helpful assistant for a badminton facility.
-
-Answer the user question using only the supplied context.
-
-Context:
-{retrieved_documents}
-
-Question:
-{user_question}
+data/knowledge_base.csv
 ```
 
-### 9.5 Answer generation
+Each document contains:
 
-The LLM generates a response based on the retrieved information.
+- `id`
+- `category`
+- `title`
+- `content`
+- `coach_name`
+- `skill_level`
+- `location`
 
-The prompt is designed to reduce hallucinations and keep the answer grounded in the knowledge base.
+The ingestion code validates required columns and unique document IDs before fitting the search index.
 
----
+### Operational data
 
-## 10. Retrieval Evaluation
+PostgreSQL stores operational records for:
 
-Retrieval evaluation measures whether the search system returns the correct document for a given question.
+- coaches;
+- offerings;
+- prices;
+- courts;
+- court schedules;
+- conversations;
+- feedback.
 
-A ground-truth dataset is created with fields such as:
+The demonstration seed contains:
+
+- eight badminton courts;
+- hourly court rental;
+- one-to-one, one-to-two, and one-to-three private lessons;
+- basic and advanced group classes;
+- weekly group-class packages;
+- racket and shoe rental;
+- soft drinks and bottled water;
+- simulated private lessons, classes, bookings, and available slots.
+
+The generated court schedule covers 28 days. Normal public booking slots run from 10:00 AM to 10:00 PM in 60-minute intervals.
+
+This is simulated operational data for demonstration purposes, not an external production booking system.
+
+## Retrieval pipeline
+
+### Text retrieval
+
+MinSearch searches the configured text fields and supports evaluated field boosts.
+
+### Vector retrieval
+
+Knowledge-base documents are converted to embeddings with the configured OpenAI embedding model. Query embeddings are compared with normalized document vectors using cosine similarity.
+
+### Hybrid retrieval
+
+The project evaluates:
+
+- text-only retrieval;
+- 70% text and 30% vector retrieval;
+- 50% text and 50% vector retrieval;
+- 30% text and 70% vector retrieval;
+- vector-only retrieval.
+
+Text and vector rankings are combined with weighted reciprocal-rank fusion. The best configuration is selected using validation data and saved to:
 
 ```text
-question,document_id
+data/best-retrieval-config.json
 ```
 
-Example:
+The held-out test set is used for reporting, not configuration selection.
 
-```csv
-question,document_id
-"What time is beginner drop-in on Friday?",dropin-003
-"Which coach teaches beginners?",coach-001
-"What is the cancellation policy?",policy-002
-```
+### Document re-ranking
 
-### Evaluation metrics
-
-The retrieval system may be evaluated using:
-
-* Hit Rate
-* Mean Reciprocal Rank
-* Precision at K
-* Recall at K
-
-### Hit Rate
-
-Hit Rate measures whether the expected document appears anywhere in the retrieved results.
-
-```python
-def hit_rate(relevance_total):
-    return sum(any(line) for line in relevance_total) / len(relevance_total)
-```
-
-### Mean Reciprocal Rank
-
-Mean Reciprocal Rank gives a higher score when the correct document appears near the top of the result list.
-
-```python
-def mrr(relevance_total):
-    total_score = 0.0
-
-    for line in relevance_total:
-        for rank, relevant in enumerate(line):
-            if relevant:
-                total_score += 1 / (rank + 1)
-                break
-
-    return total_score / len(relevance_total)
-```
-
-The evaluation results are used to improve:
-
-* Document wording
-* Metadata
-* Search parameters
-* Number of retrieved documents
-* Embedding model selection
-
----
-
-## 11. RAG Evaluation
-
-Retrieval evaluation only checks whether the correct documents were found.
-
-RAG evaluation checks the quality of the generated answer.
-
-The generated answers can be evaluated based on:
-
-* Relevance
-* Correctness
-* Groundedness
-* Completeness
-* Hallucination risk
-
-### Example evaluation flow
-
-1. Load a set of evaluation questions.
-2. Generate an answer using the RAG pipeline.
-3. Compare the answer with the retrieved context or reference answer.
-4. Use an LLM judge or evaluation metric to assign a score.
-5. Store and summarize the results.
-
-Example evaluation categories:
+The project compares retrieval with and without LLM re-ranking. The selected configuration is saved to:
 
 ```text
-RELEVANT
-PARTLY_RELEVANT
-NON_RELEVANT
+data/best-reranking-config.json
 ```
 
-The evaluation results help identify:
+The re-ranker returns structured document IDs and relevance scores. Invalid or omitted IDs are handled safely, and omitted candidates retain their original order.
 
-* Missing knowledge-base information
-* Weak retrieval results
-* Poor prompt instructions
-* Unsupported generated claims
-* Questions the application cannot answer reliably
+### Query routing
 
-### Running the evaluations
+The router distinguishes:
 
-Run the evaluations from the project root in this order:
+- general knowledge;
+- pricing;
+- court availability.
+
+For availability questions, it resolves dates such as:
+
+```text
+tomorrow
+next Thursday
+August 6
+```
+
+Operational results are added to the prompt separately from static knowledge-base context.
+
+## Evaluation
+
+The evaluation design follows the LLM Zoomcamp methodology.
+
+### Ground truth
+
+The retrieval ground truth is stored in:
+
+```text
+data/ground-truth-retrieval.csv
+```
+
+It contains evaluation questions and expected document IDs. Records are split by document ID to prevent questions from the same document appearing in both validation and held-out test sets.
+
+### Retrieval evaluation
+
+Retrieval is evaluated using:
+
+- Hit Rate at K;
+- Mean Reciprocal Rank;
+- held-out document-level testing.
+
+Run:
+
+```bash
+uv run python -m evaluation.evaluate_retrieval
+```
+
+This compares multiple MinSearch boost configurations and stores the selected configuration.
+
+### Hybrid evaluation
+
+Run:
+
+```bash
+uv run python -m evaluation.evaluate_hybrid
+```
+
+This compares text, vector, and weighted hybrid approaches. Results are written to:
+
+```text
+data/evaluation/hybrid-retrieval-evaluation-results.csv
+```
+
+### Re-ranking evaluation
+
+Run:
+
+```bash
+uv run python -m evaluation.evaluate_reranking
+```
+
+This compares retrieval with and without LLM re-ranking.
+
+Results are written to:
+
+```text
+data/evaluation/reranking-evaluation-results.csv
+```
+
+### RAG and Prompt evaluation
+
+Run:
+
+```bash
+uv run python -m evaluation.evaluate_rag
+```
+
+This compares:
+
+- a baseline Prompt;
+- the production Prompt.
+
+An LLM judge compares generated answers with the original knowledge records and assigns `good` or `bad`.
+
+Results are written to:
+
+```text
+data/evaluation/rag-evaluation-comparison.csv
+data/evaluation/rag-prompt-comparison.csv
+```
+
+The production Prompt is selected only when it performs best on the evaluation data.
+
+### Run all evaluations
+
+Run the stages in this order:
 
 ```bash
 uv run python -m evaluation.evaluate_retrieval
@@ -490,469 +386,65 @@ uv run python -m evaluation.evaluate_reranking
 uv run python -m evaluation.evaluate_rag
 ```
 
-The evaluation stages produce:
+Hybrid, re-ranking, and RAG evaluation call OpenAI APIs and may incur usage charges.
 
-* Retrieval field-boost comparison.
-* Text, vector, and hybrid retrieval comparison.
-* Retrieval evaluation with Hit Rate and MRR.
-* Document re-ranking comparison.
-* Baseline and production Prompt comparison.
-* LLM-as-a-Judge answer evaluation.
+## API
 
-Generated reports are stored in:
-
-```text
-data/evaluation/
-```
-
-Selected production configurations are stored in:
-
-```text
-data/best-minsearch-boost.json
-data/best-retrieval-config.json
-data/best-reranking-config.json
-```
-
-The hybrid, re-ranking, and RAG evaluations call OpenAI APIs and may
-incur usage charges. The retrieval evaluation should be run before the
-other stages because later stages use its selected configurations.
-
----
-
----
-
-## 12. Flask API
-
-The project exposes the RAG application through a Flask API.
-
-### Main endpoint
-
-```http
-POST /question
-```
-
-Example request:
-
-```json
-{
-  "question": "Which coaches are available on Saturday?"
-}
-```
-
-Example response:
-
-```json
-{
-  "conversation_id": "example-conversation-id",
-  "question": "Which coaches are available on Saturday?",
-  "answer": "Based on the current schedule, Coach Alex is available on Saturday morning.",
-  "response_time": 1.42
-}
-```
-
-### Feedback endpoint
-
-```http
-POST /feedback
-```
-
-Example request:
-
-```json
-{
-  "conversation_id": "example-conversation-id",
-  "feedback": 1
-}
-```
-
-Feedback values may be:
-
-```text
-1  = positive
--1 = negative
-```
-
-Example response:
-
-```json
-{
-  "status": "feedback recorded"
-}
-```
-
-### Health-check endpoint
-
-A health endpoint may also be included:
+### Health check
 
 ```http
 GET /health
 ```
 
-Example response:
-
-```json
-{
-  "status": "ok"
-}
-```
-
----
-
-## 13. PostgreSQL Database
-
-PostgreSQL stores application activity and user feedback.
-
-Typical stored fields include:
-
-* Conversation ID
-* User question
-* Generated answer
-* Model name
-* Response time
-* Token usage
-* Timestamp
-* User feedback
-
-Example conversations table:
-
-```sql
-CREATE TABLE conversations (
-    id TEXT PRIMARY KEY,
-    question TEXT NOT NULL,
-    answer TEXT NOT NULL,
-    model_used TEXT,
-    response_time FLOAT,
-    relevance TEXT,
-    relevance_explanation TEXT,
-    prompt_tokens INTEGER,
-    completion_tokens INTEGER,
-    total_tokens INTEGER,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-Example feedback table:
-
-```sql
-CREATE TABLE feedback (
-    id SERIAL PRIMARY KEY,
-    conversation_id TEXT,
-    feedback INTEGER,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (conversation_id)
-        REFERENCES conversations(id)
-);
-```
-
-The actual schema should match the implementation in the project.
-
----
-
-## 14. Grafana Monitoring
-
-Grafana reads conversation and feedback records from PostgreSQL.
-
-The repository contains:
-
-```text
-grafana/
-├── init.py
-└── dashboard.json
-```
-
-* `dashboard.json` contains the monitoring dashboard definition.
-* `init.py` uses the Grafana HTTP API to configure the PostgreSQL
-  datasource and import the dashboard.
-* The Docker Compose Grafana service uses a named volume to preserve
-  Grafana settings across normal restarts.
-
-For local initialization, start PostgreSQL, the API, and Grafana first:
-
-```bash
-docker compose up -d
-```
-
-Then run:
-
-```bash
-uv run python grafana/init.py
-```
-
-In Railway, Grafana connects to PostgreSQL using Railway private-network
-database credentials. The dashboard can be imported from
-`grafana/dashboard.json`.
-
-### Dashboard metrics
-
-Example datasource configuration:
-
-```yaml
-apiVersion: 1
-
-datasources:
-  - name: PostgreSQL
-    type: postgres
-    access: proxy
-    url: postgres:5432
-    user: postgres
-    secureJsonData:
-      password: postgres
-    jsonData:
-      database: badminton_agent
-      sslmode: disable
-      postgresVersion: 1500
-      timescaledb: false
-    isDefault: true
-    editable: true
-```
-
-The exact database name, username, and password must match the values in `docker-compose.yaml` and `.env`.
-
-### Suggested dashboard metrics
-
-Grafana can display:
-
-* Total number of conversations
-* Conversations per hour or day
-* Average response time
-* Positive feedback count
-* Negative feedback count
-* Feedback ratio
-* Questions with low relevance
-* Token usage
-* Most common user questions
-* Application errors
-
-Example SQL query for total conversations:
-
-```sql
-SELECT COUNT(*) AS total_conversations
-FROM conversations;
-```
-
-Example SQL query for average response time:
-
-```sql
-SELECT AVG(response_time) AS average_response_time
-FROM conversations;
-```
-
-Example feedback query:
-
-```sql
-SELECT
-    feedback,
-    COUNT(*) AS count
-FROM feedback
-GROUP BY feedback;
-```
-
----
-
-## 15. Environment Variables
-
-Create a `.env` file in the project root.
-
 Example:
 
-```env
-OPENAI_API_KEY=your_openai_api_key
-
-POSTGRES_DB=badminton_agent
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=postgres
-POSTGRES_HOST=postgres
-POSTGRES_PORT=5432
-
-FLASK_HOST=0.0.0.0
-FLASK_PORT=5000
-```
-
-Do not commit the real `.env` file to GitHub.
-
-Create an `.env.example` file using placeholder values:
-
-```env
-OPENAI_API_KEY=your_openai_api_key
-
-POSTGRES_DB=badminton_agent
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=your_postgres_password
-POSTGRES_HOST=postgres
-POSTGRES_PORT=5432
-
-FLASK_HOST=0.0.0.0
-FLASK_PORT=5000
-```
-
----
-
-## 16. Local Installation
-
-Docker Compose is the recommended way to run the complete project. For local Python development, this repository uses [uv](https://docs.astral.sh/uv/) rather than `requirements.txt`.
-
-### 16.1 Clone the repository
-
 ```bash
-git clone https://github.com/tonyweng0906/Tonyweng-AI-agent-Project.git
-cd Tonyweng-AI-agent-Project
+curl http://localhost:5000/health
 ```
 
-### 16.2 Install the locked dependencies
+### Submit a question
 
-Install uv if it is not already available, then run:
-
-```bash
-uv sync --locked
+```http
+POST /question
 ```
 
-The dependency declarations are in `pyproject.toml`, and exact resolved versions are stored in `uv.lock`.
-
-### 16.3 Configure environment variables
-
-On macOS or Linux:
-
-```bash
-cp .env.example .env
-```
-
-On Windows PowerShell:
-
-```powershell
-Copy-Item .env.example .env
-```
-
-Add a valid `OPENAI_API_KEY` to `.env`. Do not commit the real `.env` file.
-
-### 16.4 Optional local development
-
-When PostgreSQL and the Flask backend are already available, start the API with:
-
-```bash
-uv run python -m scripts.db_prep
-uv run python -m scripts.seed_operational_data
-uv run python app.py
-```
-
-In another terminal, start the Streamlit frontend:
-
-```bash
-uv run streamlit run frontend.py --server.port 8501
-```
-
-For the simplest full setup, use Docker Compose as described below.
-
----
-
-## 17. Running with Docker Compose
-
-The Compose configuration starts all application services:
-
-* `postgres` — PostgreSQL database
-* `app` — Flask API and RAG backend
-* `frontend` — Streamlit chat interface
-* `grafana` — monitoring dashboard service
-
-### 17.1 Configure and start
-
-Create `.env` from `.env.example`, add `OPENAI_API_KEY`, then run:
-
-```bash
-docker compose up -d --build
-```
-
-Check service status:
-
-```bash
-docker compose ps
-```
-
-### 17.2 Access the services
-
-| Service | URL |
-| --- | --- |
-| Streamlit frontend | `http://localhost:8501` |
-| Flask API | `http://localhost:5000` |
-| Flask health check | `http://localhost:5000/health` |
-| Grafana | `http://localhost:3000` |
-| PostgreSQL from the host | `localhost:5432` |
-
-### 17.3 View logs
-
-```bash
-docker compose logs -f app
-```
-
-```bash
-docker compose logs -f frontend
-```
-
-```bash
-docker compose logs -f grafana
-```
-
-### 17.4 Stop the project
-
-```bash
-docker compose down
-```
-
-This preserves the PostgreSQL and Grafana named volumes.
-
-To delete containers and all stored database and Grafana data:
-
-```bash
-docker compose down -v
-```
-
-Use `-v` only when you intentionally want to erase the stored data.
-
----
-
-## 18. Docker Compose Configuration
-
-The repository's `docker-compose.yaml` is the source of truth for service configuration.
-
-| Service | Container port | Host port | Purpose |
-| --- | ---: | ---: | --- |
-| `app` | 5000 | 5000 | Flask API and RAG backend |
-| `frontend` | 8501 | 8501 | Streamlit web interface |
-| `grafana` | 3000 | 3000 | Monitoring dashboard |
-| `postgres` | 5432 | 5432 | Conversation and feedback storage |
-
-Inside Docker Compose, services communicate using service names:
-
-```text
-frontend -> http://app:5000
-app      -> postgres:5432
-grafana  -> postgres:5432
-```
-
-The named volumes `courtmate_postgres_data` and `courtmate_grafana_data` preserve data across normal container restarts.
-
----
-
-## 19. Testing the API
-
-### Using curl
+Example knowledge question:
 
 ```bash
 curl -X POST http://localhost:5000/question \
   -H "Content-Type: application/json" \
-  -d "{\"question\":\"What are the drop-in times?\"}"
+  -d '{"question":"What should I bring to a badminton session?"}'
 ```
 
-On PowerShell:
+Example availability question:
 
-```powershell
-Invoke-RestMethod `
-  -Method Post `
-  -Uri "http://localhost:5000/question" `
-  -ContentType "application/json" `
-  -Body '{"question":"What are the drop-in times?"}'
+```bash
+curl -X POST http://localhost:5000/question \
+  -H "Content-Type: application/json" \
+  -d '{"question":"What court times are available next Thursday?"}'
+```
+
+The endpoint also accepts recent conversation history:
+
+```json
+{
+  "question": "What about next Thursday?",
+  "history": [
+    {
+      "role": "user",
+      "content": "I want to book a court next week."
+    }
+  ]
+}
 ```
 
 ### Submit feedback
+
+```http
+POST /feedback
+```
+
+Example:
 
 ```bash
 curl -X POST http://localhost:5000/feedback \
@@ -963,119 +455,294 @@ curl -X POST http://localhost:5000/feedback \
   }'
 ```
 
-### Health check
+Feedback values:
 
-```bash
-curl http://localhost:5000/health
+```text
+ 1 = positive
+-1 = negative
 ```
 
----
+## Environment variables
 
-## 20. Useful Docker Troubleshooting Commands
-
-### Check running containers
+Copy the example configuration:
 
 ```bash
-docker ps
+cp .env.example .env
 ```
 
-A formatted view:
+Windows PowerShell:
 
-```bash
-docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Ports}}"
+```powershell
+Copy-Item .env.example .env
 ```
 
-### Check the resolved Docker Compose configuration
+The local configuration uses:
 
-```bash
-docker compose config
+```env
+OPENAI_API_KEY=replace-with-your-openai-key
+OPENAI_MODEL=gpt-4o-mini
+OPENAI_JUDGE_MODEL=gpt-4o-mini
+OPENAI_EMBEDDING_MODEL=text-embedding-3-small
+OPENAI_RERANK_MODEL=gpt-4o-mini
+OPENAI_ROUTER_MODEL=gpt-4o-mini
+
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_DB=courtmate
+POSTGRES_USER=courtmate
+POSTGRES_PASSWORD=courtmate
+TZ=America/Toronto
+
+GRAFANA_ADMIN_USER=admin
+GRAFANA_ADMIN_PASSWORD=admin
+GRAFANA_URL=http://localhost:3000
 ```
 
-This is useful when Docker still appears to use an old port mapping.
+Replace the placeholder OpenAI Key in `.env`.
 
-### Rebuild after configuration changes
+Never commit `.env` or a real API Key. Railway secrets must be configured using Railway service variables.
+
+## Quick start with Docker Compose
+
+### Requirements
+
+- Docker with Docker Compose
+- An OpenAI API Key
+
+### Clone and configure
 
 ```bash
-docker compose down --remove-orphans
+git clone https://github.com/tonyweng0906/Tonyweng-AI-agent-Project.git
+cd Tonyweng-AI-agent-Project
+cp .env.example .env
+```
+
+Add your OpenAI API Key to `.env`.
+
+### Start all services
+
+```bash
 docker compose up -d --build
 ```
 
-### Check application logs
+The API container automatically:
+
+1. waits for PostgreSQL;
+2. creates the database tables;
+3. seeds operational demonstration data;
+4. starts Flask.
+
+Check the services:
 
 ```bash
-docker compose logs app
+docker compose ps
 ```
 
-### Check PostgreSQL logs
-
-```bash
-docker compose logs postgres
-```
-
-### Check Grafana logs
-
-```bash
-docker compose logs grafana
-```
-
-### Check whether port 5000 is occupied
-
-On Windows:
-
-```powershell
-netstat -ano | findstr :5000
-```
-
-On macOS or Linux:
-
-```bash
-lsof -i :5000
-```
-
-Because port `5000` is occupied on the current development machine, the Docker application uses host port `5001`.
-
----
-
-## 21. Grafana Setup
-
-After Docker Compose starts successfully, initialize the PostgreSQL datasource and import the version-controlled dashboard.
+### Initialize Grafana
 
 Run the initializer inside the application container:
 
 ```bash
-docker compose exec -e GRAFANA_URL=http://grafana:3000 app python grafana/init.py
+docker compose exec \
+  -e GRAFANA_URL=http://grafana:3000 \
+  app python grafana/init.py
 ```
 
-Alternatively, run it from the host after `uv sync --locked`:
+This creates or updates the PostgreSQL datasource and imports the version-controlled dashboard.
 
-```bash
-uv run python grafana/init.py
-```
+### Open the services
 
-Open Grafana:
+| Service | Local URL |
+| --- | --- |
+| Streamlit frontend | `http://localhost:8501` |
+| Flask API | `http://localhost:5000` |
+| Flask health check | `http://localhost:5000/health` |
+| Grafana | `http://localhost:3000` |
+| PostgreSQL | `localhost:5432` |
 
-```text
-http://localhost:3000
-```
-
-Default credentials:
+Local Grafana defaults:
 
 ```text
 Username: admin
 Password: admin
 ```
 
-The initializer is safe to run again: it creates or updates the PostgreSQL datasource and imports `grafana/dashboard.json`.
+Change the Grafana administrator password before exposing Grafana publicly.
 
-The dashboard contains eight panels covering question volume, response relevance, latency, token usage, feedback, satisfaction, and recent conversations.
+### View logs
 
----
+```bash
+docker compose logs -f app
+docker compose logs -f frontend
+docker compose logs -f grafana
+docker compose logs -f postgres
+```
 
-## 22. Common Issues
+### Stop the project
+
+```bash
+docker compose down
+```
+
+This preserves PostgreSQL and Grafana named volumes.
+
+To intentionally erase both data volumes:
+
+```bash
+docker compose down -v
+```
+
+Do not use `-v` unless you intend to delete all stored local data.
+
+## Local development with uv
+
+Install the locked dependencies:
+
+```bash
+uv sync --locked
+```
+
+Start PostgreSQL:
+
+```bash
+docker compose up -d postgres
+```
+
+Prepare and seed the database:
+
+```bash
+uv run python -m scripts.db_prep
+uv run python -m scripts.seed_operational_data
+```
+
+Start the API:
+
+```bash
+uv run python app.py
+```
+
+In another terminal, start Streamlit:
+
+```bash
+uv run streamlit run frontend.py --server.port 8501
+```
+
+## Tests
+
+Run the complete test suite:
+
+```bash
+uv run pytest tests -v
+```
+
+The current tests cover:
+
+- API health behavior;
+- required question validation;
+- invalid feedback validation;
+- successful mocked RAG responses;
+- knowledge-base CSV loading;
+- required ingestion columns;
+- duplicate document IDs;
+- retrieval boost configuration loading.
+
+The API tests mock RAG and database dependencies, so they do not call OpenAI or require a live PostgreSQL connection.
+
+## Grafana monitoring
+
+The dashboard definition is stored in:
+
+```text
+grafana/dashboard.json
+```
+
+The initializer is stored in:
+
+```text
+grafana/init.py
+```
+
+The dashboard includes eight panels covering:
+
+- total question volume;
+- response relevance;
+- response latency;
+- token usage;
+- positive and negative feedback;
+- satisfaction ratio;
+- recent conversations.
+
+Grafana reads PostgreSQL through its datasource. In Railway, the datasource should use the PostgreSQL private-network hostname and credentials.
+
+## Railway deployment
+
+The project can be deployed as four Railway services:
+
+- PostgreSQL
+- API
+- Streamlit frontend
+- Grafana
+
+### API service
+
+Required variables include:
+
+```text
+OPENAI_API_KEY
+OPENAI_MODEL
+OPENAI_JUDGE_MODEL
+OPENAI_EMBEDDING_MODEL
+OPENAI_RERANK_MODEL
+OPENAI_ROUTER_MODEL
+POSTGRES_HOST
+POSTGRES_PORT
+POSTGRES_DB
+POSTGRES_USER
+POSTGRES_PASSWORD
+TZ
+```
+
+Recommended API start command:
+
+```text
+python -m scripts.db_prep && python -m scripts.seed_operational_data && python app.py
+```
+
+Use Railway reference variables for PostgreSQL credentials. Do not copy production credentials into the repository.
+
+### Frontend service
+
+Set:
+
+```text
+BADMINTON_MATE_API_URL=https://your-api-domain
+```
+
+The frontend start command is:
+
+```text
+streamlit run frontend.py --server.address=0.0.0.0 --server.port=$PORT
+```
+
+### Grafana service
+
+Attach a persistent Railway volume at:
+
+```text
+/var/lib/grafana
+```
+
+Configure the PostgreSQL datasource with Railway's private database hostname. Import:
+
+```text
+grafana/dashboard.json
+```
+
+Seal sensitive Railway variables and rotate any credential that has been exposed.
+
+## Troubleshooting
 
 ### Frontend cannot reach the API
-
-Check both services:
 
 ```bash
 docker compose ps
@@ -1083,47 +750,38 @@ docker compose logs frontend --tail=100
 docker compose logs app --tail=100
 ```
 
-The frontend container must use:
+Inside Docker Compose, the frontend URL must be:
 
 ```text
 BADMINTON_MATE_API_URL=http://app:5000
 ```
 
-### Application cannot connect to PostgreSQL
+### API cannot connect to PostgreSQL
 
-Inside Docker, the database host must be the Compose service name:
+Inside Docker Compose:
 
 ```text
 POSTGRES_HOST=postgres
 ```
 
-Check the database and application logs:
+Check:
 
 ```bash
 docker compose logs postgres --tail=100
 docker compose logs app --tail=100
 ```
 
-### Port 5000 is already in use
-
-Change the app mapping in `docker-compose.yaml`:
-
-```yaml
-ports:
-  - "5001:5000"
-```
-
-Then access the API from the host at `http://localhost:5001`. The frontend container still uses `http://app:5000`.
-
 ### Grafana has no datasource or dashboard
 
 Run:
 
 ```bash
-docker compose exec -e GRAFANA_URL=http://grafana:3000 app python grafana/init.py
+docker compose exec \
+  -e GRAFANA_URL=http://grafana:3000 \
+  app python grafana/init.py
 ```
 
-Then inspect the Grafana logs if initialization fails:
+Then inspect:
 
 ```bash
 docker compose logs grafana --tail=100
@@ -1137,309 +795,85 @@ docker compose down --remove-orphans
 docker compose up -d --build
 ```
 
----
+### A port is already in use
 
-## 23. Example User Interaction
+Change only the host side of the relevant mapping.
 
-### User
+For example:
+
+```yaml
+ports:
+  - "5001:5000"
+```
+
+The frontend container should continue using:
 
 ```text
-Which coaches are available for beginner lessons on Saturday?
+http://app:5000
 ```
 
-### Assistant
-
-```text
-Based on the current facility information, Coach Alex offers beginner lessons
-on Saturday morning. Availability should be confirmed before completing a
-booking.
-```
-
-### User
-
-```text
-What is the cancellation policy?
-```
-
-### Assistant
-
-```text
-Lessons must be cancelled within the period specified by the facility policy.
-Late cancellations may not qualify for a refund or credit.
-```
-
-The assistant should avoid inventing information when the answer is not contained in the knowledge base.
-
----
-
-## 24. Planned Agent Tools
-
-The current system mainly provides RAG-based question answering.
-
-Future versions can introduce tools that allow the agent to perform actions.
-
-### Search coaches
-
-```python
-def search_coaches(
-    skill_level: str,
-    date: str | None = None,
-    time: str | None = None
-):
-    ...
-```
-
-### Search courts
-
-```python
-def search_available_courts(
-    date: str,
-    start_time: str,
-    duration_minutes: int
-):
-    ...
-```
-
-### Create booking
-
-```python
-def create_booking(
-    customer_id: str,
-    court_id: str,
-    date: str,
-    start_time: str,
-    duration_minutes: int
-):
-    ...
-```
-
-### Cancel booking
-
-```python
-def cancel_booking(
-    booking_id: str,
-    reason: str | None = None
-):
-    ...
-```
-
-### Reschedule lesson
-
-```python
-def reschedule_lesson(
-    booking_id: str,
-    new_date: str,
-    new_start_time: str
-):
-    ...
-```
-
-### Find replacement time
-
-```python
-def find_replacement_times(
-    coach_id: str,
-    original_booking_id: str
-):
-    ...
-```
-
-Before performing actions that affect a real booking, the system should request user confirmation.
-
----
-
-## 25. Safety and Reliability
-
-The AI assistant should follow several operational rules:
-
-1. Do not claim a booking was created unless the booking system confirms it.
-2. Do not claim a cancellation succeeded unless the database confirms it.
-3. Do not invent coach or court availability.
-4. Do not expose private customer information.
-5. Request confirmation before making schedule changes.
-6. Log booking-related actions.
-7. Return a clear error when required information is missing.
-8. Escalate uncertain cases to staff.
-9. Use the knowledge base as the source of truth for policies.
-10. Distinguish between information requests and real booking actions.
-
----
-
-## 26. Evaluation Plan
-
-The completed project should be evaluated at several levels.
-
-### Retrieval evaluation
-
-Measures whether the correct knowledge-base document is retrieved.
-
-Metrics:
-
-* Hit Rate
-* Mean Reciprocal Rank
-* Precision at K
-* Recall at K
-
-### Answer evaluation
-
-Measures the quality of generated answers.
-
-Criteria:
-
-* Relevance
-* Correctness
-* Groundedness
-* Completeness
-* Clarity
-
-### Operational evaluation
-
-Measures application performance.
-
-Metrics:
-
-* Average response time
-* Error rate
-* Positive feedback percentage
-* Negative feedback percentage
-* Number of conversations
-* Token usage
-
-### Future booking evaluation
-
-Once action tools are added, evaluate:
-
-* Booking success rate
-* Scheduling conflict rate
-* Cancellation success rate
-* Rescheduling success rate
-* Number of cases escalated to staff
-
----
-
-## 27. Future Improvements
-
-The current project supports knowledge questions, pricing queries, and
-court-availability lookup. Future work will focus on transactional
-booking capabilities and production hardening.
-
-Planned improvements include:
-
-* Create, confirm, cancel, and reschedule real bookings.
-* Add customer authentication and user profiles.
-* Add role-based access for customers, coaches, and staff.
-* Add a staff interface for maintaining prices and schedules.
-* Support coach-specific prices and availability.
-* Add confirmation before any booking-related database change.
-* Integrate with Google Calendar or an external booking platform.
-* Send booking confirmations through email or SMS.
-* Add automated CI checks for tests and code quality.
-* Add PostgreSQL backups and recovery procedures.
-* Add application error monitoring and Grafana alerts.
-* Add evaluation cases for pricing and live-availability queries.
-* Cache document embeddings to reduce application startup cost.
-* Add multilingual support.
-* Perform a production security review.
-
----
-
----
-
-## 28. Development Roadmap
-
-### Phase 1 — Knowledge assistant: completed
-
-* Prepare the facility knowledge base.
-* Build text and vector retrieval.
-* Evaluate retrieval with Hit Rate and MRR.
-* Compare multiple retrieval configurations.
-* Evaluate multiple generation prompts.
-* Add optional document re-ranking.
-
-### Phase 2 — Application and monitoring: completed
-
-* Build the Flask API.
-* Build the Streamlit interface.
-* Store conversations and user feedback in PostgreSQL.
-* Add Grafana monitoring.
-* Add Docker Compose.
-* Add automated API and ingestion tests.
-
-### Phase 3 — Operational information: completed
-
-* Create structured price, coach, offering, court, and schedule tables.
-* Seed simulated operational data.
-* Route pricing and availability questions.
-* Resolve relative dates.
-* Query available courts by date and time.
-* Combine operational results with generated answers.
-
-### Phase 4 — Booking actions: planned
-
-* Create confirmed bookings.
-* Prevent scheduling conflicts.
-* Cancel and reschedule bookings.
-* Add customer and staff authentication.
-* Request confirmation before database-changing actions.
-* Record booking audit events.
-
-### Phase 5 — Production hardening: in progress
-
-* Deploy services through Railway.
-* Add CI/CD checks.
-* Configure database backups.
-* Add error monitoring and alerts.
-* Add authentication and permissions.
-* Perform load and security testing.
-
----
-
----
-
-## 29. Current Development URLs
-
-After running Docker Compose:
-
-| Service | URL |
-| --- | --- |
-| Streamlit frontend | `http://localhost:8501` |
-| Flask API | `http://localhost:5000` |
-| Grafana | `http://localhost:3000` |
-| PostgreSQL | `localhost:5432` |
-
-Docker containers communicate internally using:
-
-```text
-frontend -> app:5000
-app -> postgres:5432
-grafana -> postgres:5432
-```
-
----
-
-## 30. References
-
-This project follows concepts and examples from:
-
-* DataTalksClub LLM Zoomcamp
-* LLM Zoomcamp project-example lessons
-* The Fitness Assistant demonstration project
-* Retrieval-Augmented Generation workflows
-* LLM evaluation and monitoring practices
-
----
-
-## 31. Author
+## Safety and limitations
+
+- Static knowledge-base information must not be presented as live availability.
+- Operational availability comes from the PostgreSQL demonstration schedule.
+- The assistant cannot currently create, hold, modify, or cancel a booking.
+- A booking must never be described as confirmed without a successful booking-system response.
+- Prices, policies, schedules, and coach information must not be invented.
+- Database-changing actions should require explicit user confirmation.
+- Customer information and credentials must not be exposed.
+- Production secrets belong in Railway variables, not source control.
+- The system provides club information, not a guaranteed booking service.
+
+## Roadmap
+
+### Completed
+
+- Static knowledge-base ingestion
+- Text and vector retrieval
+- Hybrid retrieval evaluation
+- Document re-ranking evaluation
+- Prompt comparison
+- LLM-as-a-Judge evaluation
+- Flask API
+- Streamlit interface
+- PostgreSQL persistence
+- Operational pricing and schedule lookup
+- Grafana monitoring
+- Docker Compose
+- Railway deployment configuration
+- API and ingestion tests
+
+### Planned
+
+- Real booking creation
+- Conflict-safe cancellation and rescheduling
+- Customer and staff authentication
+- Role-based permissions
+- Coach-specific pricing and availability
+- Staff schedule-management interface
+- Email or SMS confirmations
+- Calendar integration
+- GitHub Actions CI
+- Database backups and alerts
+- Embedding cache
+- Multilingual support
+- Load and security testing
+
+## References
+
+- [DataTalksClub LLM Zoomcamp](https://github.com/DataTalksClub/llm-zoomcamp)
+- Retrieval-Augmented Generation
+- Ground-truth retrieval evaluation
+- Hit Rate and Mean Reciprocal Rank
+- LLM-as-a-Judge
+- Hybrid retrieval and document re-ranking
+
+## Author
 
 **Tony Weng**
 
-LLM Zoomcamp Project
-Badminton Court AI Agent
+LLM Zoomcamp Final Project
 
----
+## License
 
-## 32. License
-
-This project is currently intended for educational and portfolio purposes.
-
-A formal open-source license can be added before public distribution.
+This repository is currently intended for educational and portfolio purposes. Add a formal license before distributing it as an open-source project.
