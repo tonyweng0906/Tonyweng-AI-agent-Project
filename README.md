@@ -65,37 +65,45 @@ The AI agent provides a single conversational interface for accessing facility i
 
 ## 3. Project Goals
 
-The current version of the project focuses on building a reliable question-answering and monitoring system.
+The project provides a single conversational interface for static club
+knowledge and operational badminton-facility data.
 
-### Current goals
+### Current capabilities
 
-* Build a searchable badminton facility knowledge base.
-* Retrieve relevant information using semantic search.
-* Generate grounded answers with an LLM.
-* Evaluate retrieval quality.
-* Evaluate generated RAG answers.
-* Expose the assistant through a Flask API.
-* Record conversations and user feedback in PostgreSQL.
-* Monitor application activity using Grafana.
-* Run the complete application with Docker Compose.
+* Search the badminton facility knowledge base.
+* Combine evaluated text and vector retrieval.
+* Re-rank retrieved documents when the evaluated configuration enables it.
+* Answer questions using grounded LLM generation.
+* Route pricing and availability questions to PostgreSQL operational data.
+* Resolve relative date expressions for court availability.
+* Return available courts for specific dates and 60-minute time slots.
+* Return lesson, court, and equipment pricing.
+* Expose the assistant through Flask and Streamlit.
+* Store conversations, evaluation results, and user feedback.
+* Monitor application activity through Grafana.
+* Run locally with Docker Compose and deploy through Railway.
 
 ### Future goals
 
-* Check real-time court availability.
-* Check real-time coach availability.
-* Create new bookings.
-* Cancel or reschedule lessons.
-* Recommend coaches based on player level.
-* Integrate with a calendar or booking platform.
+* Create and confirm real court bookings.
+* Cancel or reschedule bookings.
+* Add customer authentication and user profiles.
+* Add coach-specific pricing and availability.
+* Provide a staff interface for editing schedules and prices.
+* Integrate with calendar, email, or SMS services.
 * Send booking confirmations and reminders.
-* Add authentication and user profiles.
-* Support multi-step agent workflows.
+* Add automated CI, production backups, and alerting.
+* Add permission controls for booking-related actions.
+
+---
 
 ---
 
 ## 4. Current Project Status
 
-The current version implements a complete RAG application with a web UI, API, persistence, evaluation artifacts, monitoring, and containerized services.
+The current version implements a complete badminton-club assistant with
+a web UI, API, hybrid retrieval, operational database queries, evaluation,
+monitoring, and containerized deployment.
 
 Implemented components include:
 
@@ -103,72 +111,95 @@ Implemented components include:
 * [x] Badminton facility knowledge base
 * [x] Automated CSV loading and text indexing
 * [x] MinSearch text retrieval
+* [x] OpenAI embedding-based vector retrieval
+* [x] Evaluated hybrid retrieval configurations
+* [x] LLM document re-ranking
 * [x] Retrieval-Augmented Generation
 * [x] Ground-truth retrieval evaluation with Hit Rate and MRR
-* [x] LLM-as-a-Judge evaluation
+* [x] Multiple-prompt evaluation with LLM-as-a-Judge
+* [x] Query routing for knowledge, pricing, and availability requests
+* [x] PostgreSQL pricing and operational schedule data
+* [x] Live court-availability queries
 * [x] Flask API
 * [x] Streamlit chat interface
 * [x] Conversation-history-aware retrieval queries
 * [x] PostgreSQL conversation and feedback storage
-* [x] Grafana dashboard with eight monitoring panels
+* [x] Grafana monitoring dashboard
 * [x] Docker Compose setup
-* [ ] Real booking tools
-* [ ] Coach scheduling automation
-* [ ] Cancellation and rescheduling workflow
-* [ ] Production deployment
+* [x] Railway deployment configuration
+* [x] Automated API and ingestion tests
+* [ ] Real booking creation
+* [ ] Customer authentication
+* [ ] Cancellation and rescheduling actions
+* [ ] Automated CI workflow
 
 ---
 
 ## 5. System Architecture
 
-The application uses a Retrieval-Augmented Generation architecture.
+The application combines a static badminton knowledge base with
+operational PostgreSQL data.
 
-```text
-User
-  |
-  v
-Streamlit UI
-  |
-  v
-Flask API
-  |
-  v
-Conversation-aware RAG pipeline
-  |
-  +------------------------+
-  |                        |
-  v                        v
-MinSearch text retrieval   OpenAI-compatible LLM
-  |
-  v
-CSV knowledge base
-  |
-  v
-Retrieved context
-  |
-  v
-Generated answer
-  |
-  +------------------------+
-  |                        |
-  v                        v
-PostgreSQL             API / Streamlit response
-  |
-  v
-Grafana dashboard
+```mermaid
+flowchart TD
+    U["User"] --> UI["Streamlit frontend"]
+    UI --> API["Flask API"]
+    API --> ROUTER["Query router"]
+
+    ROUTER --> STATIC["Knowledge retrieval"]
+    ROUTER --> LIVE["Operational lookup"]
+
+    STATIC --> TEXT["MinSearch text ranking"]
+    STATIC --> VECTOR["OpenAI vector ranking"]
+    TEXT --> FUSION["Weighted rank fusion"]
+    VECTOR --> FUSION
+    FUSION --> RERANK["Optional LLM re-ranking"]
+
+    LIVE --> PRICES["PostgreSQL prices"]
+    LIVE --> SCHEDULE["PostgreSQL court schedule"]
+
+    RERANK --> CONTEXT["Combined prompt context"]
+    PRICES --> CONTEXT
+    SCHEDULE --> CONTEXT
+    API --> HISTORY["Recent conversation history"]
+    HISTORY --> CONTEXT
+
+    CONTEXT --> LLM["OpenAI generation model"]
+    LLM --> JUDGE["Online relevance judge"]
+    JUDGE --> DATABASE["PostgreSQL conversation record"]
+    LLM --> RESPONSE["API response"]
+    RESPONSE --> UI
+
+    UI --> FEEDBACK["User feedback"]
+    FEEDBACK --> DATABASE
+    DATABASE --> GRAFANA["Grafana monitoring"]
 ```
 
 ### Request flow
 
-1. The user submits a question through Streamlit or directly to the Flask API.
-2. The frontend sends the current question and up to eight recent messages.
-3. The RAG pipeline uses recent user messages to contextualize follow-up retrieval queries.
-4. MinSearch retrieves the most relevant records from the badminton knowledge base.
-5. The retrieved documents and conversation history are added to the LLM prompt.
-6. The LLM generates a grounded answer.
-7. The question, answer, relevance judgment, token usage, and response time are stored in PostgreSQL.
-8. The user can submit positive or negative feedback.
-9. Grafana reads the stored application data for monitoring.
+1. The user submits a question through Streamlit or directly to the
+   Flask API.
+2. The frontend sends the question together with up to eight recent
+   conversation messages.
+3. The query router identifies whether the request concerns general
+   knowledge, pricing, or court availability.
+4. Date expressions such as `tomorrow` or `next Thursday` are resolved
+   for operational schedule queries.
+5. Knowledge queries use evaluated text and vector retrieval.
+6. Text and vector rankings are combined using weighted rank fusion.
+7. Retrieved documents may be re-ranked by the configured LLM
+   re-ranker.
+8. Pricing and availability requests retrieve current operational
+   records from PostgreSQL.
+9. Static documents, operational results, and recent conversation
+   history are combined in the generation prompt.
+10. The LLM produces a grounded response, and an online judge evaluates
+    its relevance.
+11. The response, sources, token usage, timing, routing information, and
+    relevance result are stored in PostgreSQL.
+12. Users can submit positive or negative feedback through Streamlit.
+13. Grafana reads the stored conversations and feedback for monitoring.
+
 
 ---
 
@@ -179,9 +210,9 @@ Grafana dashboard
 | Programming language | Python 3.13 in Docker |
 | Web interface | Streamlit |
 | Web API | Flask |
-| LLM orchestration | Custom conversation-aware RAG pipeline |
+| LLM orchestration | Query-routed, conversation-aware RAG pipeline with static and operational context |
 | Language model | OpenAI-compatible LLM |
-| Search | MinSearch text retrieval with evaluated field boosts |
+| Search | Evaluated MinSearch, OpenAI vector retrieval, weighted hybrid retrieval, and LLM re-ranking |
 | Data processing | Pandas |
 | Database | PostgreSQL 16 |
 | Monitoring | Grafana |
@@ -448,6 +479,46 @@ The evaluation results help identify:
 * Unsupported generated claims
 * Questions the application cannot answer reliably
 
+### Running the evaluations
+
+Run the evaluations from the project root in this order:
+
+```bash
+uv run python -m evaluation.evaluate_retrieval
+uv run python -m evaluation.evaluate_hybrid
+uv run python -m evaluation.evaluate_reranking
+uv run python -m evaluation.evaluate_rag
+```
+
+The evaluation stages produce:
+
+* Retrieval field-boost comparison.
+* Text, vector, and hybrid retrieval comparison.
+* Retrieval evaluation with Hit Rate and MRR.
+* Document re-ranking comparison.
+* Baseline and production Prompt comparison.
+* LLM-as-a-Judge answer evaluation.
+
+Generated reports are stored in:
+
+```text
+data/evaluation/
+```
+
+Selected production configurations are stored in:
+
+```text
+data/best-minsearch-boost.json
+data/best-retrieval-config.json
+data/best-reranking-config.json
+```
+
+The hybrid, re-ranking, and RAG evaluations call OpenAI APIs and may
+incur usage charges. The retrieval evaluation should be run before the
+other stages because later stages use its selected configurations.
+
+---
+
 ---
 
 ## 12. Flask API
@@ -579,13 +650,39 @@ The actual schema should match the implementation in the project.
 
 ## 14. Grafana Monitoring
 
-Grafana is used to monitor the application through PostgreSQL.
+Grafana reads conversation and feedback records from PostgreSQL.
 
-The Grafana PostgreSQL datasource is provisioned from:
+The repository contains:
 
 ```text
-grafana/provisioning/datasources/postgres.yaml
+grafana/
+├── init.py
+└── dashboard.json
 ```
+
+* `dashboard.json` contains the monitoring dashboard definition.
+* `init.py` uses the Grafana HTTP API to configure the PostgreSQL
+  datasource and import the dashboard.
+* The Docker Compose Grafana service uses a named volume to preserve
+  Grafana settings across normal restarts.
+
+For local initialization, start PostgreSQL, the API, and Grafana first:
+
+```bash
+docker compose up -d
+```
+
+Then run:
+
+```bash
+uv run python grafana/init.py
+```
+
+In Railway, Grafana connects to PostgreSQL using Railway private-network
+database credentials. The dashboard can be imported from
+`grafana/dashboard.json`.
+
+### Dashboard metrics
 
 Example datasource configuration:
 
@@ -1222,67 +1319,80 @@ Once action tools are added, evaluate:
 
 ## 27. Future Improvements
 
+The current project supports knowledge questions, pricing queries, and
+court-availability lookup. Future work will focus on transactional
+booking capabilities and production hardening.
+
 Planned improvements include:
 
-* Replace static availability data with a real scheduling database.
-* Add structured tool calling.
-* Add multi-step agent workflows.
-* Add customer authentication.
-* Add coach and staff dashboards.
-* Add booking confirmation.
-* Add cancellation confirmation.
-* Add email or SMS notifications.
-* Add Google Calendar integration.
-* Add role-based access control.
-* Add automated testing.
-* Add CI/CD.
-* Deploy the application to a cloud platform.
+* Create, confirm, cancel, and reschedule real bookings.
+* Add customer authentication and user profiles.
+* Add role-based access for customers, coaches, and staff.
+* Add a staff interface for maintaining prices and schedules.
+* Support coach-specific prices and availability.
+* Add confirmation before any booking-related database change.
+* Integrate with Google Calendar or an external booking platform.
+* Send booking confirmations through email or SMS.
+* Add automated CI checks for tests and code quality.
+* Add PostgreSQL backups and recovery procedures.
+* Add application error monitoring and Grafana alerts.
+* Add evaluation cases for pricing and live-availability queries.
+* Cache document embeddings to reduce application startup cost.
 * Add multilingual support.
-* Add fallback handling for unsupported questions.
-* Add automatic evaluation reports.
-* Add more Grafana dashboards and alerts.
+* Perform a production security review.
+
+---
 
 ---
 
 ## 28. Development Roadmap
 
-### Phase 1 — Knowledge assistant
+### Phase 1 — Knowledge assistant: completed
 
-* Prepare facility data
-* Build the knowledge base
-* Implement semantic search
-* Implement the RAG pipeline
-* Evaluate retrieval
-* Evaluate generated answers
+* Prepare the facility knowledge base.
+* Build text and vector retrieval.
+* Evaluate retrieval with Hit Rate and MRR.
+* Compare multiple retrieval configurations.
+* Evaluate multiple generation prompts.
+* Add optional document re-ranking.
 
-### Phase 2 — Application and monitoring
+### Phase 2 — Application and monitoring: completed
 
-* Build Flask API
-* Store conversations in PostgreSQL
-* Store user feedback
-* Add Grafana monitoring
-* Add Docker Compose
+* Build the Flask API.
+* Build the Streamlit interface.
+* Store conversations and user feedback in PostgreSQL.
+* Add Grafana monitoring.
+* Add Docker Compose.
+* Add automated API and ingestion tests.
 
-### Phase 3 — Booking agent
+### Phase 3 — Operational information: completed
 
-* Create structured booking tables
-* Implement coach availability search
-* Implement court availability search
-* Implement booking creation
-* Implement cancellation
-* Implement rescheduling
-* Add confirmation steps
+* Create structured price, coach, offering, court, and schedule tables.
+* Seed simulated operational data.
+* Route pricing and availability questions.
+* Resolve relative dates.
+* Query available courts by date and time.
+* Combine operational results with generated answers.
 
-### Phase 4 — Production readiness
+### Phase 4 — Booking actions: planned
 
-* Authentication
-* Permissions
-* Automated tests
-* Error monitoring
-* Deployment
-* Backups
-* Security review
-* Real booking-system integration
+* Create confirmed bookings.
+* Prevent scheduling conflicts.
+* Cancel and reschedule bookings.
+* Add customer and staff authentication.
+* Request confirmation before database-changing actions.
+* Record booking audit events.
+
+### Phase 5 — Production hardening: in progress
+
+* Deploy services through Railway.
+* Add CI/CD checks.
+* Configure database backups.
+* Add error monitoring and alerts.
+* Add authentication and permissions.
+* Perform load and security testing.
+
+---
 
 ---
 

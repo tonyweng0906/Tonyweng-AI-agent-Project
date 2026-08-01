@@ -1,7 +1,7 @@
 [project]
 name = "tonyweng-ai-agent-project"
 version = "0.1.0"
-description = "Add your description here"
+description = "A RAG-powered badminton club assistant with live court availability, evaluation, feedback, and monitoring."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
