@@ -1,3 +1,4 @@
+import os
 import uuid
 
 from flask import Flask, jsonify, request
@@ -7,6 +8,34 @@ from courtmate import db
 
 
 app = Flask(__name__)
+
+MAX_QUESTION_LENGTH = int(
+    os.getenv("MAX_QUESTION_LENGTH", "2000")
+)
+MAX_HISTORY_MESSAGES = int(
+    os.getenv("MAX_HISTORY_MESSAGES", "8")
+)
+MAX_HISTORY_MESSAGE_LENGTH = int(
+    os.getenv("MAX_HISTORY_MESSAGE_LENGTH", "4000")
+)
+
+app.config["MAX_CONTENT_LENGTH"] = int(
+    os.getenv("MAX_REQUEST_BYTES", "65536")
+)
+
+
+@app.errorhandler(413)
+def request_too_large(_error):
+    return (
+        jsonify(
+            {
+                "error": (
+                    "The request body is too large."
+                )
+            }
+        ),
+        413,
+    )
 
 def run_rag(
     question: str,
@@ -68,7 +97,9 @@ def handle_question():
     history: list[dict[str, str]] = []
 
     if isinstance(raw_history, list):
-        for message in raw_history[-8:]:
+        for message in raw_history[
+            -MAX_HISTORY_MESSAGES:
+        ]:
             if not isinstance(message, dict):
                 continue
 
@@ -86,6 +117,10 @@ def handle_question():
             if not content:
                 continue
 
+            content = content[
+                :MAX_HISTORY_MESSAGE_LENGTH
+            ]
+
             history.append(
                 {
                     "role": role,
@@ -99,6 +134,19 @@ def handle_question():
                 {
                     "error": (
                         "The 'question' field is required."
+                    )
+                }
+            ),
+            400,
+        )
+
+    if len(question) > MAX_QUESTION_LENGTH:
+        return (
+            jsonify(
+                {
+                    "error": (
+                        "The question exceeds the "
+                        f"{MAX_QUESTION_LENGTH}-character limit."
                     )
                 }
             ),
@@ -230,3 +278,4 @@ if __name__ == "__main__":
         host="0.0.0.0",
         port=5000,
     )
+

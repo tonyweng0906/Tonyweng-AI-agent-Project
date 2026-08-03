@@ -1,4 +1,6 @@
+import hashlib
 import time
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Literal
 
@@ -237,6 +239,13 @@ def main() -> None:
         )
     )
 
+    ground_truth_sha256 = hashlib.sha256(
+        GROUND_TRUTH_PATH.read_bytes()
+    ).hexdigest()
+    evaluated_at = datetime.now(
+        timezone.utc
+    ).isoformat()
+
     print(
         f"Documents: {len(documents)}"
     )
@@ -367,7 +376,7 @@ def main() -> None:
                 f"[{current_evaluation}/"
                 f"{total_evaluations}] "
                 f"{configuration}: "
-                f"{score} — {question}"
+                f"{score} 鈥?{question}"
             )
 
             time.sleep(0.1)
@@ -439,6 +448,11 @@ def main() -> None:
                 "bad": bad_count,
                 "errors": error_count,
                 "good_rate": good_rate,
+                "question_count": len(ground_truth),
+                "ground_truth_sha256": (
+                    ground_truth_sha256
+                ),
+                "evaluated_at": evaluated_at,
             }
         )
 
@@ -514,4 +528,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
 

@@ -14,7 +14,7 @@ from courtmate.config import (
     TIMEZONE,
 )
 
-APP_TIMEZONE = ZoneInfo("America/Toronto")
+APP_TIMEZONE = ZoneInfo(TIMEZONE)
 
 
 def current_timestamp() -> datetime:
@@ -83,11 +83,21 @@ def init_db() -> None:
                     specialties TEXT NOT NULL DEFAULT '',
                     skill_level TEXT NOT NULL DEFAULT '',
                     active BOOLEAN NOT NULL DEFAULT TRUE,
+                    source TEXT NOT NULL DEFAULT 'manual',
                     created_at TIMESTAMPTZ NOT NULL
                         DEFAULT CURRENT_TIMESTAMP,
                     updated_at TIMESTAMPTZ NOT NULL
                         DEFAULT CURRENT_TIMESTAMP
                 )
+                """
+            )
+
+            cursor.execute(
+                """
+                ALTER TABLE coaches
+                ADD COLUMN IF NOT EXISTS
+                source TEXT NOT NULL
+                DEFAULT 'manual'
                 """
             )
 
@@ -123,11 +133,21 @@ def init_db() -> None:
                             OR capacity > 0
                         ),
                     active BOOLEAN NOT NULL DEFAULT TRUE,
+                    source TEXT NOT NULL DEFAULT 'manual',
                     created_at TIMESTAMPTZ NOT NULL
                         DEFAULT CURRENT_TIMESTAMP,
                     updated_at TIMESTAMPTZ NOT NULL
                         DEFAULT CURRENT_TIMESTAMP
                 )
+                """
+            )
+
+            cursor.execute(
+                """
+                ALTER TABLE offerings
+                ADD COLUMN IF NOT EXISTS
+                source TEXT NOT NULL
+                DEFAULT 'manual'
                 """
             )
 
@@ -174,6 +194,7 @@ def init_db() -> None:
                         DEFAULT CURRENT_DATE,
                     effective_to DATE,
                     active BOOLEAN NOT NULL DEFAULT TRUE,
+                    source TEXT NOT NULL DEFAULT 'manual',
                     created_at TIMESTAMPTZ NOT NULL
                         DEFAULT CURRENT_TIMESTAMP,
                     CHECK (
@@ -198,6 +219,15 @@ def init_db() -> None:
                             effective_from
                         )
                 )
+                """
+            )
+
+            cursor.execute(
+                """
+                ALTER TABLE prices
+                ADD COLUMN IF NOT EXISTS
+                source TEXT NOT NULL
+                DEFAULT 'manual'
                 """
             )
 
@@ -564,3 +594,4 @@ def check_database_connection() -> bool:
 
     finally:
         connection.close()
+

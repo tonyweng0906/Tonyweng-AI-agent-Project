@@ -44,6 +44,20 @@ def test_question_rejects_blank_question(client):
     assert response.status_code == 400
 
 
+def test_question_rejects_excessive_length(client):
+    response = client.post(
+        "/question",
+        json={
+            "question": "x" * (
+                app_module.MAX_QUESTION_LENGTH + 1
+            )
+        },
+    )
+
+    assert response.status_code == 400
+    assert "character limit" in response.json["error"]
+
+
 def test_feedback_rejects_invalid_value(client):
     response = client.post(
         "/feedback",
@@ -117,3 +131,4 @@ def test_question_returns_answer_and_saves_conversation(
     assert saved_conversation["answer_data"]["answer"] == (
         "Bring court shoes, water, and a racket."
     )
+

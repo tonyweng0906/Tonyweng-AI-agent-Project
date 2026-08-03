@@ -575,6 +575,40 @@ def seed_data() -> None:
 
     try:
         with connection.cursor() as cursor:
+            # Seed-managed catalog rows are reactivated below. Rows that
+            # were removed from this file remain available for audit but
+            # no longer appear in operational searches.
+            cursor.execute(
+                """
+                UPDATE coaches
+                SET active = FALSE,
+                    updated_at = CURRENT_TIMESTAMP
+                WHERE source = 'seed'
+                """
+            )
+
+            cursor.execute(
+                """
+                UPDATE offerings
+                SET active = FALSE,
+                    updated_at = CURRENT_TIMESTAMP
+                WHERE source = 'seed'
+                """
+            )
+
+            cursor.execute(
+                """
+                UPDATE prices
+                SET active = FALSE
+                WHERE source = 'seed'
+                """
+            )
+
+            coach_rows = [
+                (*coach, True, "seed")
+                for coach in COACHES
+            ]
+
             execute_values(
                 cursor,
                 """
@@ -583,7 +617,9 @@ def seed_data() -> None:
                     name,
                     description,
                     specialties,
-                    skill_level
+                    skill_level,
+                    active,
+                    source
                 )
                 VALUES %s
                 ON CONFLICT (id)
@@ -595,11 +631,18 @@ def seed_data() -> None:
                         EXCLUDED.specialties,
                     skill_level =
                         EXCLUDED.skill_level,
+                    active = EXCLUDED.active,
+                    source = EXCLUDED.source,
                     updated_at =
                         CURRENT_TIMESTAMP
                 """,
-                COACHES,
+                coach_rows,
             )
+
+            offering_rows = [
+                (*offering, True, "seed")
+                for offering in OFFERINGS
+            ]
 
             execute_values(
                 cursor,
@@ -611,7 +654,9 @@ def seed_data() -> None:
                     description,
                     coach_id,
                     duration_minutes,
-                    capacity
+                    capacity,
+                    active,
+                    source
                 )
                 VALUES %s
                 ON CONFLICT (id)
@@ -627,10 +672,12 @@ def seed_data() -> None:
                         EXCLUDED.duration_minutes,
                     capacity =
                         EXCLUDED.capacity,
+                    active = EXCLUDED.active,
+                    source = EXCLUDED.source,
                     updated_at =
                         CURRENT_TIMESTAMP
                 """,
-                OFFERINGS,
+                offering_rows,
             )
 
             price_rows = [
@@ -642,6 +689,7 @@ def seed_data() -> None:
                     billing_unit,
                     EFFECTIVE_FROM,
                     True,
+                    "seed",
                 )
                 for (
                     offering_id,
@@ -662,7 +710,8 @@ def seed_data() -> None:
                     currency,
                     billing_unit,
                     effective_from,
-                    active
+                    active,
+                    source
                 )
                 VALUES %s
                 ON CONFLICT (
@@ -675,7 +724,8 @@ def seed_data() -> None:
                     currency = EXCLUDED.currency,
                     billing_unit =
                         EXCLUDED.billing_unit,
-                    active = EXCLUDED.active
+                    active = EXCLUDED.active,
+                    source = EXCLUDED.source
                 """,
                 price_rows,
             )
@@ -704,6 +754,15 @@ def seed_data() -> None:
 
             schedule_rows = (
                 create_schedule_rows()
+            )
+
+            # Rebuild only simulated rows. Manual bookings and staff-created
+            # schedule entries keep their source and are never removed here.
+            cursor.execute(
+                """
+                DELETE FROM court_schedule
+                WHERE source = 'simulation'
+                """
             )
 
             execute_values(
@@ -769,3 +828,4 @@ def seed_data() -> None:
 
 if __name__ == "__main__":
     seed_data()
+

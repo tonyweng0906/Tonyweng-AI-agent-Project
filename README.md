@@ -151,7 +151,8 @@ Tonyweng-AI-agent-Project/
 |   |-- evaluate_retrieval.py
 |   |-- evaluate_hybrid.py
 |   |-- evaluate_reranking.py
-|   `-- evaluate_rag.py
+|   |-- evaluate_rag.py
+|   `-- evaluate_operational.py
 |-- scripts/
 |   |-- db_prep.py
 |   |-- seed_operational_data.py
@@ -159,10 +160,13 @@ Tonyweng-AI-agent-Project/
 |-- tests/
 |   |-- conftest.py
 |   |-- test_api.py
-|   `-- test_ingest.py
+|   |-- test_ingest.py
+|   |-- test_live_context.py
+|   `-- test_query_router.py
 |-- data/
 |   |-- knowledge_base.csv
 |   |-- ground-truth-retrieval.csv
+|   |-- ground-truth-operational.json
 |   |-- best-minsearch-boost.json
 |   |-- best-retrieval-config.json
 |   |-- best-reranking-config.json
@@ -234,6 +238,8 @@ The demonstration seed contains:
 The generated court schedule covers 28 days. Normal public booking slots run from 10:00 AM to 10:00 PM in 60-minute intervals.
 
 This is simulated operational data for demonstration purposes, not an external production booking system.
+
+On startup, seed-managed catalog rows are refreshed, removed seed entries are deactivated, and only `simulation` schedule rows are rebuilt. Manual schedule rows are preserved.
 
 ## Retrieval pipeline
 
@@ -384,9 +390,12 @@ uv run python -m evaluation.evaluate_retrieval
 uv run python -m evaluation.evaluate_hybrid
 uv run python -m evaluation.evaluate_reranking
 uv run python -m evaluation.evaluate_rag
+uv run python -m evaluation.evaluate_operational
 ```
 
-Hybrid, re-ranking, and RAG evaluation call OpenAI APIs and may incur usage charges.
+Hybrid, re-ranking, RAG, and operational evaluation call OpenAI APIs and may incur usage charges. The operational evaluation also requires the seeded PostgreSQL service.
+
+`evaluate_rag` records the question count and SHA-256 fingerprint of the ground-truth file in `rag-prompt-comparison.csv`, making stale Prompt results visible after the dataset changes.
 
 ## API
 
@@ -645,6 +654,10 @@ The current tests cover:
 - required ingestion columns;
 - duplicate document IDs;
 - retrieval boost configuration loading.
+- deterministic price-query normalization;
+- relative weekday and week-range resolution;
+- live price and coach-schedule context construction;
+- oversized question rejection.
 
 The API tests mock RAG and database dependencies, so they do not call OpenAI or require a live PostgreSQL connection.
 
@@ -705,10 +718,12 @@ TZ
 Recommended API start command:
 
 ```text
-python -m scripts.db_prep && python -m scripts.seed_operational_data && python app.py
+python -m scripts.db_prep && python -m scripts.seed_operational_data && gunicorn --bind 0.0.0.0:$PORT --workers 2 --threads 4 --timeout 180 app:app
 ```
 
 Use Railway reference variables for PostgreSQL credentials. Do not copy production credentials into the repository.
+
+The API limits request bodies to 64 KiB and questions to 2,000 characters by default. These limits can be adjusted with `MAX_REQUEST_BYTES`, `MAX_QUESTION_LENGTH`, `MAX_HISTORY_MESSAGES`, and `MAX_HISTORY_MESSAGE_LENGTH`.
 
 ### Frontend service
 
@@ -877,3 +892,4 @@ LLM Zoomcamp Final Project
 ## License
 
 This repository is currently intended for educational and portfolio purposes. Add a formal license before distributing it as an open-source project.
+
