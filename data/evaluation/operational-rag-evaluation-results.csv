@@ -1,0 +1,41 @@
+question,expected_intent,actual_intent,expected_offering_type,actual_offering_type,expected_coach_name,actual_coach_name,resolved_date,resolved_end_date,route_checks,answer,deterministic_score,judge_score,score,reasoning
+How much is a bottle of water?,price,price,retail_item,retail_item,,,,,"{""intent"": true, ""offering_type"": true, ""coach_name"": true, ""context_source"": true, ""answer_source"": true, ""required_context_values"": true}",A bottle of mineral water costs 2.00 CAD.,good,good,good,"The answer correctly states the price of a bottle of mineral water as 2.00 CAD, which matches the operational context provided. All route checks are true, and the answer directly addresses the user's question about the price."
+How much is a soft drink?,price,price,retail_item,retail_item,,,,,"{""intent"": true, ""offering_type"": true, ""coach_name"": true, ""context_source"": true, ""answer_source"": true, ""required_context_values"": true}",A soft drink costs 3.00 CAD per item.,good,good,good,"The answer correctly states the price of a soft drink as 3.00 CAD per item, which matches the operational context provided. All route checks are true, and the answer directly addresses the user's question about the price."
+How much does it cost to rent a court for one hour?,price,price,court_rental,court_rental,,,,,"{""intent"": true, ""offering_type"": true, ""coach_name"": true, ""context_source"": true, ""answer_source"": true, ""required_context_values"": true}",The cost to rent a court for one hour is $35.00 CAD.,good,good,good,"The answer correctly states the cost to rent a court for one hour as $35.00 CAD, which matches the information provided in the operational context. All required checks are true, and the answer is clear and accurate."
+How much is a one-to-two private lesson?,price,price,private_lesson,private_lesson,,,,,"{""intent"": true, ""offering_type"": true, ""coach_name"": true, ""context_source"": true, ""answer_source"": true, ""required_context_values"": true}",A one-to-two private lesson costs CAD 100.00 for a 60-minute session for two players.,good,good,good,"The answer correctly states the price of a one-to-two private lesson as CAD 100.00 for a 60-minute session for two players. It aligns with the operational context, which confirms the price and details of the offering. All route checks are true, and the answer directly addresses the user's question."
+When does Coach Amy have classes next week?,schedule,schedule,,,Coach Amy,Coach Amy,2026-08-10,2026-08-16,"{""intent"": true, ""offering_type"": true, ""coach_name"": true, ""context_source"": true, ""answer_source"": true, ""required_context_values"": true}","Here is Coach Amy's schedule for next week, from August 10 to August 16, 2026:
+
+| Date       | Time              | Activity                              | Court   |
+|------------|-------------------|---------------------------------------|---------|
+| Tue, Aug 11 | 10:00-11:00 AM   | One-to-three private lesson with Coach Amy | Court 7 |
+| Tue, Aug 11 | 6:00-7:00 PM     | Beginner skills class with Coach Amy | Court 3 |
+| Thu, Aug 13 | 3:00-4:00 PM     | One-to-two private lesson with Coach Amy | Court 6 |
+| Thu, Aug 13 | 6:00-7:00 PM     | Beginner skills class with Coach Amy | Court 3 |
+| Thu, Aug 13 | 7:00-8:00 PM     | One-to-one private lesson with Coach Amy | Court 5 |
+| Fri, Aug 14 | 12:00-1:00 PM    | One-to-two private lesson with Coach Amy | Court 4 |
+| Fri, Aug 14 | 3:00-4:00 PM     | One-to-one private lesson with Coach Amy | Court 4 |
+| Fri, Aug 14 | 7:00-8:00 PM     | One-to-one private lesson with Coach Amy | Court 7 |
+| Sat, Aug 15 | 12:00-1:00 PM    | One-to-three private lesson with Coach Amy | Court 4 |
+| Sun, Aug 16 | 11:00 AM-12:00 PM| One-to-one private lesson with Coach Amy | Court 1 |
+| Sun, Aug 16 | 4:00-5:00 PM     | One-to-one private lesson with Coach Amy | Court 7 |
+| Sun, Aug 16 | 8:00-9:00 PM     | One-to-one private lesson with Coach Amy | Court 8 |
+
+These are existing scheduled activities and should not be treated as available booking times.",good,bad,needs_review,"The generated answer incorrectly lists activities for August 11, 13, 14, 15, and 16, but it fails to mention that the week starts on August 10, which is not included in the scheduled activities. Additionally, the activities on August 13 are incorrectly formatted, as they should be listed separately for clarity. The answer should clearly state that these are not available booking slots, but it does not explicitly mention that."
+What court times are available next Thursday?,availability,availability,,court_rental,,,2026-08-13,,"{""intent"": true, ""offering_type"": true, ""coach_name"": true, ""context_source"": true, ""answer_source"": true, ""required_context_values"": true}","Next Thursday, August 13, 2026, the following court times are available:
+
+| Time | Available Courts |
+|---|---|
+| 10:00-11:00 AM | Court 3, Court 4, Court 5, Court 6, Court 7, Court 8 |
+| 11:00-12:00 PM | Court 3, Court 4, Court 5, Court 6, Court 8 |
+| 12:00-1:00 PM | Court 3, Court 4, Court 5, Court 6, Court 8 |
+| 1:00-2:00 PM | Court 1, Court 3, Court 4, Court 5, Court 6, Court 8 |
+| 2:00-3:00 PM | Court 1, Court 4, Court 6, Court 7 |
+| 3:00-4:00 PM | Court 1, Court 3, Court 4, Court 5, Court 7, Court 8 |
+| 4:00-5:00 PM | Court 3, Court 7 |
+| 5:00-6:00 PM | Court 1, Court 2, Court 3, Court 4, Court 6, Court 7, Court 8 |
+| 6:00-7:00 PM | Court 1, Court 2, Court 4, Court 6, Court 8 |
+| 7:00-8:00 PM | Court 1, Court 2, Court 3, Court 4, Court 6, Court 8 |
+| 8:00-9:00 PM | Court 1, Court 2, Court 3, Court 5, Court 7, Court 8 |
+| 9:00-10:00 PM | Court 1, Court 2, Court 3, Court 4, Court 5, Court 6, Court 7 |
+
+Would you like me to check whether other courts are available during any of these time slots?",good,good,good,"The answer correctly lists the available court times for next Thursday, August 13, 2026, as per the operational context. It includes the time slots and the corresponding available courts, aligning with the user's request for availability. All route checks are true, and the information provided is accurate and complete."

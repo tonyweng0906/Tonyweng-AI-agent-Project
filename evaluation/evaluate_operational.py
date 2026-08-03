@@ -6,6 +6,9 @@ import pandas as pd
 from openai import OpenAI
 from pydantic import BaseModel, Field
 
+from datetime import datetime
+from zoneinfo import ZoneInfo
+
 from courtmate.config import (
     OPENAI_API_KEY,
     OPENAI_JUDGE_MODEL,
@@ -14,6 +17,11 @@ from courtmate.live_context import build_live_context
 from courtmate.query_router import route_query
 from courtmate.rag import rag
 
+from courtmate.config import (
+    OPENAI_API_KEY,
+    OPENAI_JUDGE_MODEL,
+    TIMEZONE,
+)
 
 GROUND_TRUTH_PATH = Path(
     "data/ground-truth-operational.json"
@@ -37,11 +45,54 @@ JUDGE_INSTRUCTIONS = """
 You evaluate Badminton Mate answers that use live PostgreSQL data.
 
 The OPERATIONAL CONTEXT is the authoritative ground truth for this run.
-Mark the answer good only when it directly answers the question and every
-price, date, time, coach, court, and availability claim is supported by that
-context. Mark it bad when routing checks failed, required values are missing,
-the answer contradicts the context, or scheduled activities are described as
-available booking times.
+The intent tells you what kind of operational question the user asked.
+
+Important rules:
+
+1. The database has already filtered price records by active status and
+   effective date. Prices returned in OPERATIONAL CONTEXT are current.
+   Do not reject a price because its effective_from date is earlier than
+   the evaluation date.
+
+2. Numeric formats are equivalent:
+   2, 2.0, and 2.00 represent the same value.
+
+3. For intent "price":
+   - verify the item, amount, currency, and billing unit when relevant;
+   - do not require a coach unless the question asks about a coach.
+
+4. For intent "schedule":
+   - the user is asking about existing scheduled activities;
+   - listing those activities is correct;
+   - do not confuse scheduled activities with available booking times;
+   - an answer is especially clear when it says these are not available
+     booking slots;
+   - a heading may show the complete requested date range;
+   - only table rows or explicitly listed activities count as activity dates;
+   - dates with no scheduled activities may be omitted.
+
+5. For intent "availability":
+   - the answer must list courts and times that are available for booking.
+
+6. Treat route_checks as deterministic evidence.
+   Do not invent a failed requirement when its route check is true.
+
+- EVALUATION_DATE is the exact current date for this evaluation.
+Never substitute your own current date or model knowledge cutoff.
+
+- CALENDAR_FACTS is calculated by Python and is authoritative.
+Do not claim a weekday/date combination is wrong when it agrees
+with CALENDAR_FACTS.
+
+- When every route_check is true, only mark the answer bad when you
+can identify a specific factual contradiction or missing answer.
+Do not invent missing requirements.
+
+Mark the answer good when it directly answers the question and its factual
+claims are supported by OPERATIONAL CONTEXT.
+
+Mark it bad when deterministic routing checks failed, required information
+is missing, or the answer contradicts OPERATIONAL CONTEXT.
 """.strip()
 
 
@@ -58,23 +109,52 @@ def load_cases() -> list[dict]:
 
 def evaluate_answer(
     question: str,
+    intent: str,
     context: str,
     answer: str,
     route_checks: dict[str, bool],
 ) -> OperationalJudgment:
+    context_data = json.loads(context)
+    evaluation_date = datetime.now(
+        ZoneInfo(TIMEZONE)
+    ).date().isoformat()
+
+    calendar_facts: dict[str, str] = {}
+
+    for activity in context_data.get(
+        "scheduled_activities",
+        [],
+    ):
+        start_at = activity.get("start_at")
+
+        if not start_at:
+            continue
+
+        activity_date = datetime.fromisoformat(
+            start_at
+        ).date()
+
+        calendar_facts[
+            activity_date.isoformat()
+        ] = activity_date.strftime("%A")
+
     response = judge_client.responses.parse(
         model=OPENAI_JUDGE_MODEL,
         instructions=JUDGE_INSTRUCTIONS,
         input=json.dumps(
             {
                 "question": question,
+                "intent": intent,
                 "route_checks": route_checks,
-                "operational_context": json.loads(context),
+                "evaluation_date": evaluation_date,
+                "calendar_facts": calendar_facts,
+                "operational_context": context_data,
                 "generated_answer": answer,
             },
             ensure_ascii=False,
         ),
         text_format=OperationalJudgment,
+        temperature=0,
     )
 
     if response.output_parsed is None:
@@ -139,12 +219,22 @@ def main() -> None:
 
         judgment = evaluate_answer(
             question=question,
+            intent=route.intent,
             context=context,
             answer=str(answer_data["answer"]),
             route_checks=route_checks,
         )
+        deterministic_passed = all(
+            route_checks.values()
+        )
 
-        if not all(route_checks.values()):
+        deterministic_score = (
+            "good"
+            if deterministic_passed
+            else "bad"
+        )
+
+        if not deterministic_passed:
             judgment.score = "bad"
             failed_checks = [
                 name
@@ -157,6 +247,14 @@ def main() -> None:
                 + ". "
                 + judgment.reasoning
             )
+        judge_score = judgment.score
+
+        if deterministic_score == "bad":
+            final_score = "bad"
+        elif judge_score == "good":
+            final_score = "good"
+        else:
+            final_score = "needs_review"
 
         rows.append(
             {
@@ -175,14 +273,16 @@ def main() -> None:
                 "resolved_end_date": route.target_end_date,
                 "route_checks": json.dumps(route_checks),
                 "answer": answer_data["answer"],
-                "score": judgment.score,
+                "deterministic_score": deterministic_score,
+                "judge_score": judge_score,
+                "score": final_score,
                 "reasoning": judgment.reasoning,
             }
         )
 
         print(
             f"[{index}/{len(cases)}] "
-            f"{judgment.score}: {question}"
+            f"{final_score}: {question}"
         )
 
     RESULTS_PATH.parent.mkdir(
@@ -195,10 +295,44 @@ def main() -> None:
     good_count = int(
         (dataframe["score"] == "good").sum()
     )
+
+    bad_count = int(
+        (dataframe["score"] == "bad").sum()
+    )
+
+    review_count = int(
+        (
+            dataframe["score"]
+            == "needs_review"
+        ).sum()
+    )
+
+    deterministic_good_count = int(
+        (
+            dataframe["deterministic_score"]
+            == "good"
+        ).sum()
+    )
+
+    judge_good_count = int(
+        (
+            dataframe["judge_score"]
+            == "good"
+        ).sum()
+    )
+
     print()
     print(
-        f"Good operational answers: {good_count}/{len(dataframe)}"
+        "Deterministic operational checks: "
+        f"{deterministic_good_count}/{len(dataframe)}"
     )
+    print(
+        "LLM judge good answers: "
+        f"{judge_good_count}/{len(dataframe)}"
+    )
+    print(f"Final good: {good_count}")
+    print(f"Final bad: {bad_count}")
+    print(f"Needs review: {review_count}")
     print(f"Saved results to: {RESULTS_PATH}")
 
 

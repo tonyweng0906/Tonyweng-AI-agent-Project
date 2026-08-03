@@ -376,7 +376,7 @@ def main() -> None:
                 f"[{current_evaluation}/"
                 f"{total_evaluations}] "
                 f"{configuration}: "
-                f"{score} 鈥?{question}"
+                f"{score} - {question}"
             )
 
             time.sleep(0.1)

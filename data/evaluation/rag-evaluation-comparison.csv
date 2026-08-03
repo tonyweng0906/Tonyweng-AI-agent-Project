@@ -1,372 +1,454 @@
 configuration,question,expected_document_id,retrieved_ids,answer_orig,answer_llm,score,reasoning,generation_model,judge_model,error
-baseline_prompt,What is the cancellation policy for private lessons?,policy-001,"['policy-001', 'course-001', 'course-002', 'dropin-001', 'faq-001']","Document ID: policy-001
+baseline_prompt,What is the cancellation policy for private lessons?,policy-001,"['policy-001', 'course-001', 'course-002', 'dropin-001', 'coach-001']","Document ID: policy-001
 Category: cancellation
 Title: Private lesson cancellation
 Content: Private lessons must be cancelled at least 24 hours before the scheduled start time. Late cancellations may not be eligible for a refund.
 Coach:
 Skill level:
-Location: Main Club",Private lessons must be cancelled at least 24 hours before the scheduled start time. Late cancellations may not be eligible for a refund.,good,"The generated answer accurately reflects the details provided in the original knowledge-base record regarding the cancellation policy for private lessons, including the requirement for a 24-hour notice and potential issues with refunds for late cancellations. It addresses the user question directly and completely without any discrepancies or omissions.",gpt-4o-mini,gpt-4o-mini,
+Location: Main Club",Private lessons must be cancelled at least 24 hours before the scheduled start time. Late cancellations may not be eligible for a refund.,good,"The generated answer accurately reflects the information from the original knowledge record regarding the cancellation policy for private lessons, stating the 24-hour notice requirement and the consequence of late cancellations. It does not miss any crucial details and adheres to the original content without contradiction.",gpt-4o-mini,gpt-4o-mini,
 baseline_prompt,How much notice do I need to give to cancel a private lesson?,policy-001,"['policy-001', 'course-001', 'course-002', 'dropin-001', 'policy-002']","Document ID: policy-001
 Category: cancellation
 Title: Private lesson cancellation
 Content: Private lessons must be cancelled at least 24 hours before the scheduled start time. Late cancellations may not be eligible for a refund.
 Coach:
 Skill level:
-Location: Main Club",You need to give at least 24 hours' notice to cancel a private lesson.,good,"The generated answer accurately reflects the information provided in the original knowledge record regarding the notice required for cancelling a private lesson. It correctly states that at least 24 hours' notice is needed, which is the key detail the user asked for.",gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,Will I get a refund if I cancel my lesson late?,policy-001,"['policy-001', 'course-001', 'course-002', 'policy-002', 'faq-001']","Document ID: policy-001
+Location: Main Club",You need to cancel private lessons at least 24 hours before the scheduled start time.,good,"The generated answer correctly states the requirement for cancelling private lessons, which is at least 24 hours before the scheduled start time, as mentioned in the original knowledge-base record. It includes the essential information needed to answer the user's question without any contradictions or omissions.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,Will I get a refund if I cancel my lesson late?,policy-001,"['policy-001', 'course-002', 'course-001', 'policy-002', 'faq-001']","Document ID: policy-001
 Category: cancellation
 Title: Private lesson cancellation
 Content: Private lessons must be cancelled at least 24 hours before the scheduled start time. Late cancellations may not be eligible for a refund.
 Coach:
 Skill level:
-Location: Main Club",Late cancellations may not be eligible for a refund.,good,"The generated answer accurately reflects the key information from the original knowledge-base record regarding late cancellations and refunds. It correctly states that late cancellations may not guarantee a refund, aligning with the policy provided.",gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,How long can I book a court for my practice session?,policy-002,"['policy-002', 'policy-001', 'course-002', 'facility-001', 'course-001']","Document ID: policy-002
+Location: Main Club",Late cancellations may not be eligible for a refund.,good,The generated answer accurately reflects the key information from the original knowledge-base record regarding the refund policy for late cancellations. It addresses the user's question about refunds in the context of late cancellations without omitting important details.,gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,How long can I book a court for my practice session?,policy-002,"['policy-002', 'course-002', 'policy-001', 'course-001', 'facility-001']","Document ID: policy-002
 Category: booking
 Title: Court booking duration
 Content: Court bookings use 60-minute time slots. This describes the booking duration only. Exact start times and live court availability are not stored in the knowledge base. Customers should arrive at least 10 minutes before the booking.
 Coach:
 Skill level:
-Location: Main Club",You can book a court for a practice session in 60-minute time slots.,good,"The generated answer correctly states the booking duration for the court, which is 60-minute time slots, as mentioned in the knowledge record. It fully captures the relevant information needed to answer the user's question.",gpt-4o-mini,gpt-4o-mini,
+Location: Main Club",You can book a court for a 60-minute time slot.,good,"The generated answer accurately captures the information from the original knowledge record regarding the duration of court bookings, stating they are in 60-minute time slots. It does not omit any key details and correctly reflects the main point of the user question.",gpt-4o-mini,gpt-4o-mini,
 baseline_prompt,What time should I arrive before my court booking?,policy-002,"['policy-002', 'faq-002', 'policy-001', 'facility-001', 'faq-001']","Document ID: policy-002
 Category: booking
 Title: Court booking duration
 Content: Court bookings use 60-minute time slots. This describes the booking duration only. Exact start times and live court availability are not stored in the knowledge base. Customers should arrive at least 10 minutes before the booking.
 Coach:
 Skill level:
-Location: Main Club",You should arrive at least 10 minutes before your court booking.,good,The generated answer accurately reflects the information provided in the original knowledge base record by stating that customers should arrive at least 10 minutes before their booking. It matches the main point of the user's question regarding arrival time.,gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,Are there any specific time slots available for court bookings?,policy-002,"['policy-002', 'facility-001', 'faq-001', 'policy-001', 'dropin-001']","Document ID: policy-002
+Location: Main Club",You should arrive at least 10 minutes before your booking.,good,"The RAG-generated answer correctly states that you should arrive at least 10 minutes before your booking, which is consistent with the information provided in the original knowledge record. It captures the main point and does not introduce any inaccuracies.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,Are there any specific time slots available for court bookings?,policy-002,"['policy-002', 'facility-001', 'faq-001', 'policy-001', 'course-001']","Document ID: policy-002
 Category: booking
 Title: Court booking duration
 Content: Court bookings use 60-minute time slots. This describes the booking duration only. Exact start times and live court availability are not stored in the knowledge base. Customers should arrive at least 10 minutes before the booking.
 Coach:
 Skill level:
-Location: Main Club",I don't have enough information in the club knowledge base to answer that.,bad,"The RAG generated answer incorrectly states that there isn't enough information regarding court booking time slots. While the original knowledge record specifies that court bookings use 60-minute time slots, it clearly indicates that exact start times and live availability are not stored. The user is asking specifically about available time slots, which the original record implies exist but does not provide specific availability details for. Therefore, the RAG answer misses the main point and fails to provide relevant information from the knowledge record.",gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,Is there a drop-in session for beginners at the club?,dropin-001,"['dropin-001', 'faq-002', 'course-002', 'course-001', 'coach-001']","Document ID: dropin-001
+Location: Main Club",I don't have enough information in the club knowledge base to answer that.,bad,"The generated answer states that there isn't enough information to provide details about court bookings. However, the original knowledge record indicates that court bookings are done in 60-minute time slots, which is relevant information. While it does not specify exact start times or availability, it still addresses the structure of the court booking durations. Therefore, the response misses the main point by not conveying this information. Thus, the answer is considered incomplete and unhelpful.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,Is there a drop-in session for beginners at the club?,dropin-001,"['dropin-001', 'course-003', 'faq-002', 'course-004', 'course-002']","Document ID: dropin-001
 Category: dropin
 Title: Beginner drop-in
 Content: The beginner drop-in is suitable for new and recreational players. Registration is required and spaces are limited.
 Coach:
 Skill level: beginner
-Location: Main Club","Yes, there is a beginner drop-in session at the club. Registration is required and spaces are limited.",good,The generated answer correctly identifies that there is a beginner drop-in session at the club and includes important details about registration and limited spaces. It accurately reflects the information found in the original knowledge base record without omitting any key points.,gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,Do I need to register to attend the beginner drop-in?,dropin-001,"['dropin-001', 'faq-002', 'faq-001', 'course-002', 'coach-001']","Document ID: dropin-001
+Location: Main Club","Yes, there is a beginner drop-in session at the club. Registration is required and spaces are limited.",good,The generated answer correctly states that there is a beginner drop-in session at the club and includes the important details about registration being required and that spaces are limited. It matches the information in the original knowledge record without omitting any critical points.,gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,Do I need to register to attend the beginner drop-in?,dropin-001,"['dropin-001', 'course-003', 'faq-002', 'faq-001', 'coach-001']","Document ID: dropin-001
 Category: dropin
 Title: Beginner drop-in
 Content: The beginner drop-in is suitable for new and recreational players. Registration is required and spaces are limited.
 Coach:
 Skill level: beginner
-Location: Main Club","Yes, registration is required to attend the beginner drop-in, and spaces are limited.",good,"The generated answer correctly states that registration is required to attend the beginner drop-in and mentions that spaces are limited, which aligns with the information in the original knowledge base record.",gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,Where is the beginner drop-in held?,dropin-001,"['dropin-001', 'faq-002', 'coach-001', 'course-002', 'faq-001']","Document ID: dropin-001
+Location: Main Club","Yes, registration is required to attend the beginner drop-in.",good,"The generated answer correctly states that registration is required to attend the beginner drop-in, which matches the information provided in the original knowledge record. It is complete and accurate, addressing the user's question directly.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,Where is the beginner drop-in held?,dropin-001,"['dropin-001', 'course-003', 'faq-002', 'coach-003', 'coach-001']","Document ID: dropin-001
 Category: dropin
 Title: Beginner drop-in
 Content: The beginner drop-in is suitable for new and recreational players. Registration is required and spaces are limited.
 Coach:
 Skill level: beginner
-Location: Main Club",The beginner drop-in is held at the Main Club.,good,"The generated answer accurately states the location of the beginner drop-in as the Main Club, which is consistent with the original knowledge record. It conveys the essential information without any inaccuracies or omissions.",gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,What type of training does Coach Amy focus on?,coach-001,"['coach-001', 'coach-002', 'course-001', 'course-002', 'faq-002']","Document ID: coach-001
+Location: Main Club",The beginner drop-in is held at the Main Club.,good,"The generated answer correctly identifies the location of the beginner drop-in as the Main Club, which matches the information in the original knowledge record.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,What type of training does Coach Amy focus on?,coach-001,"['coach-001', 'coach-003', 'coach-002', 'course-001', 'coach-004']","Document ID: coach-001
 Category: coach
 Title: Coach Amy profile
-Content: Coach Amy specializes in beginner fundamentals, footwork and junior training. She teaches private and semi-private lessons.
+Content: Coach Amy focuses on beginner fundamentals, footwork and junior training. She teaches private, semi-private and beginner group lessons.
 Coach: Coach Amy
-Skill level: beginner
-Location: Main Club","Coach Amy focuses on beginner fundamentals, footwork, and junior training.",good,The generated answer accurately reflects the information in the original knowledge-base record regarding Coach Amy's training focus. It mentions all the relevant aspects without introducing any inaccuracies or omissions.,gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,Can I take private lessons with Coach Amy?,coach-001,"['coach-001', 'course-001', 'course-002', 'coach-002', 'policy-001']","Document ID: coach-001
+Skill level: beginner and intermediate
+Location: Main Club","Coach Amy focuses on beginner fundamentals, footwork, and junior training.",good,"The generated answer correctly identifies the areas of training that Coach Amy focuses on, which are beginner fundamentals, footwork, and junior training, matching the original knowledge record without omitting any important details.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,Can I take private lessons with Coach Amy?,coach-001,"['coach-001', 'course-001', 'course-002', 'coach-003', 'policy-001']","Document ID: coach-001
 Category: coach
 Title: Coach Amy profile
-Content: Coach Amy specializes in beginner fundamentals, footwork and junior training. She teaches private and semi-private lessons.
+Content: Coach Amy focuses on beginner fundamentals, footwork and junior training. She teaches private, semi-private and beginner group lessons.
 Coach: Coach Amy
-Skill level: beginner
-Location: Main Club","Yes, you can take private lessons with Coach Amy.",good,"The generated answer accurately states that private lessons are available with Coach Amy, aligning with the information from the knowledge record that mentions she teaches private lessons.",gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,Is Coach Amy available for teaching juniors?,coach-001,"['coach-001', 'coach-002', 'course-001', 'course-002', 'faq-001']","Document ID: coach-001
+Skill level: beginner and intermediate
+Location: Main Club","Yes, you can take private lessons with Coach Amy.",good,"The generated answer accurately confirms that the user can take private lessons with Coach Amy, which aligns with the information provided in the original knowledge record. It correctly captures the main point without any contradictory or invented details.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,Is Coach Amy available for teaching juniors?,coach-001,"['coach-001', 'coach-003', 'course-001', 'coach-002', 'course-002']","Document ID: coach-001
 Category: coach
 Title: Coach Amy profile
-Content: Coach Amy specializes in beginner fundamentals, footwork and junior training. She teaches private and semi-private lessons.
+Content: Coach Amy focuses on beginner fundamentals, footwork and junior training. She teaches private, semi-private and beginner group lessons.
 Coach: Coach Amy
-Skill level: beginner
-Location: Main Club","Yes, Coach Amy is available for teaching juniors as she specializes in junior training.",good,The generated answer correctly states that Coach Amy is available for teaching juniors and supports this by referencing her specialization in junior training. This aligns with the information in the original knowledge-base record.,gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,What kind of training does Coach David focus on?,coach-002,"['coach-002', 'coach-001', 'course-001', 'course-002', 'faq-002']","Document ID: coach-002
+Skill level: beginner and intermediate
+Location: Main Club","Yes, Coach Amy is available for teaching juniors.",good,"The generated answer correctly states that Coach Amy is available for teaching juniors, which aligns with the information in the original knowledge-base record. It directly addresses the user question without any contradictions or omissions.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,What kind of training does Coach David focus on?,coach-002,"['coach-002', 'coach-004', 'coach-001', 'coach-003', 'course-001']","Document ID: coach-002
 Category: coach
 Title: Coach David profile
-Content: Coach David specializes in intermediate and advanced singles strategy, movement and match preparation.
+Content: Coach David focuses on intermediate and advanced singles strategy, movement and match preparation.
 Coach: Coach David
-Skill level: advanced
-Location: Main Club","Coach David focuses on intermediate and advanced singles strategy, movement, and match preparation.",good,"The generated answer accurately reflects the information in the original knowledge record regarding Coach David's focus on training, including intermediate and advanced singles strategy, movement, and match preparation.",gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,Can I get coaching from Coach David if I'm an intermediate player?,coach-002,"['coach-002', 'coach-001', 'course-001', 'course-002', 'faq-002']","Document ID: coach-002
+Skill level: intermediate and advanced
+Location: Main Club","Coach David focuses on intermediate and advanced singles strategy, movement, and match preparation.",good,The generated answer accurately reflects the information provided in the original knowledge-base record regarding Coach David's focus areas in training.,gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,Can I get coaching from Coach David if I'm an intermediate player?,coach-002,"['coach-002', 'coach-004', 'coach-003', 'course-001', 'coach-001']","Document ID: coach-002
 Category: coach
 Title: Coach David profile
-Content: Coach David specializes in intermediate and advanced singles strategy, movement and match preparation.
+Content: Coach David focuses on intermediate and advanced singles strategy, movement and match preparation.
 Coach: Coach David
-Skill level: advanced
-Location: Main Club","Yes, you can get coaching from Coach David as an intermediate player.",good,"The generated answer correctly states that intermediate players can receive coaching from Coach David, aligning with the information in the original knowledge record regarding his specialization in intermediate strategy.",gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,Where can I find Coach David for lessons?,coach-002,"['coach-002', 'coach-001', 'course-001', 'course-002', 'policy-001']","Document ID: coach-002
+Skill level: intermediate and advanced
+Location: Main Club","Yes, you can get coaching from Coach David if you're an intermediate player.",good,"The generated answer accurately reflects the information in the knowledge record, confirming that Coach David provides coaching for both intermediate and advanced players. It directly addresses the user's question without any contradictions or omissions.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,Where can I find Coach David for lessons?,coach-002,"['coach-002', 'course-001', 'coach-001', 'coach-004', 'course-002']","Document ID: coach-002
 Category: coach
 Title: Coach David profile
-Content: Coach David specializes in intermediate and advanced singles strategy, movement and match preparation.
+Content: Coach David focuses on intermediate and advanced singles strategy, movement and match preparation.
 Coach: Coach David
-Skill level: advanced
-Location: Main Club",You can find Coach David for lessons at the Main Club.,good,"The generated answer correctly indicates the location of Coach David for lessons, which matches the original knowledge-base record. It provides the necessary information without contradiction or fabrication.",gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,What is a private lesson in badminton?,course-001,"['course-001', 'course-002', 'faq-002', 'policy-001', 'facility-001']","Document ID: course-001
+Skill level: intermediate and advanced
+Location: Main Club",You can find Coach David for lessons at the Main Club.,good,"The generated answer correctly identifies the location of Coach David for lessons, which is mentioned in the original knowledge-base record. It preserves the important factual information without any contradictions or omissions.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,What is a private lesson in badminton?,course-001,"['course-002', 'course-001', 'faq-002', 'policy-001', 'course-003']","Document ID: course-001
 Category: course
-Title: Private lesson
-Content: A private lesson is a one-on-one coaching session customized to the player's level and goals.
+Title: Private lesson options
+Content: Private coaching is available as one-to-one, one-to-two or one-to-three 60-minute lessons customized to the players' skill levels and goals.
 Coach:
 Skill level: all
-Location: Main Club",A private lesson is a one-on-one coaching session customized to the player's level and goals.,good,"The generated answer accurately describes what a private lesson in badminton is, aligning perfectly with the original knowledge-base record. It includes essential details about the nature of the lesson being one-on-one and that it is tailored to the player's needs.",gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,Can I get coaching tailored to my skill level during a private lesson?,course-001,"['course-001', 'course-002', 'coach-001', 'coach-002', 'policy-001']","Document ID: course-001
+Location: Main Club","A private lesson in badminton is a 60-minute coaching session that can be customized for one-to-one, one-to-two, or one-to-three players, tailored to their skill levels and goals.",good,"The generated answer correctly describes a private lesson in badminton by including key details such as the duration (60 minutes), the options for number of players (one-to-one, one-to-two, one-to-three), and the customization based on skill levels and goals. It aligns well with the information from the original knowledge record.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,Can I get coaching tailored to my skill level during a private lesson?,course-001,"['course-001', 'course-002', 'coach-001', 'coach-002', 'coach-003']","Document ID: course-001
 Category: course
-Title: Private lesson
-Content: A private lesson is a one-on-one coaching session customized to the player's level and goals.
+Title: Private lesson options
+Content: Private coaching is available as one-to-one, one-to-two or one-to-three 60-minute lessons customized to the players' skill levels and goals.
 Coach:
 Skill level: all
-Location: Main Club","Yes, private lessons are customized to the player's level and goals, so you can get coaching tailored to your skill level.",good,"The generated answer correctly reflects the information from the original knowledge-base record, confirming that private lessons offer customized coaching based on the player's skill level and goals. It fully addresses the user's question about coaching tailored to their skill level.",gpt-4o-mini,gpt-4o-mini,
+Location: Main Club","Yes, private coaching is customized to players' skill levels and goals during a one-to-one, one-to-two, or one-to-three 60-minute lesson.",good,"The generated answer correctly confirms that private coaching can be tailored to skill levels, directly addressing the user's question. It accurately reflects the information from the original knowledge-base record, mentioning the customization and the types of lessons available.",gpt-4o-mini,gpt-4o-mini,
 baseline_prompt,Where are the private lessons held?,course-001,"['course-001', 'course-002', 'policy-001', 'coach-001', 'dropin-001']","Document ID: course-001
 Category: course
-Title: Private lesson
-Content: A private lesson is a one-on-one coaching session customized to the player's level and goals.
+Title: Private lesson options
+Content: Private coaching is available as one-to-one, one-to-two or one-to-three 60-minute lessons customized to the players' skill levels and goals.
 Coach:
 Skill level: all
-Location: Main Club",Private lessons are held at the Main Club.,good,"The generated answer accurately reflects the location of the private lessons as stated in the original knowledge record, which mentions that they are held at the Main Club. It preserves all the important information regarding the location without any contradictions or omissions.",gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,What kind of lesson is available for small groups at the club?,course-002,"['course-002', 'course-001', 'dropin-001', 'policy-001', 'coach-001']","Document ID: course-002
+Location: Main Club",Private lessons are held at the Main Club.,good,"The generated answer accurately reflects the location of the private lessons as stated in the original knowledge base record, which specifies that they are held at the Main Club. It provides the necessary information without any contradictions or missing points.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,What kind of lesson is available for small groups at the club?,course-002,"['course-002', 'course-001', 'course-003', 'course-004', 'dropin-001']","Document ID: course-002
 Category: course
 Title: Semi-private lesson
-Content: A semi-private lesson is designed for two to four players of a similar skill level.
+Content: A semi-private lesson is a 60-minute private coaching session for two or three players of a similar skill level.
 Coach:
 Skill level: all
-Location: Main Club",The club offers semi-private lessons designed for two to four players of a similar skill level.,good,"The generated answer correctly identifies the type of lesson available for small groups at the club, matching the information in the original knowledge base record about semi-private lessons.",gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,Can I join a semi-private lesson with a friend who has the same skill level as me?,course-002,"['course-002', 'course-001', 'coach-001', 'dropin-001', 'policy-001']","Document ID: course-002
+Location: Main Club","The club offers a semi-private lesson, which is a 60-minute coaching session for two or three players of a similar skill level.",good,"The generated answer accurately reflects the information provided in the original knowledge record about the semi-private lesson available for small groups. It mentions the duration, group size, and that it is suitable for players of similar skill levels, aligning with the user's question about lessons for small groups.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,Can I join a semi-private lesson with a friend who has the same skill level as me?,course-002,"['course-002', 'course-001', 'coach-001', 'course-004', 'dropin-001']","Document ID: course-002
 Category: course
 Title: Semi-private lesson
-Content: A semi-private lesson is designed for two to four players of a similar skill level.
+Content: A semi-private lesson is a 60-minute private coaching session for two or three players of a similar skill level.
 Coach:
 Skill level: all
-Location: Main Club","Yes, you can join a semi-private lesson with a friend who has the same skill level as you, as it is designed for two to four players of a similar skill level.",good,The generated answer accurately reflects the information in the original knowledge-base record and confirms that joining a semi-private lesson with a friend of the same skill level is allowed. It includes key details about the structure of the lesson and its intended participants.,gpt-4o-mini,gpt-4o-mini,
+Location: Main Club","Yes, you can join a semi-private lesson with a friend who has the same skill level as you, as it is designed for two or three players of a similar skill level.",good,"The generated answer correctly states that you can join a semi-private lesson with a friend of the same skill level, aligning with the information about the lesson being for players of similar skill levels. It is both correct and complete.",gpt-4o-mini,gpt-4o-mini,
 baseline_prompt,Where are the semi-private lessons held at the badminton club?,course-002,"['course-002', 'facility-001', 'faq-002', 'course-001', 'faq-001']","Document ID: course-002
 Category: course
 Title: Semi-private lesson
-Content: A semi-private lesson is designed for two to four players of a similar skill level.
+Content: A semi-private lesson is a 60-minute private coaching session for two or three players of a similar skill level.
 Coach:
 Skill level: all
-Location: Main Club",The semi-private lessons are held at the Main Club.,good,"The generated answer correctly identifies the location of the semi-private lessons as stated in the original knowledge-base record, matching the important factual information without any contradictions or omissions.",gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,What facilities does the club offer for playing badminton?,facility-001,"['facility-001', 'faq-002', 'faq-001', 'dropin-001', 'course-002']","Document ID: facility-001
+Location: Main Club",The semi-private lessons are held at the Main Club.,good,The generated answer correctly identifies the location of the semi-private lessons as stated in the original knowledge record.,gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,What facilities does the club offer for playing badminton?,facility-001,"['facility-001', 'faq-002', 'faq-001', 'course-003', 'dropin-001']","Document ID: facility-001
 Category: facility
 Title: Court facilities
 Content: The club provides badminton courts, change rooms, seating areas and equipment rental.
 Coach:
 Skill level:
-Location: Main Club","The club offers badminton courts, change rooms, seating areas, and equipment rental.",good,"The generated answer accurately reflects the facilities mentioned in the original knowledge record, preserving all important factual information without addition or contradiction.",gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,Are there change rooms available at the club?,facility-001,"['facility-001', 'faq-001', 'faq-002', 'dropin-001', 'policy-002']","Document ID: facility-001
+Location: Main Club","The club offers badminton courts, change rooms, seating areas, and equipment rental.",good,The generated answer accurately lists all the facilities provided by the club and aligns perfectly with the information in the original knowledge record without omitting any important details.,gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,Are there change rooms available at the club?,facility-001,"['facility-001', 'faq-001', 'faq-002', 'course-001', 'dropin-001']","Document ID: facility-001
 Category: facility
 Title: Court facilities
 Content: The club provides badminton courts, change rooms, seating areas and equipment rental.
 Coach:
 Skill level:
-Location: Main Club","Yes, there are change rooms available at the club.",good,"The generated answer correctly states that there are change rooms available at the club, which aligns with the information provided in the original knowledge record.",gpt-4o-mini,gpt-4o-mini,
+Location: Main Club","Yes, there are change rooms available at the club.",good,"The generated answer accurately reflects the information provided in the original knowledge-base record, confirming the availability of change rooms at the club.",gpt-4o-mini,gpt-4o-mini,
 baseline_prompt,Can I rent equipment for badminton at the facility?,facility-001,"['facility-001', 'faq-001', 'faq-002', 'dropin-001', 'course-002']","Document ID: facility-001
 Category: facility
 Title: Court facilities
 Content: The club provides badminton courts, change rooms, seating areas and equipment rental.
 Coach:
 Skill level:
-Location: Main Club","Yes, you can rent equipment for badminton at the facility. Rackets are available for rental at the front desk, subject to availability.",good,"The generated answer correctly conveys that equipment rental for badminton is available at the facility, including the specific detail about rackets being available at the front desk. This matches the information in the original knowledge record.",gpt-4o-mini,gpt-4o-mini,
+Location: Main Club","Yes, you can rent equipment for badminton at the facility. Rackets are available for rental at the front desk, subject to availability.",good,"The generated answer correctly states that equipment rental for badminton is available at the facility, matching the information in the original knowledge record. It also adds that rackets can be rented from the front desk, which is plausible and does not contradict the original record.",gpt-4o-mini,gpt-4o-mini,
 baseline_prompt,Can I rent a racket when I arrive at the club?,faq-001,"['faq-001', 'faq-002', 'facility-001', 'dropin-001', 'policy-002']","Document ID: faq-001
 Category: faq
 Title: Racket rental
 Content: Rackets are available for rental at the front desk, subject to availability.
 Coach:
 Skill level:
-Location: Main Club","Yes, you can rent a racket at the front desk, subject to availability.",good,"The generated answer correctly states that rackets can be rented at the front desk and mentions that this is subject to availability, which aligns with the original knowledge record.",gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,Where do I go to rent a badminton racket?,faq-001,"['faq-001', 'faq-002', 'facility-001', 'dropin-001', 'course-002']","Document ID: faq-001
+Location: Main Club","Yes, you can rent a racket at the front desk, subject to availability.",good,"The generated answer correctly conveys that rackets can be rented at the front desk and mentions that this is subject to availability, which matches the information in the original knowledge record.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,Where do I go to rent a badminton racket?,faq-001,"['faq-001', 'faq-002', 'facility-001', 'dropin-001', 'course-003']","Document ID: faq-001
 Category: faq
 Title: Racket rental
 Content: Rackets are available for rental at the front desk, subject to availability.
 Coach:
 Skill level:
-Location: Main Club","You can rent a badminton racket at the front desk, subject to availability.",good,"The generated answer correctly states where to rent a badminton racket and includes the important detail about availability, which matches the information in the original knowledge record.",gpt-4o-mini,gpt-4o-mini,
+Location: Main Club","You can rent a badminton racket at the front desk, subject to availability.",good,The generated answer correctly specifies where to rent a badminton racket (at the front desk) and mentions that it is subject to availability. This matches the information in the original knowledge record without missing any important points.,gpt-4o-mini,gpt-4o-mini,
 baseline_prompt,Is there a chance that rackets might not be available for rental?,faq-001,"['faq-001', 'faq-002', 'facility-001', 'policy-001', 'dropin-001']","Document ID: faq-001
 Category: faq
 Title: Racket rental
 Content: Rackets are available for rental at the front desk, subject to availability.
 Coach:
 Skill level:
-Location: Main Club","Yes, there is a chance that rackets might not be available for rental, as they are subject to availability.",good,"The generated answer accurately captures the information from the original knowledge record regarding the availability of rackets for rental. It reflects that rackets are subject to availability, correctly addressing the user's question about the chance of them not being available.",gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,What should I bring with me for my badminton session?,faq-002,"['faq-002', 'facility-001', 'faq-001', 'dropin-001', 'course-002']","Document ID: faq-002
+Location: Main Club","Yes, there is a chance that rackets might not be available for rental, as their availability is subject to current stock at the front desk.",good,"The generated answer accurately reflects the information in the original knowledge record by stating that rackets are available for rental at the front desk but are subject to availability, acknowledging the possibility that they might not be available.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,What should I bring with me for my badminton session?,faq-002,"['faq-002', 'facility-001', 'faq-001', 'course-003', 'dropin-001']","Document ID: faq-002
 Category: faq
 Title: What to bring
 Content: Players should bring indoor court shoes, sports clothing, water and a badminton racket.
 Coach:
 Skill level: beginner
-Location: Main Club","You should bring indoor court shoes, sports clothing, water, and a badminton racket for your badminton session.",good,"The generated answer correctly lists all the items that the player should bring, matching the original knowledge-base record without any omissions or contradictions. It preserves the important factual information required to answer the question.",gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,Do I need to bring my own badminton racket?,faq-002,"['faq-002', 'faq-001', 'facility-001', 'dropin-001', 'course-002']","Document ID: faq-002
+Location: Main Club","You should bring indoor court shoes, sports clothing, water, and a badminton racket.",good,The generated answer correctly lists all the items that players should bring for their badminton session as specified in the original knowledge record. It is complete and does not contradict any information from the record.,gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,Do I need to bring my own badminton racket?,faq-002,"['faq-002', 'faq-001', 'facility-001', 'dropin-001', 'course-003']","Document ID: faq-002
 Category: faq
 Title: What to bring
 Content: Players should bring indoor court shoes, sports clothing, water and a badminton racket.
 Coach:
 Skill level: beginner
-Location: Main Club","Yes, players should bring their own badminton racket.",good,"The generated answer correctly states that players should bring their own badminton racket, which aligns with the information provided in the original knowledge-base record.",gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,What type of shoes are required for playing badminton here?,faq-002,"['faq-002', 'facility-001', 'faq-001', 'dropin-001', 'course-002']","Document ID: faq-002
+Location: Main Club","Yes, you should bring your own badminton racket, but you can also rent one at the front desk if needed, subject to availability.",good,"The generated answer correctly states that you should bring your own badminton racket, which aligns with the knowledge base record. It also adds the information about the option to rent a racket, which is not mentioned in the original, and this additional context enhances the answer without contradicting the information provided.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,What type of shoes are required for playing badminton here?,faq-002,"['faq-002', 'facility-001', 'faq-001', 'course-003', 'dropin-001']","Document ID: faq-002
 Category: faq
 Title: What to bring
 Content: Players should bring indoor court shoes, sports clothing, water and a badminton racket.
 Coach:
 Skill level: beginner
-Location: Main Club",Players should bring indoor court shoes for playing badminton here.,good,"The generated answer correctly states that players should bring indoor court shoes for playing badminton, which aligns perfectly with the information provided in the original knowledge-base record. It addresses the user's question clearly and completely without omitting any key details.",gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,My child is just starting badminton and needs help with movement basics. Which instructor would fit?,coach-001,"['coach-001', 'faq-002', 'coach-002', 'dropin-001', 'course-001']","Document ID: coach-001
+Location: Main Club",Players should bring indoor court shoes for playing badminton here.,good,"The generated answer correctly identifies that players are required to bring indoor court shoes for playing badminton, which aligns perfectly with the information provided in the original knowledge-base record.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,My child is just starting badminton and needs help with movement basics. Which instructor would fit?,coach-001,"['coach-003', 'faq-002', 'course-003', 'coach-001', 'coach-004']","Document ID: coach-001
 Category: coach
 Title: Coach Amy profile
-Content: Coach Amy specializes in beginner fundamentals, footwork and junior training. She teaches private and semi-private lessons.
+Content: Coach Amy focuses on beginner fundamentals, footwork and junior training. She teaches private, semi-private and beginner group lessons.
 Coach: Coach Amy
-Skill level: beginner
-Location: Main Club","Coach Amy would be a great fit for your child, as she specializes in beginner fundamentals and footwork.",good,"The generated answer correctly identifies Coach Amy as a suitable instructor for a child starting badminton, highlighting her specialization in beginner fundamentals and footwork, which directly addresses the user's need for help with movement basics.",gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,Who should I choose for a junior player learning fundamental technique and footwork?,coach-001,"['coach-001', 'coach-002', 'faq-002', 'dropin-001', 'course-002']","Document ID: coach-001
+Skill level: beginner and intermediate
+Location: Main Club","Coach Lily Chen would be a great fit for your child as she focuses on fundamentals, footwork, and junior development for beginner players. Additionally, the basic group class also emphasizes beginner fundamentals and movement.",bad,"The generated answer incorrectly identifies Coach Lily Chen instead of Coach Amy, who is clearly noted in the knowledge base as focusing on beginner fundamentals and movement basics. Therefore, it does not match the original record and misrepresents the correct instructor for the child's needs.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,Who should I choose for a junior player learning fundamental technique and footwork?,coach-001,"['coach-003', 'coach-001', 'course-003', 'coach-004', 'coach-002']","Document ID: coach-001
 Category: coach
 Title: Coach Amy profile
-Content: Coach Amy specializes in beginner fundamentals, footwork and junior training. She teaches private and semi-private lessons.
+Content: Coach Amy focuses on beginner fundamentals, footwork and junior training. She teaches private, semi-private and beginner group lessons.
 Coach: Coach Amy
-Skill level: beginner
-Location: Main Club","You should choose Coach Amy for a junior player learning fundamental technique and footwork, as she specializes in beginner fundamentals and junior training.",good,"The generated answer correctly identifies Coach Amy as the appropriate choice for a junior player focused on fundamental technique and footwork. It aligns with the original knowledge-base record, which specifies her specialization in these areas, and includes relevant details about her teaching offerings.",gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,I need an instructor experienced with both new players and children. Who is suitable?,coach-001,"['dropin-001', 'course-002', 'coach-002', 'course-001', 'coach-001']","Document ID: coach-001
+Skill level: beginner and intermediate
+Location: Main Club","You should choose either Coach Lily Chen or Coach Amy, as both focus on fundamentals, footwork, and junior development for beginner and intermediate players.",bad,"The RAG generated answer incorrectly includes Coach Lily Chen, who is not mentioned in the original knowledge base record, while the record states only Coach Amy focuses on the relevant aspects of training for junior players. Therefore, the answer does not fully meet the requirement of being accurate and grounded in the original knowledge record.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,I need an instructor experienced with both new players and children. Who is suitable?,coach-001,"['dropin-001', 'course-001', 'coach-003', 'course-002', 'coach-002']","Document ID: coach-001
 Category: coach
 Title: Coach Amy profile
-Content: Coach Amy specializes in beginner fundamentals, footwork and junior training. She teaches private and semi-private lessons.
+Content: Coach Amy focuses on beginner fundamentals, footwork and junior training. She teaches private, semi-private and beginner group lessons.
 Coach: Coach Amy
-Skill level: beginner
-Location: Main Club","Coach Amy is suitable, as she specializes in beginner fundamentals and junior training.",good,"The generated answer correctly identifies Coach Amy as suitable for the user's needs by highlighting her specialization in beginner fundamentals and junior training, which directly addresses the requirement for an instructor experienced with both new players and children. This aligns with the original knowledge record.",gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,I want the instructor's full attention and a session shaped around my personal goals. Which lesson should I choose?,course-001,"['course-001', 'course-002', 'coach-001', 'policy-001', 'coach-002']","Document ID: course-001
+Skill level: beginner and intermediate
+Location: Main Club","Coach Lily Chen is suitable for new players and children, as she focuses on fundamentals, footwork, and junior development for beginner and intermediate players.",bad,"The generated answer incorrectly mentions Coach Lily Chen instead of the correctly identified Coach Amy from the knowledge-base record, which leads to incorrect information about availability.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,I want the instructor's full attention and a session shaped around my personal goals. Which lesson should I choose?,course-001,"['course-001', 'course-002', 'course-004', 'coach-001', 'course-003']","Document ID: course-001
 Category: course
-Title: Private lesson
-Content: A private lesson is a one-on-one coaching session customized to the player's level and goals.
+Title: Private lesson options
+Content: Private coaching is available as one-to-one, one-to-two or one-to-three 60-minute lessons customized to the players' skill levels and goals.
 Coach:
 Skill level: all
-Location: Main Club","You should choose a private lesson, as it offers one-on-one coaching tailored to your personal goals.",good,"The generated answer correctly identifies that a private lesson provides one-on-one coaching tailored to the player's personal goals, which directly addresses the user's request for full attention and customization. It fully aligns with the information from the original knowledge record.",gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,Which coaching format is intended for one athlete rather than several players?,course-001,"['course-002', 'coach-002', 'course-001', 'coach-001', 'dropin-001']","Document ID: course-001
+Location: Main Club","For personalized attention and a session tailored to your goals, you should choose a one-to-one private lesson.",good,"The generated answer correctly identifies that a one-to-one private lesson is the appropriate option for someone seeking full attention and personalized goals, which aligns with the information in the original knowledge-base record.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,Which coaching format is intended for one athlete rather than several players?,course-001,"['course-001', 'coach-002', 'course-002', 'coach-004', 'coach-003']","Document ID: course-001
 Category: course
-Title: Private lesson
-Content: A private lesson is a one-on-one coaching session customized to the player's level and goals.
+Title: Private lesson options
+Content: Private coaching is available as one-to-one, one-to-two or one-to-three 60-minute lessons customized to the players' skill levels and goals.
 Coach:
 Skill level: all
-Location: Main Club",The coaching format intended for one athlete rather than several players is a **private lesson**.,good,"The generated answer correctly identifies the coaching format intended for one athlete as a private lesson, which aligns with the information provided in the original knowledge record.",gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,I do not want to share the coach with anyone else. What type of lesson fits?,course-001,"['course-001', 'course-002', 'coach-001', 'coach-002', 'policy-001']","Document ID: course-001
+Location: Main Club","The coaching format intended for one athlete is the ""one-to-one"" private coaching option.",good,"The generated answer correctly identifies the 'one-to-one' private coaching option as the format intended for one athlete, which aligns with the information provided in the original knowledge-base record.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,I do not want to share the coach with anyone else. What type of lesson fits?,course-001,"['course-001', 'course-002', 'coach-001', 'coach-002', 'coach-003']","Document ID: course-001
 Category: course
-Title: Private lesson
-Content: A private lesson is a one-on-one coaching session customized to the player's level and goals.
+Title: Private lesson options
+Content: Private coaching is available as one-to-one, one-to-two or one-to-three 60-minute lessons customized to the players' skill levels and goals.
 Coach:
 Skill level: all
-Location: Main Club","A private lesson fits your request, as it is a one-on-one coaching session.",good,"The generated answer accurately reflects the original knowledge record by correctly identifying that a private lesson is a one-on-one coaching session. This information directly addresses the user's need to avoid sharing the coach with anyone else. Therefore, it is complete and correctly grounded in the original content.",gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,Can my three teammates and I train together if we have approximately the same experience?,course-002,"['course-002', 'coach-001', 'coach-002', 'course-001', 'dropin-001']","Document ID: course-002
-Category: course
-Title: Semi-private lesson
-Content: A semi-private lesson is designed for two to four players of a similar skill level.
-Coach:
-Skill level: all
-Location: Main Club","Yes, you and your three teammates can train together since a semi-private lesson can accommodate two to four players of a similar skill level.",good,"The generated answer accurately reflects the information from the original knowledge-base record, confirming that four players of a similar skill level can train together in a semi-private lesson.",gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,Which lesson format allows a few similarly skilled players to share one coaching session?,course-002,"['course-001', 'course-002', 'coach-002', 'coach-001', 'dropin-001']","Document ID: course-002
+Location: Main Club","To avoid sharing the coach with anyone else, you should choose a one-to-one private lesson.",good,"The generated answer correctly identifies that a one-to-one private lesson is the appropriate option for not sharing a coach, which aligns with the original knowledge base record.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,Can my three teammates and I train together if we have approximately the same experience?,course-002,"['course-001', 'course-004', 'course-002', 'course-003', 'coach-001']","Document ID: course-002
 Category: course
 Title: Semi-private lesson
-Content: A semi-private lesson is designed for two to four players of a similar skill level.
+Content: A semi-private lesson is a 60-minute private coaching session for two or three players of a similar skill level.
 Coach:
 Skill level: all
-Location: Main Club",The lesson format that allows a few similarly skilled players to share one coaching session is the semi-private lesson.,good,"The generated answer accurately identifies the semi-private lesson format as allowing a few similarly skilled players to share a coaching session, which is consistent with the information provided in the original knowledge-base record.",gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,My friend and I want coaching together instead of separate individual sessions. What should we book?,course-002,"['course-001', 'course-002', 'coach-001', 'coach-002', 'policy-002']","Document ID: course-002
+Location: Main Club","Yes, you and your three teammates can train together in a semi-private lesson, as it is available for two or three players of a similar skill level.",bad,"The generated answer incorrectly interprets the capacity for training together. The original knowledge record states that a semi-private lesson accommodates only two or three players, not four. Hence, the answer does not match the original record's information.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,Which lesson format allows a few similarly skilled players to share one coaching session?,course-002,"['course-001', 'course-002', 'course-004', 'coach-002', 'course-003']","Document ID: course-002
 Category: course
 Title: Semi-private lesson
-Content: A semi-private lesson is designed for two to four players of a similar skill level.
+Content: A semi-private lesson is a 60-minute private coaching session for two or three players of a similar skill level.
 Coach:
 Skill level: all
-Location: Main Club","You should book a semi-private lesson, as it is designed for two players of a similar skill level.",good,"The generated answer accurately describes the semi-private lesson as the appropriate option for two players, aligning with the information provided in the original knowledge record. It correctly identifies the purpose of the lesson while emphasizing suitability for two players, thus preserving the important factual details.",gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,I am inexperienced and want an informal playing session. Do I need to sign up first?,dropin-001,"['dropin-001', 'course-002', 'faq-002', 'course-001', 'faq-001']","Document ID: dropin-001
+Location: Main Club",The lesson format that allows a few similarly skilled players to share one coaching session is the semi-private lesson.,good,"The generated answer correctly identifies the lesson format that allows a few similarly skilled players to share one coaching session, accurately reflecting the information provided in the original knowledge record about semi-private lessons.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,My friend and I want coaching together instead of separate individual sessions. What should we book?,course-002,"['course-001', 'course-002', 'coach-001', 'coach-002', 'coach-004']","Document ID: course-002
+Category: course
+Title: Semi-private lesson
+Content: A semi-private lesson is a 60-minute private coaching session for two or three players of a similar skill level.
+Coach:
+Skill level: all
+Location: Main Club","You should book a semi-private lesson for both of you, as it is designed for two players of a similar skill level.",good,"The generated answer correctly identifies the need for a semi-private lesson for the user and their friend, referencing that it is suitable for two players of similar skill levels. It accurately conveys the information from the knowledge-base record and addresses the user's request without any contradictions or inaccuracies.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,I am inexperienced and want an informal playing session. Do I need to sign up first?,dropin-001,"['dropin-001', 'faq-002', 'course-003', 'course-002', 'faq-001']","Document ID: dropin-001
 Category: dropin
 Title: Beginner drop-in
 Content: The beginner drop-in is suitable for new and recreational players. Registration is required and spaces are limited.
 Coach:
 Skill level: beginner
-Location: Main Club","Yes, registration is required for the beginner drop-in session.",good,The generated answer addresses the user's question about whether they need to sign up for the informal playing session by affirming the need for registration. It correctly reflects the information in the original knowledge-base record without any contradictions or omissions.,gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,Which activity is appropriate for recreational players but has limited spaces?,dropin-001,"['dropin-001', 'course-002', 'faq-002', 'faq-001', 'facility-001']","Document ID: dropin-001
+Location: Main Club","Yes, you need to sign up first for the beginner drop-in session, as registration is required and spaces are limited.",good,The generated answer accurately reflects the information from the original knowledge-base record regarding the need for registration for the drop-in session. It directly addresses the user's question about whether signing up is necessary. The answer is complete and correctly conveys the requirement without introducing any inaccuracies.,gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,Which activity is appropriate for recreational players but has limited spaces?,dropin-001,"['dropin-001', 'course-003', 'faq-002', 'faq-001', 'course-002']","Document ID: dropin-001
 Category: dropin
 Title: Beginner drop-in
 Content: The beginner drop-in is suitable for new and recreational players. Registration is required and spaces are limited.
 Coach:
 Skill level: beginner
-Location: Main Club",The appropriate activity for recreational players with limited spaces is the beginner drop-in.,good,The generated answer accurately reflects the information in the knowledge base by identifying the beginner drop-in as the activity suitable for recreational players and noting that registration is required due to limited spaces. It does not contradict any details and is complete in addressing the user's question.,gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,I am new to badminton and prefer a casual session instead of customized coaching. What is available?,dropin-001,"['faq-002', 'dropin-001', 'course-002', 'course-001', 'faq-001']","Document ID: dropin-001
+Location: Main Club",The appropriate activity for recreational players with limited spaces is the beginner drop-in.,good,"The generated answer correctly identifies the 'beginner drop-in' as suitable for recreational players and notes that registration is required with limited spaces, matching the information provided in the knowledge-base record.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,I am new to badminton and prefer a casual session instead of customized coaching. What is available?,dropin-001,"['faq-002', 'dropin-001', 'course-001', 'course-003', 'course-002']","Document ID: dropin-001
 Category: dropin
 Title: Beginner drop-in
 Content: The beginner drop-in is suitable for new and recreational players. Registration is required and spaces are limited.
 Coach:
 Skill level: beginner
-Location: Main Club","You can participate in the beginner drop-in session, which is suitable for new and recreational players. Registration is required and spaces are limited.",good,"The generated answer correctly identifies the beginner drop-in session as suitable for new players and retains essential details about registration and space limitations, matching the original knowledge record.",gpt-4o-mini,gpt-4o-mini,
+Location: Main Club","You can join the beginner drop-in session, which is suitable for new and recreational players. Registration is required and spaces are limited. Alternatively, you might also consider the basic group class that focuses on beginner fundamentals.",bad,"The generated answer accurately mentions the beginner drop-in session, which is suitable for new players, and correctly states that registration is required and spaces are limited. However, it introduces an alternative option (basic group class) that is not mentioned in the original knowledge-base record, which could potentially confuse the user regarding their preference for casual sessions. Therefore, while the main point is mostly recovered, the introduction of unverified information affects the overall completeness.",gpt-4o-mini,gpt-4o-mini,
 baseline_prompt,Can I get changed and wait somewhere between games at the club?,facility-001,"['faq-001', 'policy-002', 'facility-001', 'faq-002', 'dropin-001']","Document ID: facility-001
 Category: facility
 Title: Court facilities
 Content: The club provides badminton courts, change rooms, seating areas and equipment rental.
 Coach:
 Skill level:
-Location: Main Club","Yes, the club provides change rooms and seating areas where you can get changed and wait between games.",good,"The generated answer accurately reflects the information in the original knowledge record, stating that there are change rooms and seating areas available for getting changed and waiting between games. It captures the main point without omitting any critical details.",gpt-4o-mini,gpt-4o-mini,
+Location: Main Club","Yes, you can get changed and wait in the change rooms or seating areas at the club between games.",good,"The generated answer correctly states that users can get changed and wait in the change rooms or seating areas, which aligns with the information in the original knowledge record.",gpt-4o-mini,gpt-4o-mini,
 baseline_prompt,Besides playing courts what spaces and services are provided at the venue?,facility-001,"['facility-001', 'faq-002', 'policy-002', 'faq-001', 'course-002']","Document ID: facility-001
 Category: facility
 Title: Court facilities
 Content: The club provides badminton courts, change rooms, seating areas and equipment rental.
 Coach:
 Skill level:
-Location: Main Club","The venue provides change rooms, seating areas, and equipment rental in addition to the badminton courts.",good,"The generated answer accurately recovers the information from the original knowledge-base record, listing all the relevant spaces and services provided at the venue, which includes change rooms, seating areas, equipment rental, and badminton courts. It fully addresses the user's question without missing any main points or introducing inaccuracies.",gpt-4o-mini,gpt-4o-mini,
+Location: Main Club","The venue provides change rooms, seating areas, and equipment rental in addition to the badminton courts.",good,"The generated answer accurately lists the additional spaces and services available at the venue, including change rooms, seating areas, and equipment rental, as mentioned in the original knowledge record. Therefore, it correctly addresses the user's question without missing any key information.",gpt-4o-mini,gpt-4o-mini,
 baseline_prompt,Does the venue provide somewhere to change clothes and sit after playing?,facility-001,"['faq-002', 'facility-001', 'faq-001', 'course-002', 'dropin-001']","Document ID: facility-001
 Category: facility
 Title: Court facilities
 Content: The club provides badminton courts, change rooms, seating areas and equipment rental.
 Coach:
 Skill level:
-Location: Main Club","Yes, the club provides change rooms and seating areas.",good,"The generated answer correctly states that the club provides both change rooms and seating areas, which directly answers the user's question about whether there is a place to change clothes and sit after playing.",gpt-4o-mini,gpt-4o-mini,
+Location: Main Club","Yes, the club provides change rooms and seating areas.",good,"The generated answer directly addresses the user question by confirming the availability of change rooms and seating areas, which aligns perfectly with the information provided in the original knowledge record. It is correct, complete, and grounded in the original content.",gpt-4o-mini,gpt-4o-mini,
 baseline_prompt,I arrived without a racquet. Where can I temporarily get one?,faq-001,"['faq-001', 'faq-002', 'facility-001', 'dropin-001', 'course-002']","Document ID: faq-001
 Category: faq
 Title: Racket rental
 Content: Rackets are available for rental at the front desk, subject to availability.
 Coach:
 Skill level:
-Location: Main Club","You can temporarily get a racquet by renting one at the front desk, subject to availability.",good,"The generated answer correctly states that racquets are available for rental at the front desk, aligning with the information provided in the original knowledge record and addressing the user's question.",gpt-4o-mini,gpt-4o-mini,
+Location: Main Club","You can temporarily get a racquet by renting one at the front desk, subject to availability.",good,"The generated answer correctly informs the user that they can rent a racquet at the front desk, which matches the information in the original knowledge record. It also mentions that availability may vary, which is consistent with the original record's wording.",gpt-4o-mini,gpt-4o-mini,
 baseline_prompt,If I forget my racket can I obtain one when I arrive and is it guaranteed?,faq-001,"['faq-001', 'faq-002', 'facility-001', 'policy-002', 'dropin-001']","Document ID: faq-001
 Category: faq
 Title: Racket rental
 Content: Rackets are available for rental at the front desk, subject to availability.
 Coach:
 Skill level:
-Location: Main Club","Rackets are available for rental at the front desk, but it is subject to availability, so it is not guaranteed.",good,"The generated answer correctly addresses the user's question about the availability of rackets for rental, mentioning both the possibility of obtaining one and the condition of availability, thus clarifying that it is not guaranteed.",gpt-4o-mini,gpt-4o-mini,
+Location: Main Club","Rackets are available for rental at the front desk, but it is subject to availability. It's not guaranteed that a racket will be available when you arrive.",good,"The generated answer accurately reflects the information from the original knowledge record, clearly stating that rackets are available for rental but their availability is not guaranteed. It directly addresses the user's question regarding obtaining a racket upon arrival.",gpt-4o-mini,gpt-4o-mini,
 baseline_prompt,Where should I ask if I need to borrow playing equipment for the session?,faq-001,"['faq-001', 'faq-002', 'dropin-001', 'course-002', 'facility-001']","Document ID: faq-001
 Category: faq
 Title: Racket rental
 Content: Rackets are available for rental at the front desk, subject to availability.
 Coach:
 Skill level:
-Location: Main Club","You should ask at the front desk to borrow playing equipment for the session, as rackets are available for rental there, subject to availability.",good,"The generated answer correctly instructs the user to ask at the front desk for borrowing playing equipment, which aligns with the information provided in the original knowledge-base record. It also mentions the condition of availability, ensuring completeness and accuracy without introducing any new information.",gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,What gear and clothing should I pack before heading to the badminton club?,faq-002,"['faq-002', 'facility-001', 'faq-001', 'dropin-001', 'coach-002']","Document ID: faq-002
+Location: Main Club",You should ask at the front desk to borrow playing equipment for the session.,good,"The generated answer correctly specifies that the user should ask at the front desk to borrow playing equipment, which aligns with the information provided in the original knowledge-base record regarding racket rentals.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,What gear and clothing should I pack before heading to the badminton club?,faq-002,"['faq-002', 'facility-001', 'faq-001', 'course-003', 'course-004']","Document ID: faq-002
 Category: faq
 Title: What to bring
 Content: Players should bring indoor court shoes, sports clothing, water and a badminton racket.
 Coach:
 Skill level: beginner
-Location: Main Club","You should pack indoor court shoes, sports clothing, water, and a badminton racket before heading to the badminton club.",good,The generated answer accurately reflects the information provided in the original knowledge record about what to pack for the badminton club. It lists all the necessary items without missing any key points.,gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,What footwear and personal items are expected when I come to play?,faq-002,"['faq-002', 'faq-001', 'dropin-001', 'facility-001', 'course-001']","Document ID: faq-002
+Location: Main Club","You should pack indoor court shoes, sports clothing, water, and a badminton racket.",good,"The generated answer correctly lists all the necessary items that should be packed before heading to the badminton club, as stated in the original knowledge-base record.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,What footwear and personal items are expected when I come to play?,faq-002,"['faq-002', 'faq-001', 'course-003', 'dropin-001', 'facility-001']","Document ID: faq-002
 Category: faq
 Title: What to bring
 Content: Players should bring indoor court shoes, sports clothing, water and a badminton racket.
 Coach:
 Skill level: beginner
-Location: Main Club","You should bring indoor court shoes, sports clothing, water, and a badminton racket.",good,"The generated answer correctly lists the specific items that players are expected to bring when coming to play badminton, matching the information provided in the original knowledge-base record.",gpt-4o-mini,gpt-4o-mini,
-baseline_prompt,I already arranged my session. What should I bring with me on the day?,faq-002,"['faq-002', 'policy-002', 'policy-001', 'course-001', 'dropin-001']","Document ID: faq-002
+Location: Main Club","You should bring indoor court shoes, sports clothing, water, and a badminton racket.",good,"The generated answer accurately reflects the essential information from the knowledge record, listing the required footwear and personal items needed for play. It includes all the necessary elements and does not contradict the original information.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,I already arranged my session. What should I bring with me on the day?,faq-002,"['faq-002', 'policy-002', 'policy-001', 'course-002', 'dropin-001']","Document ID: faq-002
 Category: faq
 Title: What to bring
 Content: Players should bring indoor court shoes, sports clothing, water and a badminton racket.
 Coach:
 Skill level: beginner
-Location: Main Club","You should bring indoor court shoes, sports clothing, water, and a badminton racket.",good,"The generated answer correctly lists all the items that the user needs to bring for their session, as stated in the original knowledge-base record.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,What is the cancellation policy for private lessons?,policy-001,"['policy-001', 'course-001', 'course-002', 'dropin-001', 'faq-001']","Document ID: policy-001
+Location: Main Club","You should bring indoor court shoes, sports clothing, water, and a badminton racket.",good,The generated answer correctly lists all the items mentioned in the original knowledge record that players should bring for their session.,gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,What coaching skills does Coach Lily Chen focus on?,coach-003,"['coach-003', 'coach-001', 'coach-004', 'coach-002', 'course-001']","Document ID: coach-003
+Category: coach
+Title: Coach Lily Chen profile
+Content: Coach Lily Chen focuses on fundamentals, footwork and junior development for beginner and intermediate players.
+Coach: Coach Lily Chen
+Skill level: beginner and intermediate
+Location: Main Club","Coach Lily Chen focuses on fundamentals, footwork, and junior development for beginner and intermediate players.",good,"The generated answer correctly summarizes the information found in the original knowledge-base record, preserving all the key points about Coach Lily Chen's focus areas.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,What player levels does Coach Lily Chen teach?,coach-003,"['coach-003', 'coach-001', 'coach-004', 'coach-002', 'course-001']","Document ID: coach-003
+Category: coach
+Title: Coach Lily Chen profile
+Content: Coach Lily Chen focuses on fundamentals, footwork and junior development for beginner and intermediate players.
+Coach: Coach Lily Chen
+Skill level: beginner and intermediate
+Location: Main Club",Coach Lily Chen teaches beginner and intermediate player levels.,good,"The generated answer correctly reflects the player levels that Coach Lily Chen teaches, as stated in the original knowledge-base record. It accurately conveys the information without omitting any important details.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,Does Coach Lily Chen provide junior development training?,coach-003,"['coach-003', 'coach-001', 'coach-004', 'coach-002', 'course-001']","Document ID: coach-003
+Category: coach
+Title: Coach Lily Chen profile
+Content: Coach Lily Chen focuses on fundamentals, footwork and junior development for beginner and intermediate players.
+Coach: Coach Lily Chen
+Skill level: beginner and intermediate
+Location: Main Club","Yes, Coach Lily Chen provides junior development training for beginner and intermediate players.",good,"The generated answer accurately states that Coach Lily Chen provides junior development training, which aligns with the information in the original knowledge-base record. It correctly identifies the target demographics as beginner and intermediate players, thus covering all key points.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,What areas of badminton does Coach Daniel Wong specialize in?,coach-004,"['coach-004', 'coach-002', 'coach-003', 'faq-002', 'course-001']","Document ID: coach-004
+Category: coach
+Title: Coach Daniel Wong profile
+Content: Coach Daniel Wong focuses on singles strategy, movement and match preparation for intermediate and advanced players.
+Coach: Coach Daniel Wong
+Skill level: intermediate and advanced
+Location: Main Club","Coach Daniel Wong specializes in singles strategy, movement, and match preparation for intermediate and advanced players.",good,"The generated answer accurately captures the specialization of Coach Daniel Wong as stated in the original knowledge-base record, listing singles strategy, movement, and match preparation for intermediate and advanced players. It provides a complete response without missing any key details.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,Is Coach Daniel Wong suitable for an advanced player?,coach-004,"['coach-004', 'coach-002', 'coach-003', 'course-004', 'coach-001']","Document ID: coach-004
+Category: coach
+Title: Coach Daniel Wong profile
+Content: Coach Daniel Wong focuses on singles strategy, movement and match preparation for intermediate and advanced players.
+Coach: Coach Daniel Wong
+Skill level: intermediate and advanced
+Location: Main Club","Yes, Coach Daniel Wong is suitable for advanced players, as he focuses on singles strategy, movement, and match preparation for intermediate and advanced players.",good,"The generated answer accurately reflects the information provided in the original knowledge-base record. It correctly identifies that Coach Daniel Wong's focus is suitable for advanced players, explicitly mentioning his emphasis on singles strategy, movement, and match preparation for both intermediate and advanced skill levels. Therefore, it fulfills the criteria of correctness and completeness without introducing any inaccuracies or omissions.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,Which coach named Daniel focuses on singles strategy and match preparation?,coach-004,"['coach-004', 'coach-002', 'coach-003', 'course-001', 'coach-001']","Document ID: coach-004
+Category: coach
+Title: Coach Daniel Wong profile
+Content: Coach Daniel Wong focuses on singles strategy, movement and match preparation for intermediate and advanced players.
+Coach: Coach Daniel Wong
+Skill level: intermediate and advanced
+Location: Main Club",Coach Daniel Wong focuses on singles strategy and match preparation.,good,"The generated answer correctly identifies Coach Daniel Wong and mentions his focus on singles strategy and match preparation, which directly addresses the user question. It is accurate and preserves the important factual information from the original knowledge record.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,What does the basic group class focus on?,course-003,"['course-003', 'course-004', 'coach-001', 'dropin-001', 'coach-003']","Document ID: course-003
+Category: course
+Title: Basic group class
+Content: The basic group class focuses on beginner fundamentals, movement and consistency. It is designed for beginner and recreational players.
+Coach:
+Skill level: beginner
+Location: Main Club","The basic group class focuses on beginner fundamentals, movement, and consistency, designed for beginner and recreational players.",good,"The generated answer accurately reflects the information in the original knowledge record about the basic group class, including its focus and intended audience.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,Which group class is designed for beginner and recreational players?,course-003,"['course-003', 'dropin-001', 'course-004', 'faq-002', 'coach-003']","Document ID: course-003
+Category: course
+Title: Basic group class
+Content: The basic group class focuses on beginner fundamentals, movement and consistency. It is designed for beginner and recreational players.
+Coach:
+Skill level: beginner
+Location: Main Club",The group class designed for beginner and recreational players is the Basic group class.,good,"The generated answer correctly identifies the Basic group class as the class designed for beginner and recreational players, matching the information in the original knowledge record.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,I am new to badminton and want group training in fundamentals and consistency. Which class fits?,course-003,"['course-003', 'faq-002', 'course-004', 'dropin-001', 'coach-001']","Document ID: course-003
+Category: course
+Title: Basic group class
+Content: The basic group class focuses on beginner fundamentals, movement and consistency. It is designed for beginner and recreational players.
+Coach:
+Skill level: beginner
+Location: Main Club","The Basic group class fits your needs as it focuses on beginner fundamentals, movement, and consistency.",good,"The generated answer accurately describes the Basic group class, mentioning that it focuses on beginner fundamentals, movement, and consistency, which aligns perfectly with the user's requirement for group training in these areas. Therefore, the answer is correct and complete. It does not contradict any information from the original record and provides the necessary details.",gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,What skills are covered in the advanced group class?,course-004,"['course-004', 'course-003', 'coach-002', 'coach-001', 'course-002']","Document ID: course-004
+Category: course
+Title: Advanced group class
+Content: The advanced group class focuses on faster movement, tactics and match preparation. It is designed for intermediate and advanced players.
+Coach:
+Skill level: intermediate and advanced
+Location: Main Club","The advanced group class covers faster movement, tactics, and match preparation.",good,The generated answer correctly identifies the key skills covered in the advanced group class as mentioned in the original knowledge-base record.,gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,Which group class is intended for intermediate and advanced players?,course-004,"['course-004', 'course-003', 'coach-002', 'coach-004', 'dropin-001']","Document ID: course-004
+Category: course
+Title: Advanced group class
+Content: The advanced group class focuses on faster movement, tactics and match preparation. It is designed for intermediate and advanced players.
+Coach:
+Skill level: intermediate and advanced
+Location: Main Club",The advanced group class is intended for intermediate and advanced players.,good,The generated answer accurately reflects the information from the original knowledge record by stating that the advanced group class is designed for intermediate and advanced players. It preserves the key details without contradictions or omissions.,gpt-4o-mini,gpt-4o-mini,
+baseline_prompt,I want group training focused on tactics and match preparation. Which class should I choose?,course-004,"['course-004', 'course-003', 'course-001', 'coach-002', 'course-002']","Document ID: course-004
+Category: course
+Title: Advanced group class
+Content: The advanced group class focuses on faster movement, tactics and match preparation. It is designed for intermediate and advanced players.
+Coach:
+Skill level: intermediate and advanced
+Location: Main Club","You should choose the **Advanced group class**, as it focuses on tactics and match preparation for intermediate and advanced players.",good,"The generated answer accurately identifies the **Advanced group class** as the suitable option for group training focused on tactics and match preparation, which aligns perfectly with the information in the original knowledge-base record.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,What is the cancellation policy for private lessons?,policy-001,"['policy-001', 'course-001', 'course-002', 'dropin-001', 'coach-001']","Document ID: policy-001
 Category: cancellation
 Title: Private lesson cancellation
 Content: Private lessons must be cancelled at least 24 hours before the scheduled start time. Late cancellations may not be eligible for a refund.
 Coach:
 Skill level:
-Location: Main Club","Private lessons must be cancelled at least 24 hours before the scheduled start time. Late cancellations may not be eligible for a refund. If you have more questions about private lessons, feel free to ask!
+Location: Main Club","Private lessons must be cancelled at least 24 hours before the scheduled start time. Late cancellations may not be eligible for a refund.
 
-**Source List:**
-- Private lesson cancellation
-- Private lesson",good,The generated answer perfectly matches the information in the original knowledge-base record regarding the cancellation policy for private lessons. It correctly states the requirement to cancel at least 24 hours in advance and notes the possibility of not receiving a refund for late cancellations. This means it effectively addresses the user question without any discrepancies.,gpt-4o-mini,gpt-4o-mini,
+If you have any more questions, feel free to ask!",good,The generated answer accurately reflects the information in the original knowledge-base record regarding the cancellation policy for private lessons. It maintains the crucial details about the timing for cancellations and the possibility of not being eligible for a refund if cancelled late.,gpt-4o-mini,gpt-4o-mini,
 production_prompt,How much notice do I need to give to cancel a private lesson?,policy-001,"['policy-001', 'course-001', 'course-002', 'dropin-001', 'policy-002']","Document ID: policy-001
 Category: cancellation
 Title: Private lesson cancellation
@@ -375,35 +457,17 @@ Coach:
 Skill level:
 Location: Main Club","You need to give at least 24 hours' notice to cancel a private lesson. Late cancellations may not be eligible for a refund.
 
-If you have any other questions or need further assistance, feel free to ask!",good,"The RAG generated answer correctly conveys the required notice period for canceling a private lesson as stated in the original knowledge record, including the detail about late cancellations and potential refund issues. It matches the original information accurately and completely without contradicting it or inventing new details.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,Will I get a refund if I cancel my lesson late?,policy-001,"['policy-001', 'course-001', 'course-002', 'policy-002', 'faq-001']","Document ID: policy-001
+If you have any more questions, feel free to ask!",good,"The generated answer accurately reflects the key information from the original knowledge-base record regarding the cancellation policy for private lessons, specifically the 24-hour notice requirement and the potential lack of refund for late cancellations. Therefore, it meets the criteria of correctness, completeness, and groundedness.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,Will I get a refund if I cancel my lesson late?,policy-001,"['policy-001', 'course-002', 'course-001', 'policy-002', 'faq-001']","Document ID: policy-001
 Category: cancellation
 Title: Private lesson cancellation
 Content: Private lessons must be cancelled at least 24 hours before the scheduled start time. Late cancellations may not be eligible for a refund.
 Coach:
 Skill level:
-Location: Main Club","You may not be eligible for a refund if you cancel your private lesson late, as private lessons must be cancelled at least 24 hours before the scheduled start time to qualify for a refund. Please keep this policy in mind when planning your cancellations!
+Location: Main Club","You may not be eligible for a refund if you cancel your private lesson late. Private lessons must be cancelled at least 24 hours before the scheduled start time to qualify for a refund.
 
-If you have any more questions about lessons or policies, just let me know!",good,"The generated answer accurately reflects the information from the original knowledge record. It clearly states that late cancellations may not qualify for a refund and emphasizes the requirement of cancelling at least 24 hours in advance to be eligible for a refund. There are no contradictions or inventing of information, and it addresses the user's question directly and completely.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,How long can I book a court for my practice session?,policy-002,"['policy-002', 'policy-001', 'course-002', 'facility-001', 'course-001']","Document ID: policy-002
-Category: booking
-Title: Court booking duration
-Content: Court bookings use 60-minute time slots. This describes the booking duration only. Exact start times and live court availability are not stored in the knowledge base. Customers should arrive at least 10 minutes before the booking.
-Coach:
-Skill level:
-Location: Main Club","You can book a court for 60-minute time slots. However, exact start times and live court availability are not stored in the knowledge base, so please confirm those details with the club.
-
-Would you like to know more about the facilities available at the club?",good,"The generated answer correctly states that court bookings are for 60-minute time slots, which matches the original knowledge record. However, it also includes an unnecessary suggestion to confirm details with the club, which may not be relevant to the user's direct question about booking duration. Despite this, the main point of the booking duration is covered correctly.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,What time should I arrive before my court booking?,policy-002,"['policy-002', 'faq-002', 'policy-001', 'facility-001', 'faq-001']","Document ID: policy-002
-Category: booking
-Title: Court booking duration
-Content: Court bookings use 60-minute time slots. This describes the booking duration only. Exact start times and live court availability are not stored in the knowledge base. Customers should arrive at least 10 minutes before the booking.
-Coach:
-Skill level:
-Location: Main Club","You should arrive at least 10 minutes before your court booking. Court bookings use 60-minute time slots, but please note that exact start times and live court availability are not stored in the knowledge base.
-
-Is there anything else you would like to know?",good,"The generated answer accurately conveys the key information from the original knowledge base, stating that customers should arrive at least 10 minutes before their court booking. It also appropriately mentions the 60-minute booking duration, aligning with the original content.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,Are there any specific time slots available for court bookings?,policy-002,"['policy-002', 'facility-001', 'faq-001', 'policy-001', 'dropin-001']","Document ID: policy-002
+If you have more questions about cancellations or any other policies, feel free to ask!",good,"The generated answer accurately reflects the information from the original knowledge base regarding the cancellation policy for private lessons, specifically mentioning the 24-hour notice requirement and the potential ineligibility for a refund due to late cancellation. Therefore, it correctly addresses the user's question about refund eligibility upon late cancellation.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,How long can I book a court for my practice session?,policy-002,"['policy-002', 'course-002', 'policy-001', 'course-001', 'facility-001']","Document ID: policy-002
 Category: booking
 Title: Court booking duration
 Content: Court bookings use 60-minute time slots. This describes the booking duration only. Exact start times and live court availability are not stored in the knowledge base. Customers should arrive at least 10 minutes before the booking.
@@ -411,411 +475,525 @@ Coach:
 Skill level:
 Location: Main Club","Court bookings use 60-minute time slots. However, the knowledge base does not contain exact start times or live court availability, so please confirm those details with the club.
 
-Would you like to know more about the facilities or other club policies?",good,"The generated answer correctly states the duration of court bookings and mentions the absence of specific start times or live availability from the knowledge base, aligning with the original record. It does not provide details on available time slots, which reflects the limitation of the original document regarding availability information. Overall, it conveys the relevant information accurately without contradicting the original record.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,Is there a drop-in session for beginners at the club?,dropin-001,"['dropin-001', 'faq-002', 'course-002', 'course-001', 'coach-001']","Document ID: dropin-001
+Would you like me to help with anything else?",good,"The generated answer accurately mentions that court bookings use 60-minute time slots, directly addressing the user's question. It acknowledges that the knowledge base does not contain exact start times or live availability, which aligns with the original record. Therefore, the answer is correct and complete regarding the duration of the booking.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,What time should I arrive before my court booking?,policy-002,"['policy-002', 'faq-002', 'policy-001', 'facility-001', 'faq-001']","Document ID: policy-002
+Category: booking
+Title: Court booking duration
+Content: Court bookings use 60-minute time slots. This describes the booking duration only. Exact start times and live court availability are not stored in the knowledge base. Customers should arrive at least 10 minutes before the booking.
+Coach:
+Skill level:
+Location: Main Club","You should arrive at least 10 minutes before your court booking. Court bookings use 60-minute time slots. Please note that exact start times and live availability are not stored in the knowledge base.
+
+Is there anything else you’d like to know?",good,"The generated answer correctly states that customers should arrive at least 10 minutes before their court booking, which directly addresses the user's question. It also includes relevant information about the 60-minute time slots, aligning with the original knowledge base. This answer does not contradict the information provided and does not introduce any erroneous details.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,Are there any specific time slots available for court bookings?,policy-002,"['policy-002', 'facility-001', 'faq-001', 'policy-001', 'course-001']","Document ID: policy-002
+Category: booking
+Title: Court booking duration
+Content: Court bookings use 60-minute time slots. This describes the booking duration only. Exact start times and live court availability are not stored in the knowledge base. Customers should arrive at least 10 minutes before the booking.
+Coach:
+Skill level:
+Location: Main Club","Court bookings use 60-minute time slots. However, the knowledge base does not contain exact start times or live court availability, so please confirm those details with the club. Would you like me to check whether other courts are available during specific time slots?
+
+Source: Court booking duration",bad,"The generated answer correctly conveys that court bookings are in 60-minute time slots and notes that exact start times and live availability are not provided in the knowledge base. However, it does not directly answer the user's question regarding specific available time slots, as it suggests the user should confirm those details with the club without providing any further options or guidance.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,Is there a drop-in session for beginners at the club?,dropin-001,"['dropin-001', 'course-003', 'faq-002', 'course-004', 'course-002']","Document ID: dropin-001
 Category: dropin
 Title: Beginner drop-in
 Content: The beginner drop-in is suitable for new and recreational players. Registration is required and spaces are limited.
 Coach:
 Skill level: beginner
-Location: Main Club","Yes, there is a beginner drop-in session at the club. It's suitable for new and recreational players, but registration is required and spaces are limited. The session takes place at the Main Club location.
+Location: Main Club","Yes, there is a beginner drop-in session at the club, which is suitable for new and recreational players. Registration is required, and spaces are limited.
 
-If you need more details about registration or the session schedule, feel free to ask!",good,"The generated answer accurately captures the essential information from the original knowledge record regarding the beginner drop-in session, including its suitability for new and recreational players, the requirement for registration, and the location of the session. It does not introduce any inaccuracies or omissions and aligns with the user's query about the availability of a drop-in session for beginners.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,Do I need to register to attend the beginner drop-in?,dropin-001,"['dropin-001', 'faq-002', 'faq-001', 'course-002', 'coach-001']","Document ID: dropin-001
+Would you like more information about the drop-in session or any other offerings?
+
+Source: Beginner drop-in",good,"The generated answer accurately reflects the information from the original knowledge record, confirming that there is a beginner drop-in session, detailing its suitability for new players, and noting the requirements for registration and limited spaces. Therefore, it addresses the user's question completely and correctly.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,Do I need to register to attend the beginner drop-in?,dropin-001,"['dropin-001', 'course-003', 'faq-002', 'faq-001', 'coach-001']","Document ID: dropin-001
 Category: dropin
 Title: Beginner drop-in
 Content: The beginner drop-in is suitable for new and recreational players. Registration is required and spaces are limited.
 Coach:
 Skill level: beginner
-Location: Main Club","Yes, you need to register to attend the beginner drop-in, and spaces are limited. This drop-in is suitable for new and recreational players.
-
-If you have any other questions, feel free to ask!
-
-Source:
-- Beginner drop-in
-- What to bring",good,"The generated answer correctly states that registration is required to attend the beginner drop-in and mentions that spaces are limited, aligning with the original knowledge record. It also reiterates the suitability of the drop-in for new and recreational players, which is relevant information. Therefore, the answer is correct and complete.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,Where is the beginner drop-in held?,dropin-001,"['dropin-001', 'faq-002', 'coach-001', 'course-002', 'faq-001']","Document ID: dropin-001
+Location: Main Club","Yes, you need to register to attend the beginner drop-in, and spaces are limited. It's designed for new and recreational players. If you have any other questions, feel free to ask!",good,"The generated answer accurately states that registration is required to attend the beginner drop-in and mentions the limitation on spaces, which aligns with the original knowledge record. It also includes the target audience for the event without adding incorrect information.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,Where is the beginner drop-in held?,dropin-001,"['dropin-001', 'course-003', 'faq-002', 'coach-003', 'coach-001']","Document ID: dropin-001
 Category: dropin
 Title: Beginner drop-in
 Content: The beginner drop-in is suitable for new and recreational players. Registration is required and spaces are limited.
 Coach:
 Skill level: beginner
-Location: Main Club","The beginner drop-in is held at the Main Club. Registration is required, and spaces are limited.
-
-Would you like to know more about the beginner drop-in or any other activities at the club?",good,"The generated answer correctly identifies the location of the beginner drop-in as the Main Club, which corresponds with the information in the original knowledge record. Additionally, it mentions that registration is required and spaces are limited, keeping in line with the original document. Therefore, the answer is complete and aligns with the original content.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,What type of training does Coach Amy focus on?,coach-001,"['coach-001', 'coach-002', 'course-001', 'course-002', 'faq-002']","Document ID: coach-001
+Location: Main Club","The beginner drop-in is held at the Main Club. Registration is required, and spaces are limited. If you need more information about the drop-in, feel free to ask!",good,"The generated answer correctly identifies the location of the beginner drop-in as the Main Club and also includes relevant details from the original knowledge record about registration and space limitations. Therefore, it fully addresses the user question with no inaccuracies or omissions.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,What type of training does Coach Amy focus on?,coach-001,"['coach-001', 'coach-003', 'coach-002', 'course-001', 'coach-004']","Document ID: coach-001
 Category: coach
 Title: Coach Amy profile
-Content: Coach Amy specializes in beginner fundamentals, footwork and junior training. She teaches private and semi-private lessons.
+Content: Coach Amy focuses on beginner fundamentals, footwork and junior training. She teaches private, semi-private and beginner group lessons.
 Coach: Coach Amy
-Skill level: beginner
-Location: Main Club","Coach Amy focuses on beginner fundamentals, footwork, and junior training. She teaches both private and semi-private lessons at the Main Club. If you have any other questions about the training or coaching options, feel free to ask!",good,"The generated answer accurately reflects the information from the original knowledge-base record, stating Coach Amy's focus on beginner fundamentals, footwork, and junior training. It does not contradict any facts and is complete.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,Can I take private lessons with Coach Amy?,coach-001,"['coach-001', 'course-001', 'course-002', 'coach-002', 'policy-001']","Document ID: coach-001
+Skill level: beginner and intermediate
+Location: Main Club","Coach Amy focuses on beginner fundamentals, footwork, and junior training. She offers private, semi-private, and beginner group lessons, catering to both beginner and intermediate skill levels.
+
+If you have any more questions about the coaching or classes, feel free to ask!",good,"The generated answer correctly captures the main focus areas of Coach Amy's training, including beginner fundamentals, footwork, and junior training. It also accurately mentions the lesson types she offers and the skill levels she caters to. Therefore, the answer is complete and aligned with the original knowledge record.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,Can I take private lessons with Coach Amy?,coach-001,"['coach-001', 'course-001', 'course-002', 'coach-003', 'policy-001']","Document ID: coach-001
 Category: coach
 Title: Coach Amy profile
-Content: Coach Amy specializes in beginner fundamentals, footwork and junior training. She teaches private and semi-private lessons.
+Content: Coach Amy focuses on beginner fundamentals, footwork and junior training. She teaches private, semi-private and beginner group lessons.
 Coach: Coach Amy
-Skill level: beginner
-Location: Main Club","Yes, you can take private lessons with Coach Amy. She specializes in beginner fundamentals, footwork, and junior training, and offers one-on-one coaching sessions at the Main Club. If you have specific goals or skills you want to work on, her lessons can be customized to suit your needs.
+Skill level: beginner and intermediate
+Location: Main Club","Yes, you can take private lessons with Coach Amy! She teaches private, semi-private, and beginner group lessons focused on beginner fundamentals and footwork.
 
-Let me know if you need more information about scheduling or pricing!",good,"The generated answer correctly confirms that private lessons with Coach Amy are available and includes relevant details about her specialties and location. It does not introduce any incorrect information and acknowledges the possibility of customizing lessons, which is in line with the original knowledge record.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,Is Coach Amy available for teaching juniors?,coach-001,"['coach-001', 'coach-002', 'course-001', 'course-002', 'faq-001']","Document ID: coach-001
+If you're interested in scheduling a lesson, please contact the club for more details on availability and booking. Would you like to know more about the lesson options?",good,"The generated answer correctly states that private lessons are available with Coach Amy, which aligns with the original knowledge base record. It also captures the focus of her coaching and encourages contact for scheduling, making it complete and detailed without contradicting any information.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,Is Coach Amy available for teaching juniors?,coach-001,"['coach-001', 'coach-003', 'course-001', 'coach-002', 'course-002']","Document ID: coach-001
 Category: coach
 Title: Coach Amy profile
-Content: Coach Amy specializes in beginner fundamentals, footwork and junior training. She teaches private and semi-private lessons.
+Content: Coach Amy focuses on beginner fundamentals, footwork and junior training. She teaches private, semi-private and beginner group lessons.
 Coach: Coach Amy
-Skill level: beginner
-Location: Main Club","Yes, Coach Amy is available for teaching juniors as she specializes in junior training, along with beginner fundamentals and footwork. She offers private and semi-private lessons at the Main Club. If you need more details about scheduling or availability, feel free to ask!",good,"The generated answer correctly confirms that Coach Amy is available for teaching juniors, highlighting her specialization in junior training. It also provides additional relevant details about her teaching style and lesson format, which are consistent with the original knowledge record. Thus, the answer is comprehensive and matches the original information without contradiction or omission.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,What kind of training does Coach David focus on?,coach-002,"['coach-002', 'coach-001', 'course-001', 'course-002', 'faq-002']","Document ID: coach-002
+Skill level: beginner and intermediate
+Location: Main Club","Yes, Coach Amy is available for teaching juniors. She focuses on beginner fundamentals, footwork, and junior training. If you need more details about her lesson options, feel free to ask!",good,The generated answer correctly states that Coach Amy is available for teaching juniors and aligns with the information from the original knowledge-base record regarding her focus on junior training. It accurately conveys the essential details without introducing any contradictions or inaccuracies.,gpt-4o-mini,gpt-4o-mini,
+production_prompt,What kind of training does Coach David focus on?,coach-002,"['coach-002', 'coach-004', 'coach-001', 'coach-003', 'course-001']","Document ID: coach-002
 Category: coach
 Title: Coach David profile
-Content: Coach David specializes in intermediate and advanced singles strategy, movement and match preparation.
+Content: Coach David focuses on intermediate and advanced singles strategy, movement and match preparation.
 Coach: Coach David
-Skill level: advanced
-Location: Main Club","Coach David focuses on intermediate and advanced singles strategy, movement, and match preparation. If you're looking to improve in these areas, he could be a great fit for your training! Would you like to know more about his availability for lessons?
+Skill level: intermediate and advanced
+Location: Main Club","Coach David focuses on intermediate and advanced singles strategy, movement, and match preparation. If you have any other questions about coaching or training, feel free to ask!",good,"The generated answer accurately summarizes the key details from the original knowledge base record regarding Coach David's training focus on intermediate and advanced singles strategy, movement, and match preparation.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,Can I get coaching from Coach David if I'm an intermediate player?,coach-002,"['coach-002', 'coach-004', 'coach-003', 'course-001', 'coach-001']","Document ID: coach-002
+Category: coach
+Title: Coach David profile
+Content: Coach David focuses on intermediate and advanced singles strategy, movement and match preparation.
+Coach: Coach David
+Skill level: intermediate and advanced
+Location: Main Club","Yes, you can get coaching from Coach David as an intermediate player. He focuses on intermediate and advanced singles strategy, movement, and match preparation, which aligns well with your skill level.
 
-Sources:
-- Coach David profile",good,"The generated answer correctly summarizes Coach David's focus areas as stated in the knowledge record, preserving the important factual information without contradiction. It also maintains completeness by inviting the user to inquire further about lessons, which aligns with the context of the question.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,Can I get coaching from Coach David if I'm an intermediate player?,coach-002,"['coach-002', 'coach-001', 'course-001', 'course-002', 'faq-002']","Document ID: coach-002
+If you have any questions about scheduling a lesson or which type of session might suit you best, feel free to ask!",good,The generated answer correctly states that Coach David offers coaching for intermediate players and provides relevant details about his focus areas. It accurately reflects the information from the original knowledge record without contradictions or omissions.,gpt-4o-mini,gpt-4o-mini,
+production_prompt,Where can I find Coach David for lessons?,coach-002,"['coach-002', 'course-001', 'coach-001', 'coach-004', 'course-002']","Document ID: coach-002
 Category: coach
 Title: Coach David profile
-Content: Coach David specializes in intermediate and advanced singles strategy, movement and match preparation.
+Content: Coach David focuses on intermediate and advanced singles strategy, movement and match preparation.
 Coach: Coach David
-Skill level: advanced
-Location: Main Club","Yes, you can get coaching from Coach David if you're an intermediate player. He specializes in intermediate and advanced singles strategy, movement, and match preparation, so he's well-suited to help you improve your skills. If you're interested in scheduling a session, I recommend contacting the club for details on availability and booking.
-
-Would you like to know more about the types of lessons available?",good,"The generated answer accurately reflects the information from the original knowledge record, affirming that Coach David is suitable for coaching intermediate players and elaborating on his specializations. It does not contradict any detail and provides relevant context.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,Where can I find Coach David for lessons?,coach-002,"['coach-002', 'coach-001', 'course-001', 'course-002', 'policy-001']","Document ID: coach-002
-Category: coach
-Title: Coach David profile
-Content: Coach David specializes in intermediate and advanced singles strategy, movement and match preparation.
-Coach: Coach David
-Skill level: advanced
-Location: Main Club","You can find Coach David for lessons at the Main Club. He specializes in intermediate and advanced singles strategy, movement, and match preparation. Would you like to know more about the types of lessons he offers?",good,"The generated answer correctly identifies the location where Coach David can be found for lessons, which matches the information in the original knowledge-base record. It also accurately reflects his specialization, thus retaining important factual details. Therefore, the answer is complete and does not contradict the original record.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,What is a private lesson in badminton?,course-001,"['course-001', 'course-002', 'faq-002', 'policy-001', 'facility-001']","Document ID: course-001
+Skill level: intermediate and advanced
+Location: Main Club","You can find Coach David for lessons at the Main Club. He specializes in intermediate and advanced singles strategy, movement, and match preparation. If you have any further questions about booking or lesson details, feel free to ask!",good,The RAG generated answer correctly identifies the location of Coach David for lessons as the Main Club and provides additional relevant information about his specialization. It matches well with the original knowledge record and does not contradict it in any way.,gpt-4o-mini,gpt-4o-mini,
+production_prompt,What is a private lesson in badminton?,course-001,"['course-002', 'course-001', 'faq-002', 'policy-001', 'course-003']","Document ID: course-001
 Category: course
-Title: Private lesson
-Content: A private lesson is a one-on-one coaching session customized to the player's level and goals.
+Title: Private lesson options
+Content: Private coaching is available as one-to-one, one-to-two or one-to-three 60-minute lessons customized to the players' skill levels and goals.
 Coach:
 Skill level: all
-Location: Main Club","A private lesson in badminton is a one-on-one coaching session customized to the player's level and goals. These lessons are available for all skill levels and are conducted at the Main Club. Players should also remember to bring indoor court shoes, sports clothing, water, and a badminton racket. If you have any more questions or need details about booking, feel free to ask!",good,"The generated answer accurately describes a private lesson in badminton by highlighting that it is a one-on-one coaching session tailored to the player's level and goals. It also includes relevant details about skill levels, location, and additional items players need to bring. The answer contains all the essential information from the original knowledge record and does not miss any main points.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,Can I get coaching tailored to my skill level during a private lesson?,course-001,"['course-001', 'course-002', 'coach-001', 'coach-002', 'policy-001']","Document ID: course-001
+Location: Main Club","A private lesson in badminton is a coaching session that can be customized for players. It is available in different formats: one-to-one, one-to-two, or one-to-three, each lasting 60 minutes. These lessons cater to players of all skill levels and aim to meet their specific goals.
+
+If you have more questions about lessons or anything else, feel free to ask!",good,"The generated answer accurately defines what a private lesson in badminton is, including the various formats, duration, and customization to player skill levels and goals. It aligns with the original knowledge-base record without missing any crucial information and does not contradict it.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,Can I get coaching tailored to my skill level during a private lesson?,course-001,"['course-001', 'course-002', 'coach-001', 'coach-002', 'coach-003']","Document ID: course-001
 Category: course
-Title: Private lesson
-Content: A private lesson is a one-on-one coaching session customized to the player's level and goals.
+Title: Private lesson options
+Content: Private coaching is available as one-to-one, one-to-two or one-to-three 60-minute lessons customized to the players' skill levels and goals.
 Coach:
 Skill level: all
-Location: Main Club","Yes, you can get coaching tailored to your skill level during a private lesson, as these sessions are customized to match the player's level and goals. Both beginner and advanced players can benefit from private lessons with qualified coaches at the Main Club. Would you like more information about specific coaches or how to book a lesson?
+Location: Main Club","Yes, you can get coaching tailored to your skill level during a private lesson. Private coaching is available as one-to-one, one-to-two, or one-to-three 60-minute lessons that are customized to the players' skill levels and goals.
 
-**Source:**
-- Private lesson
-- Coach Amy profile
-- Coach David profile",good,"The generated answer accurately restates that private lessons are customized to the player's skill level and goals, addressing the user's question directly. It provides complete information about the private lesson's suitability for all skill levels, which is consistent with the original knowledge base record.",gpt-4o-mini,gpt-4o-mini,
+If you're looking for a specific coach or have any preferences, let me know!",good,"The generated answer accurately reflects the information provided in the original knowledge record, confirming that private lessons are indeed customized to the players' skill levels and goals. It includes all relevant details without contradicting the record.",gpt-4o-mini,gpt-4o-mini,
 production_prompt,Where are the private lessons held?,course-001,"['course-001', 'course-002', 'policy-001', 'coach-001', 'dropin-001']","Document ID: course-001
 Category: course
-Title: Private lesson
-Content: A private lesson is a one-on-one coaching session customized to the player's level and goals.
+Title: Private lesson options
+Content: Private coaching is available as one-to-one, one-to-two or one-to-three 60-minute lessons customized to the players' skill levels and goals.
 Coach:
 Skill level: all
-Location: Main Club","Private lessons are held at the Main Club. They are one-on-one coaching sessions tailored to the player's level and goals. If you have more questions about lessons or anything else, feel free to ask!",good,"The generated answer correctly identifies the location of the private lessons as the Main Club and provides relevant information about the nature of the lessons, which aligns with the original knowledge record.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,What kind of lesson is available for small groups at the club?,course-002,"['course-002', 'course-001', 'dropin-001', 'policy-001', 'coach-001']","Document ID: course-002
+Location: Main Club","Private lessons are held at the Main Club. These coaching sessions can be customized to players' skill levels and goals, and they are available for one-to-one, one-to-two, or one-to-three players.
+
+If you have any other questions about lessons or availability, feel free to ask!",good,"The generated answer accurately reflects the information from the original knowledge record by stating that private lessons are held at the Main Club. It also includes relevant details about the customization of the lessons and the type of sessions available, which enhances the completeness of the response without contradicting the original record.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,What kind of lesson is available for small groups at the club?,course-002,"['course-002', 'course-001', 'course-003', 'course-004', 'dropin-001']","Document ID: course-002
 Category: course
 Title: Semi-private lesson
-Content: A semi-private lesson is designed for two to four players of a similar skill level.
+Content: A semi-private lesson is a 60-minute private coaching session for two or three players of a similar skill level.
 Coach:
 Skill level: all
-Location: Main Club","For small groups at the club, a semi-private lesson is available. This lesson is designed for two to four players of a similar skill level and is suitable for all skill levels. If you're interested or have more questions, feel free to ask!
+Location: Main Club","The club offers a **semi-private lesson**, which is a 60-minute coaching session for two or three players of similar skill levels. Additionally, there are **private lessons** available as one-to-one, one-to-two, or one-to-three sessions, tailored to players' skill levels and goals.
 
-Sources:
-- Semi-private lesson (course-002)",good,"The generated answer correctly identifies the type of lesson available for small groups, describes it accurately, and maintains the original information about the skill levels and group size.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,Can I join a semi-private lesson with a friend who has the same skill level as me?,course-002,"['course-002', 'course-001', 'coach-001', 'dropin-001', 'policy-001']","Document ID: course-002
+For group classes, there are options like the **basic group class**, focusing on beginner fundamentals and designed for beginner and recreational players, and the **advanced group class**, which targets intermediate and advanced players with a focus on tactics and match preparation.
+
+If you have any other questions or specific interests, feel free to ask!",bad,"The generated answer provides accurate information about the semi-private lesson but also introduces unrelated content about private lessons and group classes, which is not requested in the question. The user specifically asked about lessons for small groups, and while the semi-private lesson fits that description, the additional information may lead to confusion and is unnecessary. Thus, the main point regarding the small group lesson is adequately covered, but the inclusion of excess information detracts from the clarity.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,Can I join a semi-private lesson with a friend who has the same skill level as me?,course-002,"['course-002', 'course-001', 'coach-001', 'course-004', 'dropin-001']","Document ID: course-002
 Category: course
 Title: Semi-private lesson
-Content: A semi-private lesson is designed for two to four players of a similar skill level.
+Content: A semi-private lesson is a 60-minute private coaching session for two or three players of a similar skill level.
 Coach:
 Skill level: all
-Location: Main Club","Yes, you can join a semi-private lesson with a friend who has the same skill level as you. Semi-private lessons are designed for two to four players of a similar skill level.
+Location: Main Club","Yes, you can join a semi-private lesson with a friend who has the same skill level as you. A semi-private lesson accommodates two or three players of a similar skill level and lasts for 60 minutes. If you're both at the same skill level, you should be able to sign up together.
 
-If you're interested, you might want to check the availability for such lessons. Would you like to know more about scheduling?",good,The generated answer correctly addresses the user's question by confirming that they can join a semi-private lesson with a friend of the same skill level. It accurately summarizes the relevant details from the original knowledge-base record about the structure of semi-private lessons.,gpt-4o-mini,gpt-4o-mini,
+Would you like more information about how to book a semi-private lesson?",good,The generated answer correctly confirms that the user can join a semi-private lesson with a friend of the same skill level. It accurately reflects the details from the original knowledge record regarding the structure and requirements of the semi-private lesson.,gpt-4o-mini,gpt-4o-mini,
 production_prompt,Where are the semi-private lessons held at the badminton club?,course-002,"['course-002', 'facility-001', 'faq-002', 'course-001', 'faq-001']","Document ID: course-002
 Category: course
 Title: Semi-private lesson
-Content: A semi-private lesson is designed for two to four players of a similar skill level.
+Content: A semi-private lesson is a 60-minute private coaching session for two or three players of a similar skill level.
 Coach:
 Skill level: all
-Location: Main Club","Semi-private lessons at the badminton club are held at the Main Club. These lessons are designed for two to four players of a similar skill level.
+Location: Main Club","Semi-private lessons are held at the Main Club. These lessons are 60-minute private coaching sessions designed for two or three players of a similar skill level.
 
-If you have any other questions or need more details, feel free to ask!",good,"The generated answer correctly states that semi-private lessons are held at the Main Club, which matches the information provided in the original knowledge-base record. It also effectively conveys the intended detail about the lesson type without omitting any important facts.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,What facilities does the club offer for playing badminton?,facility-001,"['facility-001', 'faq-002', 'faq-001', 'dropin-001', 'course-002']","Document ID: facility-001
+If you have more questions about lessons or the club facilities, feel free to ask!",good,The generated answer correctly states that semi-private lessons are held at the Main Club and provides additional relevant information about the lessons that aligns with the original knowledge base.,gpt-4o-mini,gpt-4o-mini,
+production_prompt,What facilities does the club offer for playing badminton?,facility-001,"['facility-001', 'faq-002', 'faq-001', 'course-003', 'dropin-001']","Document ID: facility-001
 Category: facility
 Title: Court facilities
 Content: The club provides badminton courts, change rooms, seating areas and equipment rental.
 Coach:
 Skill level:
-Location: Main Club","The club offers badminton courts, change rooms, seating areas, and equipment rental. You can rent rackets at the front desk, subject to availability.
+Location: Main Club","The club offers badminton courts, change rooms, seating areas, and equipment rental. Players should bring indoor court shoes, sports clothing, water, and a badminton racket. Rackets are available for rental at the front desk, subject to availability.
 
-If you have any more questions about the club facilities, feel free to ask!
+Would you like to know more about any specific facility?
 
-**Source:**
+Source:
 - Court facilities
-- Racket rental",good,"The generated answer correctly lists the facilities offered by the club, including badminton courts, change rooms, seating areas, and equipment rental. It also provides additional information about renting rackets at the front desk, which aligns with the original knowledge base. Therefore, it is complete and does not contradict the original information.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,Are there change rooms available at the club?,facility-001,"['facility-001', 'faq-001', 'faq-002', 'dropin-001', 'policy-002']","Document ID: facility-001
+- What to bring
+- Racket rental",good,"The generated answer accurately lists the facilities available at the club, which include badminton courts, change rooms, seating areas, and equipment rental. It also adds relevant information about what players should bring, mentioning that rackets are available for rental. This additional detail does not contradict the original knowledge record and maintains focus on the facilities while enhancing the response. Therefore, it fulfills the requirements.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,Are there change rooms available at the club?,facility-001,"['facility-001', 'faq-001', 'faq-002', 'course-001', 'dropin-001']","Document ID: facility-001
 Category: facility
 Title: Court facilities
 Content: The club provides badminton courts, change rooms, seating areas and equipment rental.
 Coach:
 Skill level:
-Location: Main Club","Yes, change rooms are available at the club. The club provides badminton courts, change rooms, seating areas, and equipment rental. If you have any more questions about the facilities or anything else, feel free to ask!",good,"The generated answer correctly states that there are change rooms available at the club and includes details about other facilities, matching the information in the original knowledge-base record.",gpt-4o-mini,gpt-4o-mini,
+Location: Main Club","Yes, the club provides change rooms along with badminton courts, seating areas, and equipment rental. If you have any other questions about the facilities, feel free to ask!",good,"The generated answer correctly confirms the availability of change rooms at the club and includes additional relevant details from the knowledge base, which enhances completeness without adding any incorrect information.",gpt-4o-mini,gpt-4o-mini,
 production_prompt,Can I rent equipment for badminton at the facility?,facility-001,"['facility-001', 'faq-001', 'faq-002', 'dropin-001', 'course-002']","Document ID: facility-001
 Category: facility
 Title: Court facilities
 Content: The club provides badminton courts, change rooms, seating areas and equipment rental.
 Coach:
 Skill level:
-Location: Main Club","Yes, you can rent badminton equipment at the facility. Rackets are available for rental at the front desk, but availability may vary.
+Location: Main Club","Yes, you can rent equipment for badminton at the facility. Rackets are available for rental at the front desk, subject to availability.
 
-Is there anything else you would like to know?",good,"The generated answer correctly states that badminton equipment can be rented at the facility and provides additional relevant information about where to rent it (at the front desk). However, it includes a note about availability, which is not explicitly confirmed or denied in the original knowledge record, but it does not contradict the provided information.",gpt-4o-mini,gpt-4o-mini,
+If you have any more questions about the club or need further assistance, feel free to ask!",good,"The generated answer correctly states that badminton equipment can be rented at the facility, which is consistent with the knowledge base record. It also adds specific information about where to rent the rackets and mentions availability, which enhances the answer without contradicting the original facts. Overall, it is accurate and complete.",gpt-4o-mini,gpt-4o-mini,
 production_prompt,Can I rent a racket when I arrive at the club?,faq-001,"['faq-001', 'faq-002', 'facility-001', 'dropin-001', 'policy-002']","Document ID: faq-001
 Category: faq
 Title: Racket rental
 Content: Rackets are available for rental at the front desk, subject to availability.
 Coach:
 Skill level:
-Location: Main Club","Yes, you can rent a racket when you arrive at the club, but it is subject to availability and can be done at the front desk. If you have any questions or need assistance with your visit, feel free to ask!
+Location: Main Club","Yes, you can rent a racket when you arrive at the club, but availability is subject to stock at the front desk.
 
-Sources:
-- Racket rental
-- Court facilities",good,The generated answer accurately captures the key information from the original knowledge record about racket rentals being available at the front desk and that it is subject to availability. It does not contradict any facts and provides a complete response to the user's question.,gpt-4o-mini,gpt-4o-mini,
-production_prompt,Where do I go to rent a badminton racket?,faq-001,"['faq-001', 'faq-002', 'facility-001', 'dropin-001', 'course-002']","Document ID: faq-001
+Is there anything else you'd like to know?",good,"The generated answer correctly restates the information from the knowledge record, confirming that rackets can be rented at the club and mentioning the conditional aspect of availability at the front desk. It maintains the important details and does not contradict or invent any information.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,Where do I go to rent a badminton racket?,faq-001,"['faq-001', 'faq-002', 'facility-001', 'dropin-001', 'course-003']","Document ID: faq-001
 Category: faq
 Title: Racket rental
 Content: Rackets are available for rental at the front desk, subject to availability.
 Coach:
 Skill level:
-Location: Main Club","You can rent a badminton racket at the front desk of the Main Club, subject to availability. If you have any other questions or need assistance, feel free to ask!",good,"The generated answer accurately conveys where to rent a badminton racket, mentioning the front desk and the Main Club, and includes the note about availability as per the knowledge base record. It aligns with the request of the user question without introducing any incorrect information.",gpt-4o-mini,gpt-4o-mini,
+Location: Main Club","You can rent a badminton racket at the front desk, subject to availability. The front desk is located at the Main Club. If you have any more questions or need assistance, feel free to ask!",good,"The generated answer correctly conveys where to rent a badminton racket, including the availability conditions and the location, matching the information in the original knowledge record.",gpt-4o-mini,gpt-4o-mini,
 production_prompt,Is there a chance that rackets might not be available for rental?,faq-001,"['faq-001', 'faq-002', 'facility-001', 'policy-001', 'dropin-001']","Document ID: faq-001
 Category: faq
 Title: Racket rental
 Content: Rackets are available for rental at the front desk, subject to availability.
 Coach:
 Skill level:
-Location: Main Club","Rackets are available for rental at the front desk, but this is subject to availability. Therefore, there is a chance that rackets might not be available for rental when you arrive. If you're considering renting one, it may be a good idea to check in early.
+Location: Main Club","Rackets are available for rental at the front desk, but this is subject to availability. So, there might be a chance that rackets are not available for rental. If you're planning to visit, it might be a good idea to bring your own racket just in case.
 
-Is there anything else you'd like to know?",good,"The generated answer accurately reflects the information from the original knowledge-base record. It states that rackets are available for rental at the front desk and notes that this is subject to availability, which directly addresses the user's question about the chance of rackets not being available. Additionally, it appropriately advises checking in early, which is a sensible suggestion based on the information provided. Therefore, the answer is complete and correct.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,What should I bring with me for my badminton session?,faq-002,"['faq-002', 'facility-001', 'faq-001', 'dropin-001', 'course-002']","Document ID: faq-002
+Is there anything else you'd like to know about the club?",good,"The generated answer correctly conveys that rackets are available for rental while also noting that this is subject to availability, which aligns with the original knowledge-base record. It directly addresses the user's question about the chance of rackets not being available, thus maintaining factual accuracy and completeness.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,What should I bring with me for my badminton session?,faq-002,"['faq-002', 'facility-001', 'faq-001', 'course-003', 'dropin-001']","Document ID: faq-002
 Category: faq
 Title: What to bring
 Content: Players should bring indoor court shoes, sports clothing, water and a badminton racket.
 Coach:
 Skill level: beginner
-Location: Main Club","For your badminton session, you should bring indoor court shoes, sports clothing, a water bottle, and a badminton racket. If you don't have a racket, you can rent one from the front desk, subject to availability.
+Location: Main Club","For your badminton session, you should bring indoor court shoes, sports clothing, water, and a badminton racket. If you don't have a racket, you can rent one at the front desk, subject to availability.
 
-Is there anything else you’d like to know?",good,"The generated answer accurately includes all the key items mentioned in the original knowledge record that should be brought to a badminton session, such as indoor court shoes, sports clothing, water, and a badminton racket. Additionally, it provides useful information about the possibility of renting a racket, which is relevant. Hence, the answer is complete and does not contradict the original content.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,Do I need to bring my own badminton racket?,faq-002,"['faq-002', 'faq-001', 'facility-001', 'dropin-001', 'course-002']","Document ID: faq-002
+Is there anything else you would like to know?",good,The generated answer correctly lists the items to bring for the badminton session based on the original knowledge record. It maintains the necessary factual information and does not contradict the original record. The additional information about renting a racket is relevant and does not detract from the answer.,gpt-4o-mini,gpt-4o-mini,
+production_prompt,Do I need to bring my own badminton racket?,faq-002,"['faq-002', 'faq-001', 'facility-001', 'dropin-001', 'course-003']","Document ID: faq-002
 Category: faq
 Title: What to bring
 Content: Players should bring indoor court shoes, sports clothing, water and a badminton racket.
 Coach:
 Skill level: beginner
-Location: Main Club","Yes, you should bring your own badminton racket. However, if you don't have one, rackets are available for rental at the front desk, but this is subject to availability.
+Location: Main Club","Yes, players should bring their own badminton racket. However, if you don't have one, rackets are available for rental at the front desk, subject to availability. Don't forget to also bring indoor court shoes, sports clothing, and water!
 
-Do you have any other questions about what to bring or the club facilities?",good,"The generated answer correctly states that you need to bring your own badminton racket, which aligns with the knowledge base record. Additionally, it provides useful information about the availability of rackets for rental, which is not explicitly stated in the knowledge base, but does not contradict it. Overall, it fully addresses the user's question.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,What type of shoes are required for playing badminton here?,faq-002,"['faq-002', 'facility-001', 'faq-001', 'dropin-001', 'course-002']","Document ID: faq-002
+Is there anything else you would like to know?",good,"The generated answer correctly states that players should bring their own badminton racket, which is in line with the information provided in the original knowledge-base record. Additionally, it informs the user about the availability of rental rackets, which adds helpful context without contradicting the original record. It also correctly mentions the other items players should bring. Therefore, the answer is good, as it is accurate, complete, and does not misrepresent the original information.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,What type of shoes are required for playing badminton here?,faq-002,"['faq-002', 'facility-001', 'faq-001', 'course-003', 'dropin-001']","Document ID: faq-002
 Category: faq
 Title: What to bring
 Content: Players should bring indoor court shoes, sports clothing, water and a badminton racket.
 Coach:
 Skill level: beginner
-Location: Main Club","To play badminton here, players are required to bring indoor court shoes, sports clothing, water, and a badminton racket. If you have any other questions about what you might need, feel free to ask!
-
-Source:
-- What to bring",good,"The generated answer accurately reflects the important factual information from the original knowledge record regarding the type of shoes required for playing badminton, which is 'indoor court shoes.' It also includes other relevant items that players should bring, maintaining completeness and clarity without introducing any inaccuracies or missing the main point.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,My child is just starting badminton and needs help with movement basics. Which instructor would fit?,coach-001,"['coach-001', 'faq-002', 'coach-002', 'dropin-001', 'course-001']","Document ID: coach-001
+Location: Main Club","Players should bring indoor court shoes, sports clothing, water, and a badminton racket to play badminton at the club. If you have any more questions or need further information, feel free to ask!",good,"The generated answer correctly identifies the requirement for indoor court shoes and other necessary items for playing badminton, aligning well with the original knowledge-base record. It is complete and does not introduce any inaccuracies or irrelevant information.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,My child is just starting badminton and needs help with movement basics. Which instructor would fit?,coach-001,"['coach-003', 'faq-002', 'course-003', 'coach-001', 'coach-004']","Document ID: coach-001
 Category: coach
 Title: Coach Amy profile
-Content: Coach Amy specializes in beginner fundamentals, footwork and junior training. She teaches private and semi-private lessons.
+Content: Coach Amy focuses on beginner fundamentals, footwork and junior training. She teaches private, semi-private and beginner group lessons.
 Coach: Coach Amy
-Skill level: beginner
-Location: Main Club","For your child just starting badminton and needing help with movement basics, Coach Amy would be a great fit. She specializes in beginner fundamentals, footwork, and junior training. Additionally, she teaches private and semi-private lessons at the Main Club.
+Skill level: beginner and intermediate
+Location: Main Club","For your child starting badminton and needing help with movement basics, both Coach Lily Chen and Coach Amy would be great fits.
 
-Would you like information on how to schedule a lesson with her?",good,"The generated answer correctly identifies Coach Amy as a suitable instructor for beginners, specifically highlighting her specialization in beginner fundamentals and footwork, which aligns with the user's needs for help with movement basics. It includes relevant details about her teaching style and location, making it complete and accurate.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,Who should I choose for a junior player learning fundamental technique and footwork?,coach-001,"['coach-001', 'coach-002', 'faq-002', 'dropin-001', 'course-002']","Document ID: coach-001
+- **Coach Lily Chen** focuses on fundamentals, footwork, and junior development for beginner and intermediate players.
+- **Coach Amy** also emphasizes beginner fundamentals and footwork while offering private, semi-private, and beginner group lessons.
+
+Either coach can help your child with the necessary skills. Would you like more information about their class schedules or availability?",bad,"The RAG generated answer correctly identifies Coach Amy as a suitable instructor for a beginner looking to learn movement basics in badminton. However, it incorrectly includes Coach Lily Chen, who was not mentioned in the original knowledge record. Therefore, while the information about Coach Amy is accurate, the inclusion of Coach Lily Chen introduces a contradiction, as there is no record of her being a coach. This misrepresentation of available instructors makes the overall answer misleading.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,Who should I choose for a junior player learning fundamental technique and footwork?,coach-001,"['coach-003', 'coach-001', 'course-003', 'coach-004', 'coach-002']","Document ID: coach-001
 Category: coach
 Title: Coach Amy profile
-Content: Coach Amy specializes in beginner fundamentals, footwork and junior training. She teaches private and semi-private lessons.
+Content: Coach Amy focuses on beginner fundamentals, footwork and junior training. She teaches private, semi-private and beginner group lessons.
 Coach: Coach Amy
-Skill level: beginner
-Location: Main Club","For a junior player learning fundamental techniques and footwork, I recommend choosing Coach Amy. She specializes in beginner fundamentals, footwork, and junior training, making her an ideal choice for new players.
+Skill level: beginner and intermediate
+Location: Main Club","For a junior player learning fundamental technique and footwork, you can choose either Coach Lily Chen or Coach Amy. Both coaches focus on fundamentals, footwork, and junior development for beginner and intermediate players.
 
-Would you like more information about her lesson options?",good,"The RAG generated answer accurately identifies Coach Amy as the appropriate choice for a junior player focusing on fundamental techniques and footwork, reflecting the information in the original knowledge base correctly and completely.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,I need an instructor experienced with both new players and children. Who is suitable?,coach-001,"['dropin-001', 'course-002', 'coach-002', 'course-001', 'coach-001']","Document ID: coach-001
+Would you like more information about either coach or their classes?",bad,"The RAG generated answer incorrectly includes Coach Lily Chen, who is not mentioned in the original knowledge base record. Coach Amy is the only coach explicitly noted for focusing on beginner fundamentals and footwork. The answer does mention Coach Amy, but it fails to meet the requirement of being grounded as it introduces a coach not listed in the source material.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,I need an instructor experienced with both new players and children. Who is suitable?,coach-001,"['dropin-001', 'course-001', 'coach-003', 'course-002', 'coach-002']","Document ID: coach-001
 Category: coach
 Title: Coach Amy profile
-Content: Coach Amy specializes in beginner fundamentals, footwork and junior training. She teaches private and semi-private lessons.
+Content: Coach Amy focuses on beginner fundamentals, footwork and junior training. She teaches private, semi-private and beginner group lessons.
 Coach: Coach Amy
-Skill level: beginner
-Location: Main Club","For an instructor experienced with both new players and children, Coach Amy would be suitable. She specializes in beginner fundamentals, footwork, and junior training, making her a great choice for both demographics. She teaches private and semi-private lessons at the Main Club.
+Skill level: beginner and intermediate
+Location: Main Club","For an instructor experienced with both new players and children, Coach Lily Chen would be suitable. She focuses on fundamentals, footwork, and junior development for beginner and intermediate players.
 
-Would you like more information about booking a lesson with her?",good,"The generated answer correctly identifies Coach Amy as suitable for new players and children, referencing her expertise in beginner fundamentals and junior training. It also accurately states her teaching format and location without any inaccuracies or omissions.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,I want the instructor's full attention and a session shaped around my personal goals. Which lesson should I choose?,course-001,"['course-001', 'course-002', 'coach-001', 'policy-001', 'coach-002']","Document ID: course-001
+If you need more details about her classes or availability, feel free to ask!",bad,"The generated answer incorrectly identifies Coach Lily Chen as the suitable instructor, while the knowledge base specifies Coach Amy as the appropriate coach for beginners and junior training. This misalignment makes the answer incorrect, as it fails to provide the correct information explicitly stated in the original record.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,I want the instructor's full attention and a session shaped around my personal goals. Which lesson should I choose?,course-001,"['course-001', 'course-002', 'course-004', 'coach-001', 'course-003']","Document ID: course-001
 Category: course
-Title: Private lesson
-Content: A private lesson is a one-on-one coaching session customized to the player's level and goals.
+Title: Private lesson options
+Content: Private coaching is available as one-to-one, one-to-two or one-to-three 60-minute lessons customized to the players' skill levels and goals.
 Coach:
 Skill level: all
-Location: Main Club","To achieve your goal of having the instructor's full attention and a session tailored specifically to your personal goals, you should choose a **private lesson**. A private lesson is a one-on-one coaching session customized to the player’s level and goals.
+Location: Main Club","For personalized attention and a lesson tailored to your individual goals, you should choose a **private lesson**. These 60-minute sessions can be customized to match your skill level and objectives.
 
-Would you like more information on booking a private lesson or about the available coaches?",good,"The generated answer accurately identifies that a private lesson is the appropriate choice for the user's needs for focused attention and customization around personal goals. It includes relevant details from the original knowledge record, confirming that private lessons are one-on-one and tailored to the player's needs.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,Which coaching format is intended for one athlete rather than several players?,course-001,"['course-002', 'coach-002', 'course-001', 'coach-001', 'dropin-001']","Document ID: course-001
+If you have any specific preferences or questions about scheduling, feel free to ask!",good,"The generated answer correctly identifies that a private lesson is the best option for personalized attention and customization to individual goals. It preserves the essential details about the private lessons being 60 minutes long and tailored to skill levels and objectives, matching the original knowledge record.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,Which coaching format is intended for one athlete rather than several players?,course-001,"['course-001', 'coach-002', 'course-002', 'coach-004', 'coach-003']","Document ID: course-001
 Category: course
-Title: Private lesson
-Content: A private lesson is a one-on-one coaching session customized to the player's level and goals.
+Title: Private lesson options
+Content: Private coaching is available as one-to-one, one-to-two or one-to-three 60-minute lessons customized to the players' skill levels and goals.
 Coach:
 Skill level: all
-Location: Main Club","The coaching format intended for one athlete is a private lesson, which is a one-on-one coaching session customized to the player's level and goals. This format allows for personalized attention and tailored instruction.
+Location: Main Club","The coaching format intended for one athlete rather than several players is the one-to-one private lesson. This is a 60-minute session that is customized to the player's skill level and goals.
 
-If you have any more questions about coaching or would like to know more about our coaches, feel free to ask!
-
-Sources:
-- Private lesson
-- Coach Amy profile",good,"The generated answer correctly identifies the coaching format intended for one athlete as a private lesson and accurately describes it as a one-on-one coaching session. It provides complete and relevant information as stated in the original knowledge base record without contradicting it. The answer is clear, grounded in the original content, and addresses the user's question directly.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,I do not want to share the coach with anyone else. What type of lesson fits?,course-001,"['course-001', 'course-002', 'coach-001', 'coach-002', 'policy-001']","Document ID: course-001
+If you have any other questions about coaching or lessons, feel free to ask!",good,"The generated answer correctly identifies the one-to-one private lesson as the coaching format intended for one athlete, and it includes relevant details about the customization based on skill level and goals. It aligns with the information provided in the original knowledge record.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,I do not want to share the coach with anyone else. What type of lesson fits?,course-001,"['course-001', 'course-002', 'coach-001', 'coach-002', 'coach-003']","Document ID: course-001
 Category: course
-Title: Private lesson
-Content: A private lesson is a one-on-one coaching session customized to the player's level and goals.
+Title: Private lesson options
+Content: Private coaching is available as one-to-one, one-to-two or one-to-three 60-minute lessons customized to the players' skill levels and goals.
 Coach:
 Skill level: all
-Location: Main Club","For a lesson where you do not have to share the coach with anyone else, a private lesson is the best fit. This is a one-on-one coaching session customized to your level and goals. If you have any more questions or need details about booking, feel free to ask!",good,"The generated answer correctly identifies that a private lesson is suitable for someone who does not want to share the coach, accurately describing it as a one-on-one coaching session tailored to the player's needs. It preserves the important factual information from the original knowledge base record.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,Can my three teammates and I train together if we have approximately the same experience?,course-002,"['course-002', 'coach-001', 'coach-002', 'course-001', 'dropin-001']","Document ID: course-002
+Location: Main Club","To avoid sharing a coach with anyone else, a one-to-one private lesson would be the best fit for you. Private coaching is available in 60-minute sessions and can be customized to your skill level and goals.
+
+If you have any other questions or need further assistance, feel free to ask!",good,"The generated answer correctly identifies that a one-to-one private lesson is the suitable option for the user who does not want to share a coach. It accurately conveys key information about private coaching being available in customized 60-minute sessions, aligning with the original knowledge record.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,Can my three teammates and I train together if we have approximately the same experience?,course-002,"['course-001', 'course-004', 'course-002', 'course-003', 'coach-001']","Document ID: course-002
 Category: course
 Title: Semi-private lesson
-Content: A semi-private lesson is designed for two to four players of a similar skill level.
+Content: A semi-private lesson is a 60-minute private coaching session for two or three players of a similar skill level.
 Coach:
 Skill level: all
-Location: Main Club","Yes, you and your three teammates can train together since a semi-private lesson is designed for two to four players of a similar skill level. You will need to choose a coach who aligns with your experience level. Would you like to know more about the available coaches?",good,"The generated answer accurately reflects the information from the knowledge-base record by stating that a semi-private lesson is for two to four players of a similar skill level, which addresses the user's question directly and completely. It also offers additional information regarding choosing a coach, which is relevant and useful.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,Which lesson format allows a few similarly skilled players to share one coaching session?,course-002,"['course-001', 'course-002', 'coach-002', 'coach-001', 'dropin-001']","Document ID: course-002
+Location: Main Club","Yes, you and your three teammates can train together in a semi-private lesson. This is a 60-minute coaching session available for two or three players of a similar skill level. Since you all have approximately the same experience, you would be a suitable fit for this option.
+
+For customized training, consider whether you prefer a semi-private lesson or if you might be interested in an advanced group class if everyone's skill level is intermediate or advanced.
+
+Would you like to know more about booking a semi-private lesson?",bad,"The RAG generated answer incorrectly states that four people can train together, whereas the original knowledge-base record specifies that a semi-private lesson accommodates only two or three players. This fundamental misinterpretation leads to a critical error in the response. Therefore, it does not fully address the user's question correctly.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,Which lesson format allows a few similarly skilled players to share one coaching session?,course-002,"['course-001', 'course-002', 'course-004', 'coach-002', 'course-003']","Document ID: course-002
 Category: course
 Title: Semi-private lesson
-Content: A semi-private lesson is designed for two to four players of a similar skill level.
+Content: A semi-private lesson is a 60-minute private coaching session for two or three players of a similar skill level.
 Coach:
 Skill level: all
-Location: Main Club","The lesson format that allows a few similarly skilled players to share one coaching session is the semi-private lesson, which is designed for two to four players of a similar skill level.
+Location: Main Club","The lesson format that allows a few similarly skilled players to share one coaching session is the semi-private lesson. This is a 60-minute session available for two or three players of similar skill levels.
 
-If you have any more questions or need further information, feel free to ask!",good,"The generated answer correctly identifies the 'semi-private lesson' as the format that allows similarly skilled players to share a coaching session, accurately reflecting the key details from the original knowledge-base record.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,My friend and I want coaching together instead of separate individual sessions. What should we book?,course-002,"['course-001', 'course-002', 'coach-001', 'coach-002', 'policy-002']","Document ID: course-002
+Would you like to know more about other lesson formats?",good,"The generated answer accurately identifies that the semi-private lesson is the format that allows a few similarly skilled players to share a coaching session, providing the duration and player capacity as detailed in the original record.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,My friend and I want coaching together instead of separate individual sessions. What should we book?,course-002,"['course-001', 'course-002', 'coach-001', 'coach-002', 'coach-004']","Document ID: course-002
 Category: course
 Title: Semi-private lesson
-Content: A semi-private lesson is designed for two to four players of a similar skill level.
+Content: A semi-private lesson is a 60-minute private coaching session for two or three players of a similar skill level.
 Coach:
 Skill level: all
-Location: Main Club","You and your friend should book a **semi-private lesson**, which is designed for two to four players of a similar skill level. This option allows you to have coaching together rather than in separate individual sessions.
+Location: Main Club","You should consider booking a semi-private lesson for you and your friend, as it's specifically designed for two or three players of similar skill levels. Each session lasts 60 minutes and can be tailored to your needs.
 
-If you have any specific questions about booking or would like more details on the coaches available for semi-private lessons, just let me know!",good,"The generated answer correctly identifies the 'semi-private lesson' as the appropriate option for the user and includes relevant details about its design for two to four players of similar skill level. It directly addresses the user's request for coaching together instead of separate sessions, fulfilling the main point of the question.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,I am inexperienced and want an informal playing session. Do I need to sign up first?,dropin-001,"['dropin-001', 'faq-002', 'course-002', 'course-001', 'faq-001']","Document ID: dropin-001
+If you need more details or want to check schedule availability, just let me know!",good,"The RAG generated answer correctly identifies the semi-private lesson as the appropriate option for the user's request, providing relevant details such as duration and flexibility. It does not contradict any information from the original knowledge record.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,I am inexperienced and want an informal playing session. Do I need to sign up first?,dropin-001,"['dropin-001', 'faq-002', 'course-003', 'course-002', 'faq-001']","Document ID: dropin-001
 Category: dropin
 Title: Beginner drop-in
 Content: The beginner drop-in is suitable for new and recreational players. Registration is required and spaces are limited.
 Coach:
 Skill level: beginner
-Location: Main Club","Yes, you need to sign up for the beginner drop-in session as registration is required and spaces are limited. It's a great opportunity for new and recreational players!
+Location: Main Club","Yes, you need to sign up for the beginner drop-in session, as registration is required and spaces are limited. It's a great way for new and recreational players to enjoy some informal playing time!
 
-Feel free to ask if you have any more questions or need further information!",good,"The generated answer correctly indicates that sign-up is required for the beginner drop-in session and emphasizes the availability for new and recreational players, which aligns with the information in the knowledge base.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,Which activity is appropriate for recreational players but has limited spaces?,dropin-001,"['dropin-001', 'course-002', 'faq-002', 'faq-001', 'facility-001']","Document ID: dropin-001
+Do you have any other questions about getting started?",good,"The generated answer correctly states that registration is required to attend the beginner drop-in session and acknowledges the informal nature of the play, thus accurately reflecting the information in the knowledge record.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,Which activity is appropriate for recreational players but has limited spaces?,dropin-001,"['dropin-001', 'course-003', 'faq-002', 'faq-001', 'course-002']","Document ID: dropin-001
 Category: dropin
 Title: Beginner drop-in
 Content: The beginner drop-in is suitable for new and recreational players. Registration is required and spaces are limited.
 Coach:
 Skill level: beginner
-Location: Main Club","The activity appropriate for recreational players, but has limited spaces, is the beginner drop-in. Registration is required for this event at the Main Club. If you'd like more details on how to register, let me know!
+Location: Main Club","The activity appropriate for recreational players but with limited spaces is the ""Beginner drop-in."" Registration is required for this activity, and spaces are limited.
 
-**Sources:**
-- Beginner drop-in (dropin-001)",good,"The RAG generated answer correctly identifies the beginner drop-in as the activity suitable for recreational players with limited spaces. It also includes relevant details like the need for registration and the location, consistent with the original knowledge base.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,I am new to badminton and prefer a casual session instead of customized coaching. What is available?,dropin-001,"['faq-002', 'dropin-001', 'course-002', 'course-001', 'faq-001']","Document ID: dropin-001
+Another option for beginner and recreational players is the ""Basic group class,"" but it does not specifically mention limited spaces.
+
+If you have more questions about these activities, feel free to ask!",good,"The generated answer correctly identifies the ""Beginner drop-in"" as the activity suitable for recreational players with limited spaces, which aligns with the original knowledge-base record. It also mentions the requirement for registration, which is relevant to the question. However, while it introduces another option, the inclusion of the ""Basic group class"" could potentially dilute the focus on the main point regarding the limited spaces of the preferred activity. Nonetheless, it does not contradict any information from the original record.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,I am new to badminton and prefer a casual session instead of customized coaching. What is available?,dropin-001,"['faq-002', 'dropin-001', 'course-001', 'course-003', 'course-002']","Document ID: dropin-001
 Category: dropin
 Title: Beginner drop-in
 Content: The beginner drop-in is suitable for new and recreational players. Registration is required and spaces are limited.
 Coach:
 Skill level: beginner
-Location: Main Club","For a casual session, you can join the beginner drop-in, which is suitable for new and recreational players. Registration is required, and spaces are limited.
+Location: Main Club","For a casual session, you can consider the ""beginner drop-in,"" which is suitable for new and recreational players. Registration is required, and spaces are limited. Additionally, there's a ""basic group class"" that focuses on beginner fundamentals, movement, and consistency, also designed for beginner and recreational players.
 
-You'll want to bring indoor court shoes, sports clothing, water, and a badminton racket. If you need a racket, they are available for rental at the front desk, subject to availability.
-
-Would you like more information on how to register for the beginner drop-in?",good,"The generated answer correctly identifies the beginner drop-in as a suitable option for someone new to badminton who prefers a casual session. It also includes necessary information about registration and what to bring, aligning well with the original knowledge base. It does not introduce any inaccuracies or omit key details, making it complete and relevant.",gpt-4o-mini,gpt-4o-mini,
+Would you like more information on how to register for these sessions?",bad,"The generated answer correctly identifies the 'beginner drop-in' session, which is suitable for the user's request for a casual session. However, it unnecessarily includes information about the 'basic group class,' which may not align with the user's preference for avoiding customized coaching and focuses instead on casual play. Although the answer does mention registration and limitations as per the original record, it introduces an unrelated class that could confuse the user about the options available. Thus, it includes some relevant information but lacks focus on the main point of the question.",gpt-4o-mini,gpt-4o-mini,
 production_prompt,Can I get changed and wait somewhere between games at the club?,facility-001,"['faq-001', 'policy-002', 'facility-001', 'faq-002', 'dropin-001']","Document ID: facility-001
 Category: facility
 Title: Court facilities
 Content: The club provides badminton courts, change rooms, seating areas and equipment rental.
 Coach:
 Skill level:
-Location: Main Club","Yes, you can get changed and wait somewhere at the club. The club provides change rooms and seating areas for your convenience between games. If you have any other questions, feel free to ask!",good,"The generated answer correctly addresses the user's question about getting changed and waiting between games, accurately referencing the change rooms and seating areas provided by the club. It aligns with the information in the original knowledge-base record.",gpt-4o-mini,gpt-4o-mini,
+Location: Main Club","Yes, you can get changed and wait in the change rooms or seating areas at the club between games. The club provides amenities like change rooms and seating for your convenience.
+
+If you have any more questions, feel free to ask!",good,"The generated answer accurately reflects the information from the original knowledge base, confirming that change rooms and seating areas are available for waiting between games at the club. It preserves the core factual content and does not contradict any provided details.",gpt-4o-mini,gpt-4o-mini,
 production_prompt,Besides playing courts what spaces and services are provided at the venue?,facility-001,"['facility-001', 'faq-002', 'policy-002', 'faq-001', 'course-002']","Document ID: facility-001
 Category: facility
 Title: Court facilities
 Content: The club provides badminton courts, change rooms, seating areas and equipment rental.
 Coach:
 Skill level:
-Location: Main Club","The club provides badminton courts, change rooms, seating areas, and equipment rental. If you have more questions or need details about any specific service, feel free to ask!
-
-Sources:
-- Court facilities
-- Racket rental",good,"The generated answer accurately reflects the information provided in the original knowledge record about the facilities available at the venue. It mentions badminton courts, change rooms, seating areas, and equipment rental, which aligns with the main points from the original record. Therefore, the answer is complete and correct.",gpt-4o-mini,gpt-4o-mini,
+Location: Main Club","The club provides badminton courts, change rooms, seating areas, and equipment rental services. If you have any more questions about the club or its facilities, feel free to ask!",good,"The generated answer correctly lists the spaces and services provided at the venue, matching the information from the original knowledge record without any omissions or contradictions.",gpt-4o-mini,gpt-4o-mini,
 production_prompt,Does the venue provide somewhere to change clothes and sit after playing?,facility-001,"['faq-002', 'facility-001', 'faq-001', 'course-002', 'dropin-001']","Document ID: facility-001
 Category: facility
 Title: Court facilities
 Content: The club provides badminton courts, change rooms, seating areas and equipment rental.
 Coach:
 Skill level:
-Location: Main Club","Yes, the club provides change rooms and seating areas for players to change clothes and sit after playing. If you have any other questions about the facilities or services, feel free to ask!
-
-Source:
-- Court facilities",good,"The generated answer accurately conveys that the club provides change rooms and seating areas, directly addressing the user's question. It does not miss any important points and aligns with the knowledge record.",gpt-4o-mini,gpt-4o-mini,
+Location: Main Club","Yes, the venue provides change rooms for players as well as seating areas to relax after playing. If you have any more questions about the club or facilities, feel free to ask!",good,"The generated answer accurately reflects the information contained in the original knowledge-base record, confirming that the venue has both change rooms and seating areas for players. It directly addresses the user's question without contradicting any details.",gpt-4o-mini,gpt-4o-mini,
 production_prompt,I arrived without a racquet. Where can I temporarily get one?,faq-001,"['faq-001', 'faq-002', 'facility-001', 'dropin-001', 'course-002']","Document ID: faq-001
 Category: faq
 Title: Racket rental
 Content: Rackets are available for rental at the front desk, subject to availability.
 Coach:
 Skill level:
-Location: Main Club","You can temporarily get a racquet by renting one at the front desk, subject to availability. If you need more assistance, feel free to ask!",good,"The generated answer correctly captures the essential information from the original knowledge-base record, stating that racquets are available for rental at the front desk and noting the condition of availability. It addresses the user's question accurately and provides a complete answer without any contradictions or omissions.",gpt-4o-mini,gpt-4o-mini,
+Location: Main Club","You can temporarily get a racquet by renting one at the front desk, subject to availability. Make sure to check there when you arrive!
+
+Is there anything else you need help with?",good,The generated answer correctly conveys the information regarding where to get a racquet temporarily and mentions the important detail about rental being subject to availability. It reflects the content from the original knowledge-base record accurately and thoroughly addresses the user's question.,gpt-4o-mini,gpt-4o-mini,
 production_prompt,If I forget my racket can I obtain one when I arrive and is it guaranteed?,faq-001,"['faq-001', 'faq-002', 'facility-001', 'policy-002', 'dropin-001']","Document ID: faq-001
 Category: faq
 Title: Racket rental
 Content: Rackets are available for rental at the front desk, subject to availability.
 Coach:
 Skill level:
-Location: Main Club","Rackets are available for rental at the front desk, but it is subject to availability, so I can't guarantee a racket will be there when you arrive. It's best to bring your own if possible.
+Location: Main Club","Rackets are available for rental at the front desk, but their availability is not guaranteed. It’s best to bring your own racket to ensure you have one for your game.
 
-Is there anything else you'd like to know?",good,"The generated answer correctly conveys that rackets are available for rental at the front desk and states that this is subject to availability. It accurately reflects the original knowledge-base record without contradicting it, especially regarding the lack of guarantee that a racket will be available upon arrival. The answer also emphasizes the advice to bring a personal racket, which is a reasonable suggestion in this context. Therefore, the answer is accurate and complete regarding the user's question.",gpt-4o-mini,gpt-4o-mini,
+Would you like to know more about what to bring to the club?",good,"The generated answer correctly states that rackets are available for rental at the front desk and clarifies that their availability is not guaranteed, which is consistent with the original knowledge record. It addresses the user's question about whether a racket can be obtained and provides a recommendation to bring their own. Therefore, it captures the essential information needed to answer the question adequately.",gpt-4o-mini,gpt-4o-mini,
 production_prompt,Where should I ask if I need to borrow playing equipment for the session?,faq-001,"['faq-001', 'faq-002', 'dropin-001', 'course-002', 'facility-001']","Document ID: faq-001
 Category: faq
 Title: Racket rental
 Content: Rackets are available for rental at the front desk, subject to availability.
 Coach:
 Skill level:
-Location: Main Club","You can ask to borrow playing equipment, like rackets, at the front desk. Rackets are available for rental, but it's subject to availability. If you need more specific assistance or details, feel free to contact the club directly.
+Location: Main Club","You can ask at the front desk if you need to borrow playing equipment for your session, as rackets are available for rental there, subject to availability.
 
-Do you have any other questions about the club?",good,"The generated answer correctly states that playing equipment can be borrowed at the front desk and mentions the availability condition, which aligns with the original knowledge record. It also adds the option to contact the club for further details, which does not detract from the correctness of the main point. Therefore, it effectively addresses the user question without missing any crucial information.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,What gear and clothing should I pack before heading to the badminton club?,faq-002,"['faq-002', 'facility-001', 'faq-001', 'dropin-001', 'coach-002']","Document ID: faq-002
+Would you like to know more about what else to bring for your session?",good,"The generated answer correctly identifies the front desk as the location to ask about borrowing playing equipment, specifically mentioning that rackets are available for rental there, which matches the information in the original knowledge record. It also retains the context of availability. The additional question about what else to bring does not detract from the main point but is not necessary for the evaluation.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,What gear and clothing should I pack before heading to the badminton club?,faq-002,"['faq-002', 'facility-001', 'faq-001', 'course-003', 'course-004']","Document ID: faq-002
 Category: faq
 Title: What to bring
 Content: Players should bring indoor court shoes, sports clothing, water and a badminton racket.
 Coach:
 Skill level: beginner
-Location: Main Club","You should pack indoor court shoes, sports clothing, water, and a badminton racket before heading to the badminton club. If you don't have a racket, they are available for rental at the front desk, subject to availability.
+Location: Main Club","Before heading to the badminton club, you should pack indoor court shoes, sports clothing, water, and a badminton racket. If you don't have your own racket, you can rent one at the front desk, subject to availability.
 
-Is there anything else you’d like to know?",good,"The generated answer correctly lists all the necessary items to pack before heading to the badminton club as outlined in the original knowledge base. It preserves the important factual information regarding indoor court shoes, sports clothing, water, and a badminton racket. Additionally, it mentions the availability of rackets for rental, which does not contradict the original content but provides extra helpful information. Therefore, the answer is complete and accurate.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,What footwear and personal items are expected when I come to play?,faq-002,"['faq-002', 'faq-001', 'dropin-001', 'facility-001', 'course-001']","Document ID: faq-002
+Is there anything else you'd like to know about preparing for your visit?",good,"The RAG generated answer correctly lists the required gear and clothing (indoor court shoes, sports clothing, water, and a badminton racket) as specified in the original knowledge record. It also provides an additional detail about renting a racket, which is relevant and helpful. Thus, the answer is complete and matches the original informational point in the knowledge base.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,What footwear and personal items are expected when I come to play?,faq-002,"['faq-002', 'faq-001', 'course-003', 'dropin-001', 'facility-001']","Document ID: faq-002
 Category: faq
 Title: What to bring
 Content: Players should bring indoor court shoes, sports clothing, water and a badminton racket.
 Coach:
 Skill level: beginner
-Location: Main Club","When you come to play badminton, you should bring indoor court shoes, sports clothing, water, and a badminton racket. If you don’t have a racket, they are available for rental at the front desk, subject to availability.
+Location: Main Club","When coming to play badminton, players are expected to bring indoor court shoes, sports clothing, water, and a badminton racket. If you don’t have a racket, they are available for rental at the front desk, subject to availability.
 
-Is there anything else you would like to know?",good,"The generated answer accurately lists the required items to bring, including footwear and personal items, as outlined in the original knowledge record. It also provides additional helpful information about racket rental, which does not contradict the original record.",gpt-4o-mini,gpt-4o-mini,
-production_prompt,I already arranged my session. What should I bring with me on the day?,faq-002,"['faq-002', 'policy-002', 'policy-001', 'course-001', 'dropin-001']","Document ID: faq-002
+Would you like to know more about our facilities or classes?",good,"The RAG generated answer correctly lists all the expected items to bring when playing badminton, as stated in the original knowledge-base record. It also adds information about racket rental, which does not contradict the original record and provides helpful context for players. However, it slightly deviates by inviting the user to learn more about facilities or classes, which is not relevant to the main point of the user question. Nonetheless, the main requirements are met accurately.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,I already arranged my session. What should I bring with me on the day?,faq-002,"['faq-002', 'policy-002', 'policy-001', 'course-002', 'dropin-001']","Document ID: faq-002
 Category: faq
 Title: What to bring
 Content: Players should bring indoor court shoes, sports clothing, water and a badminton racket.
 Coach:
 Skill level: beginner
-Location: Main Club","You should bring indoor court shoes, sports clothing, water, and a badminton racket to your session. If you have any other questions or need assistance, feel free to ask!",good,"The generated answer accurately restates all the important items that the user should bring to their session, precisely matching the information provided in the original knowledge-base record.",gpt-4o-mini,gpt-4o-mini,
+Location: Main Club","On the day of your session, you should bring indoor court shoes, sports clothing, water, and a badminton racket. It's also a good idea to arrive at least 10 minutes before your booking.
+
+Is there anything else you'd like to know?",good,"The generated answer correctly lists the items that should be brought to the session and adds a relevant detail about arriving early, which does not contradict the original knowledge record.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,What coaching skills does Coach Lily Chen focus on?,coach-003,"['coach-003', 'coach-001', 'coach-004', 'coach-002', 'course-001']","Document ID: coach-003
+Category: coach
+Title: Coach Lily Chen profile
+Content: Coach Lily Chen focuses on fundamentals, footwork and junior development for beginner and intermediate players.
+Coach: Coach Lily Chen
+Skill level: beginner and intermediate
+Location: Main Club","Coach Lily Chen focuses on fundamentals, footwork, and junior development for beginner and intermediate players. If you have any more questions about her coaching or the club, feel free to ask!",good,"The generated answer accurately reflects the information provided in the original knowledge-base record regarding Coach Lily Chen's focus areas, including fundamentals, footwork, and junior development for beginner and intermediate players. It is correct, complete, and grounded in the provided record without any contradictions or inaccuracies.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,What player levels does Coach Lily Chen teach?,coach-003,"['coach-003', 'coach-001', 'coach-004', 'coach-002', 'course-001']","Document ID: coach-003
+Category: coach
+Title: Coach Lily Chen profile
+Content: Coach Lily Chen focuses on fundamentals, footwork and junior development for beginner and intermediate players.
+Coach: Coach Lily Chen
+Skill level: beginner and intermediate
+Location: Main Club","Coach Lily Chen teaches beginner and intermediate players, focusing on fundamentals, footwork, and junior development.
+
+If you have any other questions about the coaches or lessons, feel free to ask!",good,"The generated answer correctly identifies the player levels that Coach Lily Chen teaches (beginner and intermediate) and accurately reflects the focus on fundamentals, footwork, and junior development as stated in the original knowledge record. There are no contradictions or missing information.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,Does Coach Lily Chen provide junior development training?,coach-003,"['coach-003', 'coach-001', 'coach-004', 'coach-002', 'course-001']","Document ID: coach-003
+Category: coach
+Title: Coach Lily Chen profile
+Content: Coach Lily Chen focuses on fundamentals, footwork and junior development for beginner and intermediate players.
+Coach: Coach Lily Chen
+Skill level: beginner and intermediate
+Location: Main Club","Yes, Coach Lily Chen provides junior development training, focusing on fundamentals and footwork for beginner and intermediate players. If you're interested in more details or scheduling a session, let me know!",good,"The generated answer accurately recovers the information that Coach Lily Chen provides junior development training, and it includes key elements like focusing on fundamentals and footwork for beginner and intermediate players, which directly corresponds to the original knowledge record.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,What areas of badminton does Coach Daniel Wong specialize in?,coach-004,"['coach-004', 'coach-002', 'coach-003', 'faq-002', 'course-001']","Document ID: coach-004
+Category: coach
+Title: Coach Daniel Wong profile
+Content: Coach Daniel Wong focuses on singles strategy, movement and match preparation for intermediate and advanced players.
+Coach: Coach Daniel Wong
+Skill level: intermediate and advanced
+Location: Main Club","Coach Daniel Wong specializes in singles strategy, movement, and match preparation for intermediate and advanced players. If you have more questions about his coaching or anything else, feel free to ask!",good,"The generated answer accurately reflects the information from the original knowledge record by specifying Coach Daniel Wong's areas of specialization: singles strategy, movement, and match preparation for intermediate and advanced players. It correctly conveys this information without introducing any falsehoods or omissions.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,Is Coach Daniel Wong suitable for an advanced player?,coach-004,"['coach-004', 'coach-002', 'coach-003', 'course-004', 'coach-001']","Document ID: coach-004
+Category: coach
+Title: Coach Daniel Wong profile
+Content: Coach Daniel Wong focuses on singles strategy, movement and match preparation for intermediate and advanced players.
+Coach: Coach Daniel Wong
+Skill level: intermediate and advanced
+Location: Main Club","Yes, Coach Daniel Wong is suitable for advanced players. He focuses on singles strategy, movement, and match preparation specifically for intermediate and advanced players.
+
+If you have more questions about coaching options or class details, feel free to ask!",good,"The generated answer accurately states that Coach Daniel Wong is suitable for advanced players and includes relevant details about his focus on singles strategy, movement, and match preparation for both intermediate and advanced players.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,Which coach named Daniel focuses on singles strategy and match preparation?,coach-004,"['coach-004', 'coach-002', 'coach-003', 'course-001', 'coach-001']","Document ID: coach-004
+Category: coach
+Title: Coach Daniel Wong profile
+Content: Coach Daniel Wong focuses on singles strategy, movement and match preparation for intermediate and advanced players.
+Coach: Coach Daniel Wong
+Skill level: intermediate and advanced
+Location: Main Club","Coach Daniel Wong focuses on singles strategy, movement, and match preparation for intermediate and advanced players. He is situated at the Main Club. If you have any more questions about him or the club, feel free to ask!",good,"The generated answer correctly identifies Coach Daniel Wong and describes his focus on singles strategy and match preparation, which matches the information in the original knowledge-base record. It includes all relevant details without any inaccuracies or omissions.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,What does the basic group class focus on?,course-003,"['course-003', 'course-004', 'coach-001', 'dropin-001', 'coach-003']","Document ID: course-003
+Category: course
+Title: Basic group class
+Content: The basic group class focuses on beginner fundamentals, movement and consistency. It is designed for beginner and recreational players.
+Coach:
+Skill level: beginner
+Location: Main Club","The basic group class focuses on beginner fundamentals, movement, and consistency. It is designed for beginner and recreational players.
+
+If you have more questions about classes or anything else, feel free to ask!",good,"The generated answer accurately recovers the information from the original knowledge record, stating the focus areas of the basic group class as well as its target audience. It does not miss any main points and remains consistent with the original content.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,Which group class is designed for beginner and recreational players?,course-003,"['course-003', 'dropin-001', 'course-004', 'faq-002', 'coach-003']","Document ID: course-003
+Category: course
+Title: Basic group class
+Content: The basic group class focuses on beginner fundamentals, movement and consistency. It is designed for beginner and recreational players.
+Coach:
+Skill level: beginner
+Location: Main Club","The group class designed for beginner and recreational players is the **Basic Group Class**, which focuses on beginner fundamentals, movement, and consistency. Another option is the **Beginner Drop-In**, suitable for new and recreational players, though registration is required due to limited spaces.
+
+If you have any more questions or need details about these classes, feel free to ask!",bad,"The RAG generated answer correctly identifies the Basic Group Class as designed for beginner and recreational players and provides additional relevant information about the class content. However, it introduces a second option, the Beginner Drop-In, which is not mentioned in the original knowledge record, potentially leading to confusion and introducing unverifiable details. This misinterpretation of the knowledge record makes the answer incomplete concerning just the original query.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,I am new to badminton and want group training in fundamentals and consistency. Which class fits?,course-003,"['course-003', 'faq-002', 'course-004', 'dropin-001', 'coach-001']","Document ID: course-003
+Category: course
+Title: Basic group class
+Content: The basic group class focuses on beginner fundamentals, movement and consistency. It is designed for beginner and recreational players.
+Coach:
+Skill level: beginner
+Location: Main Club","For beginner fundamentals and consistency, I recommend the **Basic group class**. This class specifically focuses on beginner fundamentals, movement, and consistency, making it ideal for new and recreational players.
+
+If you're also interested in a more casual setting, the **Beginner drop-in** is another option where registration is required, and it's suited for new players.
+
+Would you like more details on class schedules?",good,"The generated answer correctly identifies and recommends the Basic group class for beginner fundamentals and consistency, which aligns with the original knowledge base record. It also introduces an alternative option, the Beginner drop-in, but it remains focused on the user's request for a group training class. Therefore, this answer is accurate, complete, and relevant to the user's needs.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,What skills are covered in the advanced group class?,course-004,"['course-004', 'course-003', 'coach-002', 'coach-001', 'course-002']","Document ID: course-004
+Category: course
+Title: Advanced group class
+Content: The advanced group class focuses on faster movement, tactics and match preparation. It is designed for intermediate and advanced players.
+Coach:
+Skill level: intermediate and advanced
+Location: Main Club","The advanced group class focuses on faster movement, tactics, and match preparation, specifically designed for intermediate and advanced players.
+
+If you have more questions about the classes or anything else, feel free to ask!",good,"The generated answer accurately reflects the key points from the original knowledge record by mentioning the focus on faster movement, tactics, and match preparation, as well as the target skill level of intermediate and advanced players. It does not omit any critical details.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,Which group class is intended for intermediate and advanced players?,course-004,"['course-004', 'course-003', 'coach-002', 'coach-004', 'dropin-001']","Document ID: course-004
+Category: course
+Title: Advanced group class
+Content: The advanced group class focuses on faster movement, tactics and match preparation. It is designed for intermediate and advanced players.
+Coach:
+Skill level: intermediate and advanced
+Location: Main Club","The group class intended for intermediate and advanced players is the **Advanced group class**. It focuses on faster movement, tactics, and match preparation.
+
+If you have any more questions or need additional information about other classes, feel free to ask!",good,"The generated answer correctly identifies the Advanced group class as the intended class for intermediate and advanced players, and it includes relevant details about its focus. It accurately reflects the information from the original knowledge base without omitting any key details or introducing inaccuracies.",gpt-4o-mini,gpt-4o-mini,
+production_prompt,I want group training focused on tactics and match preparation. Which class should I choose?,course-004,"['course-004', 'course-003', 'course-001', 'coach-002', 'course-002']","Document ID: course-004
+Category: course
+Title: Advanced group class
+Content: The advanced group class focuses on faster movement, tactics and match preparation. It is designed for intermediate and advanced players.
+Coach:
+Skill level: intermediate and advanced
+Location: Main Club","You should choose the **Advanced group class**, as it focuses on tactics and match preparation, designed specifically for intermediate and advanced players. If you're looking for personalized attention, you could also consider **private lessons** which can be tailored to your goals.
+
+Let me know if you need more information about these options!",good,"The generated answer correctly identifies the Advanced group class as the appropriate choice for group training focused on tactics and match preparation, and notes that it is designed for intermediate and advanced players, aligning perfectly with the original knowledge record. However, it also introduces private lessons, which, while helpful, diverts slightly from the user’s specific request for group training. Nonetheless, the main answer remains accurate and supported by the provided information.",gpt-4o-mini,gpt-4o-mini,

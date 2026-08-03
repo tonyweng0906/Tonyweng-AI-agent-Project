@@ -4,28 +4,28 @@
     "expected_intent": "price",
     "expected_offering_type": "retail_item",
     "expected_source_id": "current-price-catalog",
-    "required_context_values": ["Bottled water", "2.00", "CAD"]
+    "required_context_values": ["Bottled water", "2.0", "CAD"]
   },
   {
     "question": "How much is a soft drink?",
     "expected_intent": "price",
     "expected_offering_type": "retail_item",
     "expected_source_id": "current-price-catalog",
-    "required_context_values": ["Soft drink", "3.00", "CAD"]
+    "required_context_values": ["Soft drink", "3.0", "CAD"]
   },
   {
     "question": "How much does it cost to rent a court for one hour?",
     "expected_intent": "price",
     "expected_offering_type": "court_rental",
     "expected_source_id": "current-price-catalog",
-    "required_context_values": ["Court rental", "35.00", "per_hour"]
+    "required_context_values": ["Court rental", "35.0", "per_hour"]
   },
   {
     "question": "How much is a one-to-two private lesson?",
     "expected_intent": "price",
     "expected_offering_type": "private_lesson",
     "expected_source_id": "current-price-catalog",
-    "required_context_values": ["One-to-two private lesson", "100.00"]
+    "required_context_values": ["One-to-two private lesson", "100.0"]
   },
   {
     "question": "When does Coach Amy have classes next week?",
@@ -41,4 +41,3 @@
     "required_context_values": ["live_court_schedule", "results"]
   }
 ]
-
