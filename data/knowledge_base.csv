@@ -6,8 +6,10 @@ coach-001,coach,Coach Amy profile,"Coach Amy focuses on beginner fundamentals, f
 coach-002,coach,Coach David profile,"Coach David focuses on intermediate and advanced singles strategy, movement and match preparation.",Coach David,intermediate and advanced,Main Club
 coach-003,coach,Coach Lily Chen profile,"Coach Lily Chen focuses on fundamentals, footwork and junior development for beginner and intermediate players.",Coach Lily Chen,beginner and intermediate,Main Club
 coach-004,coach,Coach Daniel Wong profile,"Coach Daniel Wong focuses on singles strategy, movement and match preparation for intermediate and advanced players.",Coach Daniel Wong,intermediate and advanced,Main Club
-course-001,course,Private lesson,"A private lesson is a one-on-one coaching session customized to the player's level and goals.",,all,Main Club
-course-002,course,Semi-private lesson,"A semi-private lesson is designed for two to four players of a similar skill level.",,all,Main Club
+course-001,course,Private lesson options,"Private coaching is available as one-to-one, one-to-two or one-to-three 60-minute lessons customized to the players' skill levels and goals.",,all,Main Club
+course-002,course,Semi-private lesson,"A semi-private lesson is a 60-minute private coaching session for two or three players of a similar skill level.",,all,Main Club
+course-003,course,Basic group class,"The basic group class focuses on beginner fundamentals, movement and consistency. It is designed for beginner and recreational players.",,beginner,Main Club
+course-004,course,Advanced group class,"The advanced group class focuses on faster movement, tactics and match preparation. It is designed for intermediate and advanced players.",,intermediate and advanced,Main Club
 facility-001,facility,Court facilities,"The club provides badminton courts, change rooms, seating areas and equipment rental.",,,Main Club
 faq-001,faq,Racket rental,"Rackets are available for rental at the front desk, subject to availability.",,,Main Club
 faq-002,faq,What to bring,"Players should bring indoor court shoes, sports clothing, water and a badminton racket.",,beginner,Main Club
