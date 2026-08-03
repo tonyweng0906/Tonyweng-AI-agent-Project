@@ -466,8 +466,8 @@ def create_schedule_rows() -> list[tuple]:
                     random_generator.random()
                 )
 
-                # Simulate private lessons.
-                if random_value < 0.10:
+                # Simulate a limited number of private lessons.
+                if random_value < 0.03:
                     available_coaches = [
                         coach_id
                         for coach_id in COACH_NAMES

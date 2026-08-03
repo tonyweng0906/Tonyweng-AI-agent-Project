@@ -248,15 +248,23 @@ def build_live_context(
             coach_name=route.coach_name,
         )
 
+        scheduled_activities = (
+            compact_schedule(schedule)
+        )
+
         context = {
             "source": "live_court_schedule",
             "start_date": start_date.isoformat(),
             "end_date": end_date.isoformat(),
             "coach_filter": route.coach_name,
+            "result_count": len(
+                scheduled_activities
+            ),
             "scheduled_activities": (
-                compact_schedule(schedule)
+                scheduled_activities
             ),
         }
+
 
         sources = [
             {

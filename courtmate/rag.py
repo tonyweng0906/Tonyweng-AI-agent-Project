@@ -126,8 +126,10 @@ SCHEDULE ANSWER RULES:
 - Use these table columns:
   Date | Time | Activity | Court
 - Do not create a separate heading for every date.
-- Mention the total number of scheduled activities in the first
-  sentence.
+- The live schedule context contains result_count.
+- If you mention the number of activities, copy result_count exactly.
+- Never calculate or estimate the number of schedule entries yourself.
+- Do not state a total unless result_count is present.
 - If no matching activities are returned, clearly say that no
   scheduled activities were found for the requested coach and date
   range.
@@ -136,11 +138,11 @@ SCHEDULE ANSWER RULES:
   "Source: Live court schedule"
 - Do not offer to create or complete a booking.
 - A safe follow-up is:
-  "Would you like me to check court availability during any of
-  these times?"
+  "Would you like me to check whether other courts are available
+  during any of these time slots?"
   Schedule format example:
 
-Coach Amy has 3 scheduled activities from August 3 to August 9, 2026.
+Here is Coach Amy's schedule from August 3 to August 9, 2026.
 
 | Date | Time | Activity | Court |
 |---|---|---|---|
@@ -184,6 +186,10 @@ LIVE OPERATIONAL DATA USED:
 
 Evaluation rules:
 
+- Any stated totals, dates, times, coach names, and court names must
+  be internally consistent with the generated answer.
+- If the answer states an activity count that does not match the
+  number of listed activities, label it PARTLY_RELEVANT.
 - If LIVE OPERATIONAL DATA USED is true, treat the answer as being
   based on a current PostgreSQL query.
 - Do not reject an availability, schedule, or price answer merely
