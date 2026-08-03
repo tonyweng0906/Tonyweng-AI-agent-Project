@@ -28,6 +28,9 @@ from courtmate.live_context import (
 from courtmate.query_router import (
     route_query,
 )
+from courtmate.source_selection import (
+    select_source_ids,
+)
 
 openai_client = OpenAI(
     api_key=OPENAI_API_KEY,
@@ -469,34 +472,10 @@ def generate_answer(
         ),
     }
 
-    allowed = set(
-        allowed_source_ids
+    selected_source_ids = select_source_ids(
+        requested_source_ids=parsed.source_ids,
+        allowed_source_ids=allowed_source_ids,
     )
-    selected_source_ids = []
-
-    for source_id in parsed.source_ids:
-        cleaned_source_id = str(
-            source_id
-        ).strip()
-
-        if (
-            cleaned_source_id in allowed
-            and cleaned_source_id
-            not in selected_source_ids
-        ):
-            selected_source_ids.append(
-                cleaned_source_id
-            )
-
-    # Preserve a useful source when a grounded knowledge answer
-    # omits source IDs despite having retrieved documents.
-    if (
-        allowed_source_ids
-        and not selected_source_ids
-    ):
-        selected_source_ids = [
-            allowed_source_ids[0]
-        ]
 
     return (
         parsed.answer.strip(),
@@ -751,4 +730,5 @@ def rag(
             route.target_end_date
         ),
     }
+
 

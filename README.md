@@ -146,6 +146,7 @@ Tonyweng-AI-agent-Project/
 |   |-- operations.py
 |   |-- query_router.py
 |   |-- rag.py
+|   |-- source_selection.py
 |   `-- rerank.py
 |-- evaluation/
 |   |-- evaluate_retrieval.py
@@ -162,7 +163,8 @@ Tonyweng-AI-agent-Project/
 |   |-- test_api.py
 |   |-- test_ingest.py
 |   |-- test_live_context.py
-|   `-- test_query_router.py
+|   |-- test_query_router.py
+|   `-- test_source_selection.py
 |-- data/
 |   |-- knowledge_base.csv
 |   |-- ground-truth-retrieval.csv
@@ -657,6 +659,7 @@ The current tests cover:
 - deterministic price-query normalization;
 - relative weekday and week-range resolution;
 - live price and coach-schedule context construction;
+- safe supporting-source filtering;
 - oversized question rejection.
 
 The API tests mock RAG and database dependencies, so they do not call OpenAI or require a live PostgreSQL connection.
