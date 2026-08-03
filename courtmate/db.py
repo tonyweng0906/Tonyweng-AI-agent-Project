@@ -103,7 +103,8 @@ def init_db() -> None:
                                 'private_lesson',
                                 'group_class',
                                 'drop_in',
-                                'membership'
+                                'membership',
+                                'retail_item'
                             )
                         ),
                     name TEXT NOT NULL,
@@ -126,6 +127,33 @@ def init_db() -> None:
                         DEFAULT CURRENT_TIMESTAMP,
                     updated_at TIMESTAMPTZ NOT NULL
                         DEFAULT CURRENT_TIMESTAMP
+                )
+                """
+            )
+
+            cursor.execute(
+                """
+                ALTER TABLE offerings
+                DROP CONSTRAINT IF EXISTS
+                offerings_offering_type_check
+                """
+            )
+
+            cursor.execute(
+                """
+                ALTER TABLE offerings
+                ADD CONSTRAINT
+                offerings_offering_type_check
+                CHECK (
+                    offering_type IN (
+                        'equipment_rental',
+                        'court_rental',
+                        'private_lesson',
+                        'group_class',
+                        'drop_in',
+                        'membership',
+                        'retail_item'
+                    )
                 )
                 """
             )
