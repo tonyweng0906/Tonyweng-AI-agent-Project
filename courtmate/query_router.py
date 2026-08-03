@@ -33,6 +33,7 @@ OfferingType = Literal[
     "group_class",
     "drop_in",
     "membership",
+    "retail_item",
 ]
 
 
@@ -110,6 +111,86 @@ class QueryRoute(BaseModel):
             "HH:MM format or null."
         ),
     )
+
+
+def normalize_price_route(
+    route: QueryRoute,
+    question: str,
+) -> None:
+    """Normalize known catalog items without relying on LLM guesses."""
+    if route.intent != "price":
+        return
+
+    normalized = question.strip().lower()
+
+    catalog_rules: list[
+        tuple[str, str, str]
+    ] = [
+        (
+            r"\b(mineral\s+water|bottled\s+water|water)\b",
+            "water",
+            "retail_item",
+        ),
+        (
+            r"\b(soft\s+drink|soda|pop)\b",
+            "soft drink",
+            "retail_item",
+        ),
+        (
+            r"\b(racket|racquet)\b",
+            "racket rental",
+            "equipment_rental",
+        ),
+        (
+            r"\b(shoe|shoes|court\s+shoes)\b",
+            "shoe rental",
+            "equipment_rental",
+        ),
+        (
+            r"\b(court\s+rental|court\s+booking|rent\s+a\s+court)\b",
+            "court rental",
+            "court_rental",
+        ),
+        (
+            r"\b(one[-\s]to[-\s]one|1[-\s]on[-\s]1)\b",
+            "one-to-one private lesson",
+            "private_lesson",
+        ),
+        (
+            r"\b(one[-\s]to[-\s]two|1[-\s]on[-\s]2)\b",
+            "one-to-two private lesson",
+            "private_lesson",
+        ),
+        (
+            r"\b(one[-\s]to[-\s]three|1[-\s]on[-\s]3)\b",
+            "one-to-three private lesson",
+            "private_lesson",
+        ),
+        (
+            r"\b(basic|beginner)\s+group\s+class\b",
+            "basic group class",
+            "group_class",
+        ),
+        (
+            r"\b(advanced)\s+group\s+class\b",
+            "advanced group class",
+            "group_class",
+        ),
+    ]
+
+    for (
+        pattern,
+        normalized_query,
+        offering_type,
+    ) in catalog_rules:
+        if re.search(pattern, normalized):
+            route.normalized_query = (
+                normalized_query
+            )
+            route.offering_type = (
+                offering_type
+            )
+            return
 
 
 def format_history(
@@ -314,7 +395,18 @@ knowledge:
 Static club policies, coaching descriptions, facilities,
 rules, what to bring, and other knowledge-base questions.
 
+price:
+Questions asking for a current price, fee, rate, or cost.
+
 Price search rules:
+- Return only the catalog item name in normalized_query.
+- Do not include words such as price, cost, fee, or rate.
+- Use retail_item for water and soft drinks.
+- Use equipment_rental for racket and shoe rentals.
+- Use court_rental for court booking prices.
+- Use private_lesson for one-to-one, one-to-two, and
+  one-to-three private coaching.
+- Use group_class for basic and advanced group classes.
 - Produce a concise English catalog search query.
 - Normalize the following concepts:
   court booking -> court rental
@@ -386,6 +478,11 @@ a follow-up question.
             "The query router did not "
             "return structured output."
         )
+
+    normalize_price_route(
+        route=route,
+        question=question,
+    )
 
     deterministic_range = (
         resolve_relative_date_range(
