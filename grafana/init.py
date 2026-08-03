@@ -158,9 +158,13 @@ def update_datasource_references(
     if isinstance(value, dict):
         datasource = value.get("datasource")
 
-        if isinstance(datasource, dict):
-            datasource["type"] = "postgres"
+        if (
+            isinstance(datasource, dict)
+            and datasource.get("name") != "-- Grafana --"
+        ):
+            datasource["name"] = datasource_uid
             datasource["uid"] = datasource_uid
+            datasource["type"] = "postgres"
             updated += 1
 
         for child in value.values():
