@@ -2,8 +2,10 @@ id,category,title,content,coach_name,skill_level,location
 policy-001,cancellation,Private lesson cancellation,"Private lessons must be cancelled at least 24 hours before the scheduled start time. Late cancellations may not be eligible for a refund.",,,Main Club
 policy-002,booking,Court booking duration,"Court bookings use 60-minute time slots. This describes the booking duration only. Exact start times and live court availability are not stored in the knowledge base. Customers should arrive at least 10 minutes before the booking.",,,Main Club
 dropin-001,dropin,Beginner drop-in,"The beginner drop-in is suitable for new and recreational players. Registration is required and spaces are limited.",,beginner,Main Club
-coach-001,coach,Coach Amy profile,"Coach Amy specializes in beginner fundamentals, footwork and junior training. She teaches private and semi-private lessons.",Coach Amy,beginner,Main Club
-coach-002,coach,Coach David profile,"Coach David specializes in intermediate and advanced singles strategy, movement and match preparation.",Coach David,advanced,Main Club
+coach-001,coach,Coach Amy profile,"Coach Amy focuses on beginner fundamentals, footwork and junior training. She teaches private, semi-private and beginner group lessons.",Coach Amy,beginner and intermediate,Main Club
+coach-002,coach,Coach David profile,"Coach David focuses on intermediate and advanced singles strategy, movement and match preparation.",Coach David,intermediate and advanced,Main Club
+coach-003,coach,Coach Lily Chen profile,"Coach Lily Chen focuses on fundamentals, footwork and junior development for beginner and intermediate players.",Coach Lily Chen,beginner and intermediate,Main Club
+coach-004,coach,Coach Daniel Wong profile,"Coach Daniel Wong focuses on singles strategy, movement and match preparation for intermediate and advanced players.",Coach Daniel Wong,intermediate and advanced,Main Club
 course-001,course,Private lesson,"A private lesson is a one-on-one coaching session customized to the player's level and goals.",,all,Main Club
 course-002,course,Semi-private lesson,"A semi-private lesson is designed for two to four players of a similar skill level.",,all,Main Club
 facility-001,facility,Court facilities,"The club provides badminton courts, change rooms, seating areas and equipment rental.",,,Main Club
