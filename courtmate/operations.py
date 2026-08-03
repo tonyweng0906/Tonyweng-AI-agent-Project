@@ -1,3 +1,5 @@
+import re
+
 from datetime import (
     date,
     datetime,
@@ -54,6 +56,51 @@ def serialize_rows(
     return serialized_rows
 
 
+PRICE_SEARCH_STOPWORDS = {
+    "a",
+    "an",
+    "are",
+    "can",
+    "cost",
+    "costs",
+    "do",
+    "does",
+    "fee",
+    "fees",
+    "for",
+    "how",
+    "i",
+    "is",
+    "much",
+    "of",
+    "please",
+    "price",
+    "prices",
+    "rate",
+    "rates",
+    "the",
+    "what",
+}
+
+
+def extract_price_search_terms(
+    query: str,
+) -> list[str]:
+    """Return meaningful lowercase terms for catalog search."""
+    terms = [
+        term
+        for term in re.findall(
+            r"[a-z0-9]+",
+            query.lower(),
+        )
+        if term not in PRICE_SEARCH_STOPWORDS
+    ]
+
+    return list(
+        dict.fromkeys(terms)
+    )
+
+
 def search_prices(
     query: str = "",
     offering_type: str | None = None,
@@ -75,9 +122,15 @@ def search_prices(
 
     cleaned_query = query.strip()
 
-    if cleaned_query:
+    search_terms = (
+        extract_price_search_terms(
+            cleaned_query
+        )
+    )
+
+    for search_term in search_terms:
         search_pattern = (
-            f"%{cleaned_query}%"
+            f"%{search_term}%"
         )
 
         conditions.append(
