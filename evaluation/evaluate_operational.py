@@ -9,10 +9,7 @@ from pydantic import BaseModel, Field
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
-from courtmate.config import (
-    OPENAI_API_KEY,
-    OPENAI_JUDGE_MODEL,
-)
+
 from courtmate.live_context import build_live_context
 from courtmate.query_router import route_query
 from courtmate.rag import rag
