@@ -136,7 +136,7 @@ OFFERINGS = [
     ),
     (
         "soft-drink",
-        "equipment_rental",
+        "retail_item",
         "Soft drink",
         "One bottled soft drink.",
         None,
@@ -145,7 +145,7 @@ OFFERINGS = [
     ),
     (
         "water",
-        "equipment_rental",
+        "retail_item",
         "Bottled water",
         "One bottle of mineral water.",
         None,
