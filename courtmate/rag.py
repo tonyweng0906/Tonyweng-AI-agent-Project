@@ -3,6 +3,7 @@ from time import perf_counter
 from typing import Any
 
 from openai import OpenAI
+from pydantic import BaseModel, Field
 
 from courtmate.config import (
     OPENAI_API_KEY,
@@ -244,6 +245,36 @@ Skill level: {skill_level}
 Location: {location}
 """.strip()
 
+
+class GeneratedAnswer(BaseModel):
+    answer: str = Field(
+        description=(
+            "The final user-facing answer."
+        )
+    )
+    source_ids: list[str] = Field(
+        default_factory=list,
+        description=(
+            "Only the static document IDs that directly "
+            "support factual claims in the answer."
+        ),
+    )
+
+
+GENERATION_INSTRUCTIONS = """
+Return the final answer and its supporting static document IDs.
+
+Source-selection rules:
+- Include only document IDs that directly support factual claims
+  in the answer.
+- Do not include a document merely because it was retrieved.
+- Use only IDs shown as Document ID in the static context.
+- For conversation or live operational answers, return an empty
+  source_ids list.
+- Never invent a document ID.
+""".strip()
+
+
 def format_conversation_history(
     history: list[dict[str, str]] | None,
 ) -> str:
@@ -390,6 +421,89 @@ def llm(
         response.output_text.strip(),
         token_stats,
     )
+
+
+def generate_answer(
+    prompt: str,
+    model: str,
+    allowed_source_ids: list[str],
+) -> tuple[str, list[str], dict[str, int]]:
+    """Generate an answer and select only supporting sources."""
+    response = openai_client.responses.parse(
+        model=model,
+        instructions=GENERATION_INSTRUCTIONS,
+        input=[
+            {
+                "role": "user",
+                "content": prompt,
+            }
+        ],
+        text_format=GeneratedAnswer,
+    )
+
+    parsed = response.output_parsed
+
+    if parsed is None:
+        raise RuntimeError(
+            "The answer model did not return "
+            "structured output."
+        )
+
+    usage = response.usage
+
+    token_stats = {
+        "prompt_tokens": (
+            usage.input_tokens
+            if usage
+            else 0
+        ),
+        "completion_tokens": (
+            usage.output_tokens
+            if usage
+            else 0
+        ),
+        "total_tokens": (
+            usage.total_tokens
+            if usage
+            else 0
+        ),
+    }
+
+    allowed = set(
+        allowed_source_ids
+    )
+    selected_source_ids = []
+
+    for source_id in parsed.source_ids:
+        cleaned_source_id = str(
+            source_id
+        ).strip()
+
+        if (
+            cleaned_source_id in allowed
+            and cleaned_source_id
+            not in selected_source_ids
+        ):
+            selected_source_ids.append(
+                cleaned_source_id
+            )
+
+    # Preserve a useful source when a grounded knowledge answer
+    # omits source IDs despite having retrieved documents.
+    if (
+        allowed_source_ids
+        and not selected_source_ids
+    ):
+        selected_source_ids = [
+            allowed_source_ids[0]
+        ]
+
+    return (
+        parsed.answer.strip(),
+        selected_source_ids,
+        token_stats,
+    )
+
 
 VALID_RELEVANCE_LABELS = {
     "RELEVANT",
@@ -542,10 +656,42 @@ def rag(
         ),
     )
 
-    answer, generation_tokens = llm(
+    allowed_source_ids = [
+        str(document["id"])
+        for document in search_results
+    ]
+
+    (
+        answer,
+        selected_source_ids,
+        generation_tokens,
+    ) = generate_answer(
         prompt=prompt,
         model=model,
+        allowed_source_ids=(
+            allowed_source_ids
+        ),
     )
+
+    documents_by_id = {
+        str(document["id"]): document
+        for document in search_results
+    }
+
+    selected_sources = [
+        {
+            "id": documents_by_id[
+                source_id
+            ]["id"],
+            "title": documents_by_id[
+                source_id
+            ]["title"],
+            "category": documents_by_id[
+                source_id
+            ]["category"],
+        }
+        for source_id in selected_source_ids
+    ]
 
     relevance_result, evaluation_tokens = (
         evaluate_relevance(
@@ -566,16 +712,7 @@ def rag(
         "answer": answer,
         "sources": (
             operational_sources
-            + [
-                {
-                    "id": document["id"],
-                    "title": document["title"],
-                    "category": document[
-                        "category"
-                    ],
-                }
-                for document in search_results
-            ]
+            + selected_sources
         ),
         "model_used": model,
         "judge_model": OPENAI_JUDGE_MODEL,
