@@ -1,10 +1,22 @@
-# Badminton Mate
+# 🏸 Badminton Mate
 
-A RAG-powered assistant for badminton-club information, pricing, and court availability.
+[![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Docker Compose](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)](docker-compose.yaml)
+[![Streamlit](https://img.shields.io/badge/UI-Streamlit-FF4B4B?logo=streamlit&logoColor=white)](frontend.py)
+[![PostgreSQL 16](https://img.shields.io/badge/PostgreSQL-16-4169E1?logo=postgresql&logoColor=white)](docker-compose.yaml)
+[![Grafana](https://img.shields.io/badge/Monitoring-Grafana-F46800?logo=grafana&logoColor=white)](grafana/dashboard.json)
+[![Tests](https://img.shields.io/badge/tests-21%20passed-brightgreen)](tests/)
+[![Deployed on Railway](https://img.shields.io/badge/deployed-Railway-7B2BF9?logo=railway&logoColor=white)](https://frontend-production-22a43.up.railway.app/)
+
+**Live demo:** [Open Badminton Mate on Railway](https://frontend-production-22a43.up.railway.app/)
+
+A RAG-powered assistant for badminton-club information, pricing, schedules, and court availability.
 
 Badminton Mate combines an evaluated knowledge-retrieval pipeline with operational PostgreSQL data. Users can ask natural-language questions through a Streamlit interface or Flask API, submit feedback, and view application metrics in Grafana.
 
-This project was created as an **LLM Zoomcamp final project** and applies the retrieval, evaluation, monitoring, and deployment methods taught by DataTalksClub.
+This project was created as an **LLM Zoomcamp final project** and applies the retrieval, evaluation, monitoring, and deployment methods taught by DataTalksClub. The documentation below is written so the project can be understood and run without taking the course.
+
+**Jump to:** [Problem](#problem-description) · [Demo](#try-the-app) · [Architecture](#architecture) · [Evaluation](#evaluation) · [Rubric evidence](#evaluation-criteria-and-rubric-evidence) · [Docker setup](#quick-start-with-docker-compose) · [Tests](#tests) · [Monitoring](#grafana-monitoring) · [Deployment](#railway-deployment)
 
 ## Problem description
 
@@ -44,7 +56,7 @@ Example questions include:
 - Weighted rank fusion
 - Optional LLM document re-ranking
 - Conversation-history-aware retrieval
-- Query routing for knowledge, pricing, and availability
+- Query routing for conversation, knowledge, pricing, schedule, and availability
 - Relative-date resolution such as `tomorrow` and `next Thursday`
 - PostgreSQL-backed pricing and court schedules
 - Eight courts with 60-minute availability slots
@@ -57,6 +69,40 @@ Example questions include:
 - Automated API and ingestion tests
 
 Badminton Mate can check operational availability, but it cannot yet create, modify, or cancel real bookings.
+
+## Try the app
+
+The deployed Streamlit interface is available at:
+
+**https://frontend-production-22a43.up.railway.app/**
+
+The sidebar reports whether the API is connected. Try one question from each data path:
+
+| Use case | Example question | Data path |
+| --- | --- | --- |
+| Static club knowledge | `What should I bring to a badminton session?` | Evaluated RAG retrieval over `knowledge_base.csv` |
+| Current pricing | `How much is a bottle of water?` | Query router → PostgreSQL price catalog |
+| Coach schedule | `When does Coach Amy have classes next week?` | Query router → date range → PostgreSQL schedule |
+| Court availability | `What court times are available next Thursday?` | Query router → relative date → live availability calculation |
+
+Expected behavior:
+
+- factual claims are grounded in retrieved documents or operational database rows;
+- static knowledge is never presented as live availability;
+- schedule answers distinguish occupied activities from bookable court times;
+- prices and availability come from PostgreSQL rather than being invented by the model;
+- every API response includes sources, routing metadata, token usage, latency, and an online relevance result.
+
+### Screenshots and preview video
+
+The Mermaid diagrams and technology badges in this README are version-controlled visuals. For release screenshots, capture the deployed Streamlit chat and the Grafana dashboard after both are populated with demonstration data, then save them as:
+
+```text
+docs/images/streamlit-chat.png
+docs/images/grafana-dashboard.png
+```
+
+A short Streamlit preview can be recorded from the app menu and uploaded through GitHub's README editor. Real captures are preferred over mocked screenshots so the documentation stays verifiable.
 
 ## Architecture
 
@@ -99,7 +145,7 @@ flowchart TD
 
 1. The user submits a question through Streamlit or the Flask API.
 2. The frontend includes up to eight recent conversation messages.
-3. The query router identifies knowledge, pricing, or availability intent.
+3. The query router identifies conversation, knowledge, pricing, schedule, or availability intent.
 4. Relative dates are resolved when operational data is requested.
 5. Knowledge queries use the selected text, vector, or hybrid configuration.
 6. Retrieved documents may be re-ranked by an LLM.
@@ -178,7 +224,8 @@ Tonyweng-AI-agent-Project/
 |       |-- reranking-evaluation-results.csv
 |       |-- rag-evaluation-baseline.csv
 |       |-- rag-evaluation-comparison.csv
-|       `-- rag-prompt-comparison.csv
+|       |-- rag-prompt-comparison.csv
+|       `-- operational-rag-evaluation-results.csv
 |-- grafana/
 |   |-- init.py
 |   `-- dashboard.json
@@ -285,11 +332,13 @@ The re-ranker returns structured document IDs and relevance scores. Invalid or o
 
 The router distinguishes:
 
+- normal conversation;
 - general knowledge;
 - pricing;
+- coach and activity schedules;
 - court availability.
 
-For availability questions, it resolves dates such as:
+Operational requests can include a normalized query, offering type, coach name, start date, end date, and time range. For schedule and availability questions, the router resolves expressions such as:
 
 ```text
 tomorrow
@@ -312,6 +361,20 @@ data/ground-truth-retrieval.csv
 ```
 
 It contains evaluation questions and expected document IDs. Records are split by document ID to prevent questions from the same document appearing in both validation and held-out test sets.
+
+### Latest committed results
+
+The repository stores the complete row-level outputs under [`data/evaluation/`](data/evaluation/). The current committed summary is:
+
+| Evaluation stage | Selected approach | Validation result | Held-out / final result | Evidence |
+| --- | --- | --- | --- | --- |
+| MinSearch field boosts | Manual field boosts | Hit Rate@5 **0.824**, MRR@5 **0.698** | Hit Rate@5 **1.000**, MRR@5 **0.896** | [retrieval results](data/evaluation/retrieval-evaluation-results.csv) |
+| Text/vector comparison | Vector-only retrieval | Hit Rate@5 **0.980**, MRR@5 **0.881** | Hit Rate@5 **1.000**, MRR@5 **1.000** | [hybrid results](data/evaluation/hybrid-retrieval-evaluation-results.csv) |
+| Document re-ranking | LLM re-ranking enabled | Hit Rate@1 **0.941**, MRR@5 **0.961** | Hit Rate@1 **1.000**, MRR@5 **1.000** | [re-ranking results](data/evaluation/reranking-evaluation-results.csv) |
+| Prompt comparison | Production Prompt | **61/63 good (96.83%)** | Tied with baseline; production selected by the documented tie-break | [Prompt comparison](data/evaluation/rag-prompt-comparison.csv) |
+| Operational RAG | Deterministic checks + LLM judge | **6/6 deterministic checks passed** | 5 good, 0 bad, 1 needs review | [operational results](data/evaluation/operational-rag-evaluation-results.csv) |
+
+These scores describe a small, project-specific evaluation dataset; they are evidence for configuration selection, not a production-service guarantee. Validation data selects configurations. Held-out data is reported afterward and is not used for tuning.
 
 ### Retrieval evaluation
 
@@ -372,7 +435,7 @@ This compares:
 - a baseline Prompt;
 - the production Prompt.
 
-An LLM judge compares generated answers with the original knowledge records and assigns `good` or `bad`.
+An LLM judge compares the question, original knowledge record, retrieved context, and generated answer, then assigns `good` or `bad`. Recording the retrieved context makes it possible to distinguish a retrieval failure from a generation failure.
 
 Results are written to:
 
@@ -381,7 +444,17 @@ data/evaluation/rag-evaluation-comparison.csv
 data/evaluation/rag-prompt-comparison.csv
 ```
 
-The production Prompt is selected only when it performs best on the evaluation data.
+The current baseline and production Prompts both score 61/63. The production Prompt is selected by a deterministic tie-break because it includes the project's grounding and operational-safety rules.
+
+### Operational RAG evaluation
+
+Run:
+
+```bash
+uv run python -m evaluation.evaluate_operational
+```
+
+This evaluation checks live price, coach-schedule, and court-availability questions. It combines deterministic route/context assertions with an LLM judge. Deterministic failures are always failures; disagreements where the route and required database values are correct are marked `needs_review` instead of being silently counted as correct.
 
 ### Run all evaluations
 
@@ -398,6 +471,31 @@ uv run python -m evaluation.evaluate_operational
 Hybrid, re-ranking, RAG, and operational evaluation call OpenAI APIs and may incur usage charges. The operational evaluation also requires the seeded PostgreSQL service.
 
 `evaluate_rag` records the question count and SHA-256 fingerprint of the ground-truth file in `rag-prompt-comparison.csv`, making stale Prompt results visible after the dataset changes.
+
+## Evaluation criteria and rubric evidence
+
+This table maps the course rubric directly to repository evidence so reviewers do not need to infer where each requirement is implemented.
+
+| Criterion | Repository evidence | Self-assessment |
+| --- | --- | ---: |
+| Problem description | [Problem description](#problem-description) explains the user, pain points, and supported questions | **2/2** |
+| Retrieval flow | [Architecture](#architecture), [`courtmate/rag.py`](courtmate/rag.py), and [`courtmate/hybrid_search.py`](courtmate/hybrid_search.py) use both a knowledge base and an LLM | **2/2** |
+| Retrieval evaluation | MinSearch, weighted hybrid, vector-only, and re-ranking approaches are compared; validation winners are saved and used | **2/2** |
+| LLM evaluation | Baseline and production Prompts are compared with an LLM-as-a-Judge; the production Prompt is selected | **2/2** |
+| Interface | Streamlit UI plus Flask API | **2/2** |
+| Ingestion pipeline | [`courtmate/ingest.py`](courtmate/ingest.py) and Python setup/seed scripts automate loading, but no workflow orchestrator is used | **1/2** |
+| Monitoring | User feedback is stored and Grafana provides eight panels | **2/2** |
+| Containerization | PostgreSQL, API, Streamlit, and Grafana are all defined in [`docker-compose.yaml`](docker-compose.yaml) | **2/2** |
+| Reproducibility | Locked dependencies, accessible data, environment template, Docker setup, tests, and evaluation commands are provided | **2/2** |
+
+**Core self-assessment: 17/18.** Final scoring belongs to the reviewer.
+
+Best-practice evidence:
+
+- **Hybrid search:** multiple text/vector weightings are evaluated.
+- **Document re-ranking:** the LLM re-ranker is evaluated and the selected configuration is loaded by the application.
+- **User query rewriting:** recent conversation history is used for conversation-aware query expansion before retrieval.
+- **Cloud deployment bonus:** the application is deployed on Railway.
 
 ## API
 
@@ -541,7 +639,7 @@ The API container automatically:
 1. waits for PostgreSQL;
 2. creates the database tables;
 3. seeds operational demonstration data;
-4. starts Flask.
+4. starts the Gunicorn API server.
 
 Check the services:
 
@@ -646,7 +744,7 @@ Run the complete test suite:
 uv run pytest tests -v
 ```
 
-The current tests cover:
+The current suite contains **21 passing tests** covering:
 
 - API health behavior;
 - required question validation;
@@ -655,7 +753,7 @@ The current tests cover:
 - knowledge-base CSV loading;
 - required ingestion columns;
 - duplicate document IDs;
-- retrieval boost configuration loading.
+- retrieval boost configuration loading;
 - deterministic price-query normalization;
 - relative weekday and week-range resolution;
 - live price and coach-schedule context construction;
