@@ -1,1 +1,8 @@
-{}
+{
+  "category": 1.2,
+  "title": 2.0,
+  "content": 1.0,
+  "coach_name": 1.5,
+  "skill_level": 1.0,
+  "location": 0.5
+}
