@@ -100,6 +100,16 @@ Rules:
 - Mark the answer as bad if it refuses even though the original
   record contains enough information.
 - Source formatting and writing style should not affect the score.
+- The expected reference record identifies the core answer, but it is
+  not necessarily the only valid supporting document.
+- Facts found in the retrieved knowledge-base context are supported
+  and must not be treated as invented.
+- Additional supported information must not cause a bad score unless
+  it contradicts the question or obscures the direct answer.
+- If requested information is explicitly unavailable in the context,
+  clearly explaining that limitation is a valid direct answer.
+- Numerical constraints must be interpreted exactly. For example,
+  "my three teammates and I" means four people.
 
 Focus on correctness, completeness, and groundedness.
 """.strip()
@@ -109,13 +119,15 @@ JUDGE_PROMPT = """
 USER QUESTION:
 {question}
 
-ORIGINAL KNOWLEDGE-BASE RECORD:
+EXPECTED REFERENCE RECORD:
 {answer_orig}
+
+RETRIEVED KNOWLEDGE-BASE CONTEXT:
+{retrieved_context}
 
 RAG GENERATED ANSWER:
 {answer_llm}
 """.strip()
-
 
 judge_client = OpenAI(
     api_key=OPENAI_API_KEY
@@ -164,7 +176,7 @@ def build_prompt(
 def generate_answer(
     question: str,
     prompt_template: str,
-) -> tuple[str, list[str]]:
+) -> tuple[str, list[str], str]:
     search_results = search(
         query=question,
         num_results=TOP_K,
@@ -186,17 +198,30 @@ def generate_answer(
         for document in search_results
     ]
 
-    return answer, retrieved_ids
+    retrieved_context = "\n\n".join(
+        DOCUMENT_TEMPLATE.format(
+            **document
+        )
+        for document in search_results
+    )
+    return (
+        answer,
+        retrieved_ids,
+        retrieved_context,
+    )
+
 
 
 def evaluate_answer(
     question: str,
     answer_orig: str,
+    retrieved_context: str,
     answer_llm: str,
 ) -> AnswerEvaluation:
     prompt = JUDGE_PROMPT.format(
         question=question,
         answer_orig=answer_orig,
+        retrieved_context=retrieved_context,
         answer_llm=answer_llm,
     )
 
@@ -305,18 +330,19 @@ def main() -> None:
             )
 
             try:
-                answer_llm, retrieved_ids = (
-                    generate_answer(
-                        question=question,
-                        prompt_template=(
-                            prompt_template
-                        ),
-                    )
+                (
+                    answer_llm,
+                    retrieved_ids,
+                    retrieved_context,
+                ) = generate_answer(
+                    question=question,
+                    prompt_template=prompt_template,
                 )
 
                 evaluation = evaluate_answer(
                     question=question,
                     answer_orig=answer_orig,
+                    retrieved_context=retrieved_context,
                     answer_llm=answer_llm,
                 )
 
@@ -329,6 +355,7 @@ def main() -> None:
                 retrieved_ids = []
                 score = "error"
                 reasoning = ""
+                retrieved_context = ""
                 error = str(exception)
 
             question = clean_multiline_text(
@@ -336,6 +363,9 @@ def main() -> None:
             )
             answer_orig = clean_multiline_text(
                 answer_orig
+            )
+            retrieved_context = clean_multiline_text(
+                retrieved_context
             )
             answer_llm = clean_multiline_text(
                 answer_llm
@@ -358,6 +388,7 @@ def main() -> None:
                     "retrieved_ids": (
                         retrieved_ids
                     ),
+                    "retrieved_context": retrieved_context,
                     "answer_orig": answer_orig,
                     "answer_llm": answer_llm,
                     "score": score,
