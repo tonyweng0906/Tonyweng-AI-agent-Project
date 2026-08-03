@@ -44,11 +44,21 @@ COACHES = [
         "coach-amy",
         "Coach Amy",
         (
-            "Beginner-friendly coach focused on "
-            "fundamentals, footwork and junior training."
+            "Coach focused on beginner fundamentals, "
+            "footwork and junior training."
         ),
         "Fundamentals, footwork, junior training",
         "beginner and intermediate",
+    ),
+    (
+        "coach-david",
+        "Coach David",
+        (
+            "Coach focused on intermediate and advanced "
+            "singles strategy, movement and match preparation."
+        ),
+        "Singles strategy, movement, match preparation",
+        "intermediate and advanced",
     ),
 ]
 
