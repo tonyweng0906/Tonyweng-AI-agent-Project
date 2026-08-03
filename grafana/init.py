@@ -25,6 +25,14 @@ POSTGRES_USER = os.getenv("POSTGRES_USER", "courtmate")
 POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "courtmate")
 
 DATASOURCE_NAME = "CourtMate PostgreSQL"
+DASHBOARD_RESOURCE_NAME = os.getenv(
+    "GRAFANA_DASHBOARD_UID",
+    "badminton-mate-monitoring",
+)
+DASHBOARD_NAMESPACE = os.getenv(
+    "GRAFANA_DASHBOARD_NAMESPACE",
+    "default",
+)
 
 
 def check_response(response: requests.Response, action: str) -> None:
@@ -149,23 +157,42 @@ def update_datasource_references(
     datasource_uid: str,
 ) -> int:
     """
-    Recursively replace PostgreSQL datasource UIDs throughout dashboard JSON.
+    Replace PostgreSQL datasource references without changing Grafana's
+    built-in annotations datasource.
 
-    This covers panels, targets, variables and nested rows.
+    Schema-v2 dashboards store the datasource UID in the name field.
+    Legacy dashboards may use uid and type instead, so only keys that
+    already exist are updated.
     """
     updated = 0
 
     if isinstance(value, dict):
         datasource = value.get("datasource")
 
-        if (
-            isinstance(datasource, dict)
-            and datasource.get("name") != "-- Grafana --"
-        ):
-            datasource["name"] = datasource_uid
-            datasource["uid"] = datasource_uid
-            datasource["type"] = "postgres"
-            updated += 1
+        if isinstance(datasource, dict):
+            datasource_name = datasource.get("name")
+            datasource_type = datasource.get("type")
+
+            is_grafana_builtin = (
+                datasource_name == "-- Grafana --"
+                or datasource_type == "grafana"
+            )
+            has_reference = bool(
+                {"name", "uid", "type"}
+                & datasource.keys()
+            )
+
+            if has_reference and not is_grafana_builtin:
+                if "name" in datasource:
+                    datasource["name"] = datasource_uid
+
+                if "uid" in datasource:
+                    datasource["uid"] = datasource_uid
+
+                if "type" in datasource:
+                    datasource["type"] = "postgres"
+
+                updated += 1
 
         for child in value.values():
             updated += update_datasource_references(
@@ -183,8 +210,10 @@ def update_datasource_references(
     return updated
 
 
-def create_or_update_dashboard(datasource_uid: str) -> None:
-    """Load dashboard.json and import it into Grafana."""
+def create_or_update_dashboard(
+    datasource_uid: str,
+) -> None:
+    """Create or update the schema-v2 dashboard through Grafana's v1 API."""
     if not DASHBOARD_FILE.exists():
         raise FileNotFoundError(
             f"Dashboard file was not found: {DASHBOARD_FILE}"
@@ -205,32 +234,102 @@ def create_or_update_dashboard(datasource_uid: str) -> None:
         "in dashboard.json."
     )
 
-    # Remove metadata from an exported dashboard before importing it
-    dashboard_json.pop("id", None)
-    dashboard_json.pop("uid", None)
-    dashboard_json.pop("version", None)
-
-    dashboard_payload = {
-        "dashboard": dashboard_json,
-        "overwrite": True,
-        "message": "Initialized by grafana/init.py",
-    }
-
-    response = requests.post(
-        f"{GRAFANA_URL}/api/dashboards/db",
-        auth=(GRAFANA_USER, GRAFANA_PASSWORD),
-        headers={"Content-Type": "application/json"},
-        json=dashboard_payload,
-        timeout=20,
+    collection_url = (
+        f"{GRAFANA_URL}"
+        "/apis/dashboard.grafana.app/v1"
+        f"/namespaces/{DASHBOARD_NAMESPACE}"
+        "/dashboards"
+    )
+    resource_url = (
+        f"{collection_url}/{DASHBOARD_RESOURCE_NAME}"
     )
 
-    check_response(response, "Dashboard import")
+    dashboard_payload = {
+        "metadata": {
+            "name": DASHBOARD_RESOURCE_NAME,
+            "annotations": {
+                "grafana.app/message": (
+                    "Initialized by grafana/init.py"
+                ),
+            },
+        },
+        "spec": dashboard_json,
+    }
+
+    auth = (
+        GRAFANA_USER,
+        GRAFANA_PASSWORD,
+    )
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+    }
+
+    lookup_response = requests.get(
+        resource_url,
+        auth=auth,
+        headers=headers,
+        timeout=10,
+    )
+
+    if lookup_response.status_code == 200:
+        print(
+            "Updating existing dashboard: "
+            f"{DASHBOARD_RESOURCE_NAME}"
+        )
+
+        response = requests.put(
+            resource_url,
+            auth=auth,
+            headers=headers,
+            json=dashboard_payload,
+            timeout=20,
+        )
+
+    elif lookup_response.status_code == 404:
+        print(
+            "Creating dashboard: "
+            f"{DASHBOARD_RESOURCE_NAME}"
+        )
+
+        response = requests.post(
+            collection_url,
+            auth=auth,
+            headers=headers,
+            json=dashboard_payload,
+            timeout=20,
+        )
+
+    else:
+        check_response(
+            lookup_response,
+            "Dashboard lookup",
+        )
+        raise RuntimeError(
+            "Unexpected dashboard lookup result"
+        )
+
+    check_response(
+        response,
+        "Dashboard creation or update",
+    )
 
     response_data = response.json()
+    metadata = response_data.get(
+        "metadata",
+        {},
+    )
+    dashboard_uid = metadata.get(
+        "name",
+        DASHBOARD_RESOURCE_NAME,
+    )
 
     print("Dashboard imported successfully.")
-    print(f"Dashboard UID: {response_data.get('uid')}")
-    print(f"Dashboard URL: {GRAFANA_URL}{response_data.get('url', '')}")
+    print(f"Dashboard UID: {dashboard_uid}")
+    print(
+        "Dashboard URL: "
+        f"{GRAFANA_URL}/d/{dashboard_uid}"
+    )
 
 
 def main() -> None:
