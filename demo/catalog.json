@@ -1,0 +1,180 @@
+{
+  "OFFERINGS": [
+    [
+      "court-rental",
+      "court_rental",
+      "Court rental",
+      "One badminton court for 60 minutes.",
+      null,
+      60,
+      4
+    ],
+    [
+      "private-one",
+      "private_lesson",
+      "One-to-one private lesson",
+      "A 60-minute private lesson for one player.",
+      null,
+      60,
+      1
+    ],
+    [
+      "private-two",
+      "private_lesson",
+      "One-to-two private lesson",
+      "A 60-minute private lesson for two players.",
+      null,
+      60,
+      2
+    ],
+    [
+      "private-three",
+      "private_lesson",
+      "One-to-three private lesson",
+      "A 60-minute private lesson for three players.",
+      null,
+      60,
+      3
+    ],
+    [
+      "group-basic",
+      "group_class",
+      "Basic group class",
+      "Weekday beginner group training. Morning sessions run from 9 AM to 12 PM.",
+      null,
+      180,
+      16
+    ],
+    [
+      "group-advanced",
+      "group_class",
+      "Advanced group class",
+      "Weekday advanced group training. Afternoon sessions run from 1 PM to 4 PM.",
+      null,
+      180,
+      12
+    ],
+    [
+      "soft-drink",
+      "retail_item",
+      "Soft drink",
+      "One bottled soft drink.",
+      null,
+      null,
+      null
+    ],
+    [
+      "water",
+      "retail_item",
+      "Bottled water",
+      "One bottle of mineral water.",
+      null,
+      null,
+      null
+    ],
+    [
+      "racket-rental",
+      "equipment_rental",
+      "Badminton racket rental",
+      "Badminton racket rental for one hour.",
+      null,
+      60,
+      null
+    ],
+    [
+      "shoe-rental",
+      "equipment_rental",
+      "Badminton shoe rental",
+      "Badminton shoe rental for one hour.",
+      null,
+      60,
+      null
+    ]
+  ],
+  "PRICES": [
+    [
+      "court-rental",
+      "hourly",
+      35.0,
+      "CAD",
+      "per_hour"
+    ],
+    [
+      "private-one",
+      "one_player",
+      80.0,
+      "CAD",
+      "per_hour"
+    ],
+    [
+      "private-two",
+      "two_players",
+      100.0,
+      "CAD",
+      "per_hour"
+    ],
+    [
+      "private-three",
+      "three_players",
+      120.0,
+      "CAD",
+      "per_hour"
+    ],
+    [
+      "group-basic",
+      "single_class",
+      65.0,
+      "CAD",
+      "per_person"
+    ],
+    [
+      "group-basic",
+      "weekly_package",
+      250.0,
+      "CAD",
+      "per_week"
+    ],
+    [
+      "group-advanced",
+      "single_class",
+      70.0,
+      "CAD",
+      "per_person"
+    ],
+    [
+      "group-advanced",
+      "weekly_package",
+      280.0,
+      "CAD",
+      "per_week"
+    ],
+    [
+      "soft-drink",
+      "standard",
+      3.0,
+      "CAD",
+      "per_item"
+    ],
+    [
+      "water",
+      "standard",
+      2.0,
+      "CAD",
+      "per_item"
+    ],
+    [
+      "racket-rental",
+      "hourly",
+      5.0,
+      "CAD",
+      "per_hour"
+    ],
+    [
+      "shoe-rental",
+      "hourly",
+      5.0,
+      "CAD",
+      "per_hour"
+    ]
+  ]
+}
