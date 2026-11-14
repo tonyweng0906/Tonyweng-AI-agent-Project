@@ -8,7 +8,9 @@
 [![Tests](https://img.shields.io/badge/tests-21%20passed-brightgreen)](tests/)
 [![Deployed on Railway](https://img.shields.io/badge/deployed-Railway-7B2BF9?logo=railway&logoColor=white)](https://frontend-production-22a43.up.railway.app/)
 
-**Live demo:** [Open Badminton Mate on Railway](https://frontend-production-22a43.up.railway.app/)
+**Free live demo:** [Open Badminton Mate](https://courtmate-tonyweng.streamlit.app/) · [Deployment guide](demo/README.md)
+
+Try knowledge-base retrieval with source excerpts, synthetic court availability, and the sample price catalogue. This public showcase requires no API key and makes no paid model calls. It uses TF-IDF retrieval and SQLite sample data; the full LLM/Flask/PostgreSQL application is documented below.
 
 A RAG-powered assistant for badminton-club information, pricing, schedules, and court availability.
 
@@ -71,6 +73,20 @@ Example questions include:
 Badminton Mate can check operational availability, but it cannot yet create, modify, or cancel real bookings.
 
 ## Try the app
+
+### Free public showcase
+
+**[Launch the interactive demo](https://courtmate-tonyweng.streamlit.app/)**
+
+- **Ask the knowledge base:** submit an example or your own English question and inspect the retrieved source excerpts.
+- **Courts & prices:** change the date/time to query eight synthetic courts and explore the seed-data price catalogue.
+- **How it works / Deploy:** view the architecture and reproduce the free Streamlit Community Cloud deployment.
+
+This demo does not generate LLM answers or connect to a real booking database. Synthetic availability is explicitly labeled. The production evaluation scores below refer to the full pipeline, not this lightweight demo. Free hosting may sleep after inactivity; wake the app if prompted.
+
+See [demo setup and deployment instructions](demo/README.md). Entry point: `demo/app.py`; Python 3.12; no secrets needed.
+
+### Full application (Railway)
 
 The deployed Streamlit interface is available at:
 
